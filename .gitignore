@@ -2,6 +2,7 @@
 *.sublime-workspace
 node_modules
 .cache
+.parcel-cache
 dist
 .DS_Store
 /coverage
