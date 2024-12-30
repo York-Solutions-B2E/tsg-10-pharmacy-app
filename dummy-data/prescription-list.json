@@ -1,0 +1,74 @@
+[
+  {
+    "id": "1",
+    "prescriptionId": "fff333",
+    "patient": {
+      "id": "1",
+      "patientId": "pat001",
+      "name": "John Doe",
+      "dob": "1990-01-01"
+    },
+    "medication": {
+      "id": "2",
+      "name": "Paracetamol",
+      "medCode": "med001"
+    },
+    "quantity": "60",
+    "instructions": "Take 1 tablet every 4 hours",
+    "status": "NEW"
+  },
+  {
+    "id": "2",
+    "prescriptionId": "fff334",
+    "patient": {
+      "id": "2",
+      "patientId": "pat002",
+      "name": "Jane Doe",
+      "dob": "1991-01-01"
+    },
+    "medication": {
+      "id": "1",
+      "name": "Aspirin",
+      "medCode": "med002"
+    },
+    "quantity": "30",
+    "instructions": "Take 1 tablet every 6 hours",
+    "status": "OUT_OF_STOCK"
+  },
+  {
+    "id": "3",
+    "prescriptionId": "fff335",
+    "patient": {
+      "id": "3",
+      "patientId": "pat003",
+      "name": "Alice Doe",
+      "dob": "1992-01-01"
+    },
+    "medication": {
+      "id": "3",
+      "name": "Ibuprofen",
+      "medCode": "med003"
+    },
+    "quantity": "90",
+    "instructions": "Take 1 tablet every 8 hours",
+    "status": "AWAITING_SHIPMENT"
+  },
+  {
+    "id": "4",
+    "prescriptionId": "fff336",
+    "patient": {
+      "id": "4",
+      "patientId": "pat004",
+      "name": "Bob Doe",
+      "dob": "1993-01-01"
+    },
+    "medication": {
+      "id": "4",
+      "name": "Codeine",
+      "medCode": "med004"
+    },
+    "quantity": "120",
+    "instructions": "Take 1 tablet every 12 hours",
+    "status": "IN_STOCK"
+  }
+]
