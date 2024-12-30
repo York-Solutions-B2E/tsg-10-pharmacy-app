@@ -27,14 +27,15 @@
     "process": "^0.11.10"
   },
   "dependencies": {
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
     "@emotion/react": "^11.13.5",
     "@emotion/styled": "^11.13.5",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "@mui/icons-material": "^6.1.8",
     "@mui/material": "^6.1.8",
     "@mui/x-data-grid": "^7.23.1",
-    "@mui/x-data-grid-generator": "^7.23.1"
+    "@mui/x-data-grid-generator": "^7.23.1",
+    "@mui/x-date-pickers": "^7.23.1"
   },
   "jest": {
     "testEnvironment": "jsdom",
