@@ -1,4 +1,6 @@
-import AppRouter from './AppRouter';
+import React from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import MedicationsPage from './pages/MedicationsPage';
 
 const App = () => {
   return (
