@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, Navigate } from 'react-router-dom';
 
 const AppRouter = () => {
   return (
@@ -6,7 +6,7 @@ const AppRouter = () => {
       <Route path="/prescriptions" element={<div>prescriptions</div>} />
       <Route path="/inventory" element={<div>inventory</div>} />
       <Route path="/orders" element={<div>orders</div>} />
-      <Route path="/*" element={<div>prescriptions</div>} />
+      <Route path="/*" element={<Navigate to="/prescriptions" replace />} />
     </Routes>
   );
 };
