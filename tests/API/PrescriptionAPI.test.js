@@ -53,16 +53,19 @@ describe('fillPrescription', () => {
 
 	it('should throw if prescription arg is undefined or null', async () => {
 		jest.spyOn(console, 'error').mockImplementation();
+		let response;
 
-		await fillPrescription();
+		response = await fillPrescription();
 		expect(console.error).toHaveBeenCalledWith(
 			new Error('No prescription provided')
 		);
+		expect(response.status).toBe(400);
 
-		await fillPrescription(null);
+		response = await fillPrescription(null);
 		expect(console.error).toHaveBeenCalledWith(
 			new Error('Provided prescription is null')
 		);
+		expect(response.status).toBe(400);
 
 		console.error.mockRestore();
 	});
