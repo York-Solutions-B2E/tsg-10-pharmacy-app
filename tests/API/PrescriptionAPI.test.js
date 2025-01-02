@@ -7,12 +7,12 @@ import {
 	markPickedUp,
 } from '../../src/API/PrescriptionAPI';
 
-afterEach(() => {
-	jest.resetAllMocks();
-});
-
 describe('getAllPrescriptions', () => {
 	const requestSpy = jest.spyOn(RequestAPI, 'getRequest');
+
+	afterEach(() => {
+		requestSpy.mockReset();
+	});
 
 	it('should call RequestAPI.getRequest with correct args', async () => {
 		await getAllPrescriptions();
@@ -51,72 +51,75 @@ describe('fillPrescription', () => {
 		expect(requestSpy).toHaveBeenCalledWith(endpoint, dataString);
 	});
 
-	it('should throw if prescription.id is not a positive number', async () => {
-		jest.spyOn(console, 'error').mockImplementation();
-
-		await fillPrescription({ id: undefined });
-		expect(console.error).toHaveBeenCalledWith(
-			new Error('Prescription id must be a positive number')
-		);
-
-		await fillPrescription({ id: null });
-		expect(console.error).toHaveBeenCalledWith(
-			new Error('Prescription id must be a positive number')
-		);
-
-		await fillPrescription({ id: 'id' });
-		expect(console.error).toHaveBeenCalledWith(
-			new Error('Prescription id must be a positive number')
-		);
-
-		await fillPrescription({ id: 0 });
-		expect(console.error).toHaveBeenCalledWith(
-			new Error('Prescription id must be a positive number')
-		);
-
-		console.error.mockRestore();
-	});
-
-	it('should throw if prescription.status is not NEW', async () => {
-		jest.spyOn(console, 'error').mockImplementationOnce();
-		const data = { status: 'AWAITING_SHIPMENT' };
-
-		await markPickedUp(data);
-
-		expect(console.error).toHaveBeenCalledWith(
-			new Error('Only NEW prescriptions can be FILLED')
-		);
-
-		console.error.mockRestore();
-	});
-
-	it('should throw if prescription arg is undefined or null', async () => {
-		jest.spyOn(console, 'error').mockImplementation();
-		let response;
-
-		response = await fillPrescription();
-		expect(console.error).toHaveBeenCalledWith(
-			new Error('No prescription provided')
-		);
-		expect(response.status).toBe(400);
-
-		response = await fillPrescription(null);
-		expect(console.error).toHaveBeenCalledWith(
-			new Error('Provided prescription is null')
-		);
-		expect(response.status).toBe(400);
-
-		console.error.mockRestore();
-	});
-
 	it('should return result of RequestAPI.putRequest', async () => {
 		const expectedResult = 'result';
 		RequestAPI.putRequest = jest
 			.fn()
 			.mockImplementationOnce(() => expectedResult);
 
-		const response = await fillPrescription({});
+		const response = await fillPrescription({ id: 123456, status: 'NEW' });
 		expect(response).toBe(expectedResult);
+	});
+
+	describe('exceptions', () => {
+		const unmockedError = console.error;
+		const errorSpy = jest.spyOn(console, 'error').mockImplementation();
+
+		afterAll(() => {
+			console.error = unmockedError;
+		});
+
+		afterEach(() => {
+			errorSpy.mockReset();
+		});
+
+		it('should throw if prescription.id is not a positive number', async () => {
+			await fillPrescription({ id: undefined });
+			expect(errorSpy).toHaveBeenCalledWith(
+				new Error('Prescription id must be a positive number')
+			);
+
+			await fillPrescription({ id: null });
+			expect(errorSpy).toHaveBeenCalledWith(
+				new Error('Prescription id must be a positive number')
+			);
+
+			await fillPrescription({ id: 'id' });
+			expect(errorSpy).toHaveBeenCalledWith(
+				new Error('Prescription id must be a positive number')
+			);
+
+			await fillPrescription({ id: 0 });
+			expect(errorSpy).toHaveBeenCalledWith(
+				new Error('Prescription id must be a positive number')
+			);
+		});
+
+		it('should throw if prescription.status is not NEW', async () => {
+			const data = { status: 'NEW' };
+
+			await markPickedUp(data);
+
+			expect(errorSpy).toHaveBeenCalledWith(
+				new Error('Only NEW prescriptions can be FILLED')
+			);
+		});
+
+		it('should throw if prescription arg is undefined or null', async () => {
+			let response;
+
+			response = await fillPrescription();
+			expect(errorSpy).toHaveBeenCalledWith(
+				new Error('No prescription provided')
+			);
+			expect(response.status).toBe(400);
+
+			response = await fillPrescription(null);
+			expect(errorSpy).toHaveBeenCalledWith(
+				new Error('Provided prescription is null')
+			);
+			expect(response.status).toBe(400);
+		});
 	});
 });
 
@@ -140,64 +143,6 @@ describe('markPickedUp', () => {
 		expect(requestSpy).toHaveBeenCalledWith(endpoint, dataString);
 	});
 
-	it('should throw if prescription.id is not a positive number', async () => {
-		jest.spyOn(console, 'error').mockImplementation();
-
-		await markPickedUp({ id: undefined });
-		expect(console.error).toHaveBeenCalledWith(
-			new Error('Prescription id must be a positive number')
-		);
-
-		await markPickedUp({ id: null });
-		expect(console.error).toHaveBeenCalledWith(
-			new Error('Prescription id must be a positive number')
-		);
-
-		await markPickedUp({ id: 'id' });
-		expect(console.error).toHaveBeenCalledWith(
-			new Error('Prescription id must be a positive number')
-		);
-
-		await markPickedUp({ id: 0 });
-		expect(console.error).toHaveBeenCalledWith(
-			new Error('Prescription id must be a positive number')
-		);
-
-		console.error.mockRestore();
-	});
-
-	it('should throw if prescription.status is not FILLED', async () => {
-		jest.spyOn(console, 'error').mockImplementationOnce();
-		const data = { status: 'NEW' };
-
-		await markPickedUp(data);
-
-		expect(console.error).toHaveBeenCalledWith(
-			new Error('Only FILLED prescriptions can be picked up')
-		);
-
-		console.error.mockRestore();
-	});
-
-	it('should throw if prescription arg is undefined or null', async () => {
-		jest.spyOn(console, 'error').mockImplementation();
-		let response;
-
-		response = await markPickedUp();
-		expect(console.error).toHaveBeenCalledWith(
-			new Error('No prescription provided')
-		);
-		expect(response.status).toBe(400);
-
-		response = await markPickedUp(null);
-		expect(console.error).toHaveBeenCalledWith(
-			new Error('Provided prescription is null')
-		);
-		expect(response.status).toBe(400);
-
-		console.error.mockRestore();
-	});
-
 	it('should return result of RequestAPI.putRequest', async () => {
 		const expectedResult = 'result';
 		RequestAPI.putRequest = jest
@@ -206,5 +151,66 @@ describe('markPickedUp', () => {
 
 		const response = await markPickedUp({});
 		expect(response).toBe(expectedResult);
+	});
+
+	describe('exceptions', () => {
+		const unmockedError = console.error;
+		const errorSpy = jest.spyOn(console, 'error').mockImplementation();
+
+		afterAll(() => {
+			console.error = unmockedError;
+		});
+
+		afterEach(() => {
+			errorSpy.mockReset();
+		});
+
+		it('should throw if prescription.id is not a positive number', async () => {
+			await markPickedUp({ id: undefined });
+			expect(errorSpy).toHaveBeenCalledWith(
+				new Error('Prescription id must be a positive number')
+			);
+
+			await markPickedUp({ id: null });
+			expect(errorSpy).toHaveBeenCalledWith(
+				new Error('Prescription id must be a positive number')
+			);
+
+			await markPickedUp({ id: 'id' });
+			expect(errorSpy).toHaveBeenCalledWith(
+				new Error('Prescription id must be a positive number')
+			);
+
+			await markPickedUp({ id: 0 });
+			expect(errorSpy).toHaveBeenCalledWith(
+				new Error('Prescription id must be a positive number')
+			);
+		});
+
+		it('should throw if prescription.status is not FILLED', async () => {
+			const data = { status: 'NEW' };
+
+			await markPickedUp(data);
+
+			expect(errorSpy).toHaveBeenCalledWith(
+				new Error('Only FILLED prescriptions can be picked up')
+			);
+		});
+
+		it('should throw if prescription arg is undefined or null', async () => {
+			let response;
+
+			response = await markPickedUp();
+			expect(errorSpy).toHaveBeenCalledWith(
+				new Error('No prescription provided')
+			);
+			expect(response.status).toBe(400);
+
+			response = await markPickedUp(null);
+			expect(errorSpy).toHaveBeenCalledWith(
+				new Error('Provided prescription is null')
+			);
+			expect(response.status).toBe(400);
+		});
 	});
 });
