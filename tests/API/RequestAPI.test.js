@@ -80,3 +80,54 @@ describe('RequestAPI.postRequest', () => {
 	});
 
 });
+
+describe('RequestAPI.putRequest', () => {
+	
+	it('should call request with correct args', async () => {
+		const endpoint = "/put";
+		const data = {test: "test-data"};
+		const dataString = JSON.stringify(data);
+		await RequestAPI.putRequest(data, endpoint);
+
+		expect(requestSpy).toHaveBeenCalledWith({endpoint: endpoint, method: "PUT", body: dataString});
+	});
+
+	it('should return result from good request call', async () => {
+		const expectedResult = "result"
+		request.request = requestSpy.mockImplementation(() => expectedResult);
+
+		const response = await RequestAPI.putRequest({test: "test-data"}, "/put/good/request");
+
+		expect(response).toBe(expectedResult);
+	});
+
+	describe('exceptions', () => {
+
+		afterEach(() => {
+			errorSpy.mockReset();
+		});
+
+		it('should throw when data arg is undefined', async () => {
+			const response = await RequestAPI.putRequest();
+
+			expect(errorSpy).toHaveBeenCalledWith(new Error("Put request body cannot be undefined"));
+			expect(response.status).toBe(400);
+		});
+
+		it('should throw when data arg is null', async () => {
+			const response = await RequestAPI.putRequest(null);
+
+			expect(errorSpy).toHaveBeenCalledWith(new Error("Put request body cannot be null"));
+			expect(response.status).toBe(400);
+		});
+	
+		it('should throw when data arg is not a json object', async () => {
+			const response = await RequestAPI.putRequest("string");
+
+			expect(errorSpy).toHaveBeenCalledWith(new Error("Put request body must be a JSON object"));
+			expect(response.status).toBe(400);
+		});
+
+	});
+
+});
