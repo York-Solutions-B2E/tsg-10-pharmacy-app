@@ -1,3 +1,11 @@
+/**
+ * Makes a fetch request using http://localhost:8080 as the base URL
+ * @Returns {Object} HTTP response: {ok: boolean, status: int, body: String}
+ * @Throws when fetch() returns undefined || null
+ * @Optional
+ * @Param {Object} args: {endpoint: String, method: String, body: String}
+ * @Default fetch method is GET
+*/
 export const request = async (args) => {
 	let { endpoint, method, body } = args ?? {endpoint: null, method: "GET", body: null};
 
