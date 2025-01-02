@@ -1,25 +1,27 @@
-import { Chip, Tooltip, Typography } from '@mui/material';
+import { Tooltip, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
-import { useState } from 'react';
 import prescriptionsList from '../../../dummy-data/prescription-list.json';
 import ButtonWithText from '../buttons/ButtonWithText';
+import StatusChip from './StatusChip';
 
-// ******** FUNCTION START
 const PrescriptionsDataGrid = () => {
-  const [selectedDoctor, setSelectedDoctor] = useState(undefined);
+  // const { prescriptionsList } = useContext(PrescriptionContext);
 
   // ******** Click Handlers
   const handleClickFillPrescription = (prescription) => {
     console.log('Fill Prescription, id is:', prescription.id);
+    // TODO: Implement the fill prescription api call
   };
 
   const handleClickOrderMore = (prescription) => {
-    console.log('Order More, id is:', prescription.id);
+    console.log('Order More, medicine id is:', prescription.medicine.id);
+    // TODO: Navigate to the order more page with the medicine id
   };
 
   const handleClickMarkPickedUp = (prescription) => {
     console.log('Picked up, id is:', prescription.id);
+    // TODO: Implement the picked up api call
   };
   // END ******** click handlers
 
@@ -102,45 +104,7 @@ const PrescriptionsDataGrid = () => {
   };
   // END ******** GridActionButtons
 
-  // ******** Status Badge
-  const renderStatusBadge = (status) => {
-    let color = '';
-    let chipText = '';
 
-    switch (status) {
-      case 'NEW':
-        color = 'success';
-        chipText = 'New';
-        break;
-      case 'OUT_OF_STOCK':
-        color = 'error';
-        chipText = 'Out of Stock';
-        break;
-      case 'AWAITING_SHIPMENT':
-        color = 'warning';
-        chipText = 'Awaiting Shipment';
-        break;
-      case 'STOCK_RECEIVED':
-        color = 'success';
-        chipText = 'Stock Received';
-        break;
-      case 'FILLED':
-        color = 'primary';
-        chipText = 'Filled';
-        break;
-      case 'PICKED_UP':
-        color = 'primary';
-        chipText = 'Picked Up';
-        break;
-      case 'CANCELLED':
-        color = 'error';
-        chipText = 'Cancelled';
-        break;
-    }
-
-    return <Chip label={chipText} color={color} variant="filled" />;
-  };
-  // END ******** Status Badge
 
   // ******** Columns headers and GridColDef
   const columns = [
@@ -196,7 +160,7 @@ const PrescriptionsDataGrid = () => {
       flex: 0.75,
       width: 100,
       renderCell: (params) => {
-        return renderStatusBadge(params.row.status);
+        return <StatusChip status={params.row.status} />;
       },
     },
     {
