@@ -13,7 +13,7 @@ afterEach(() => {
 describe('RequestAPI.getRequest', () => {
 	
 	it('should call request with correct args', async () => {
-		const endpoint = "/endpoint";
+		const endpoint = "/get";
 		await RequestAPI.getRequest(endpoint);
 
 		expect(requestSpy).toHaveBeenCalledWith({endpoint: endpoint, method: "GET"});
@@ -128,6 +128,26 @@ describe('RequestAPI.putRequest', () => {
 			expect(response.status).toBe(400);
 		});
 
+	});
+
+});
+
+describe('RequestAPI.deleteRequest', () => {
+
+	it('should call request with correct args', async () => {
+		const endpoint = "/delete";
+		await RequestAPI.deleteRequest(endpoint);
+
+		expect(requestSpy).toHaveBeenCalledWith({endpoint: endpoint, method: "DELETE"});
+	});
+
+	it('should return result from request call', async () => {
+		const expectedResult = "result"
+		request.request = requestSpy.mockImplementation(() => expectedResult);
+
+		const response = await RequestAPI.deleteRequest();
+
+		expect(response).toBe(expectedResult);
 	});
 
 });
