@@ -3,8 +3,12 @@ import { BrowserRouter } from "react-router-dom";
 import App from "../src/App";
 
 describe("App", () => {
-  test("renders App", () => {
-    render(<App />);
-    // const headingElement = ;
+  it("renders Hello heading", () => {
+    render(
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    );
+    expect(screen.getByText("Hello")).toBeInTheDocument();
   });
 });
