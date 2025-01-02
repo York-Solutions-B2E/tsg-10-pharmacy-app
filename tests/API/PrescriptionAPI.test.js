@@ -7,24 +7,23 @@ import {
 	markPickedUp,
 } from '../../src/API/PrescriptionAPI';
 
+const getRequestSpy = jest.spyOn(RequestAPI, 'getRequest');
+const putRequestSpy = jest.spyOn(RequestAPI, 'putRequest');
+
+afterEach(() => {
+	jest.resetAllMocks();
+});
+
 describe('getAllPrescriptions', () => {
-	const requestSpy = jest.spyOn(RequestAPI, 'getRequest');
-
-	afterEach(() => {
-		requestSpy.mockReset();
-	});
-
 	it('should call RequestAPI.getRequest with correct args', async () => {
 		await getAllPrescriptions();
 
-		expect(requestSpy).toHaveBeenCalledWith('/api/prescriptions');
+		expect(getRequestSpy).toHaveBeenCalledWith('/api/prescriptions');
 	});
 
 	it('should return result of RequestAPI.getRequest', async () => {
 		const expectedResult = 'result';
-		RequestAPI.getRequest = jest
-			.fn()
-			.mockImplementationOnce(() => expectedResult);
+		getRequestSpy.mockImplementationOnce(() => expectedResult);
 
 		const response = await getAllPrescriptions();
 		expect(response).toBe(expectedResult);
@@ -32,8 +31,6 @@ describe('getAllPrescriptions', () => {
 });
 
 describe('fillPrescription', () => {
-	const requestSpy = jest.spyOn(RequestAPI, 'putRequest');
-
 	it('should call RequestAPI.putRequest with correct args', async () => {
 		const data = {
 			id: 123456,
@@ -48,30 +45,59 @@ describe('fillPrescription', () => {
 		const endpoint = `/api/prescriptions/${data.id}`;
 
 		await fillPrescription(data);
-		expect(requestSpy).toHaveBeenCalledWith(endpoint, dataString);
+		expect(putRequestSpy).toHaveBeenCalledWith(endpoint, dataString);
 	});
 
 	it('should return result of RequestAPI.putRequest', async () => {
 		const expectedResult = 'result';
-		RequestAPI.putRequest = jest
-			.fn()
-			.mockImplementationOnce(() => expectedResult);
+		putRequestSpy.mockImplementationOnce(() => expectedResult);
 
 		const response = await fillPrescription({ id: 123456, status: 'NEW' });
 		expect(response).toBe(expectedResult);
 	});
+});
 
-	describe('exceptions', () => {
-		const unmockedError = console.error;
-		const errorSpy = jest.spyOn(console, 'error').mockImplementation();
+describe('markPickedUp', () => {
+	it('should call RequestAPI.putRequest with correct args', async () => {
+		const data = {
+			id: 123456,
+			prescriptionId: 654321,
+			medicineId: 456789,
+			patientId: 987654,
+			quantity: 999,
+			instructions: 'instructions',
+			status: 'FILLED',
+		};
+		const dataString = JSON.stringify({ ...data, status: 'PICKED_UP' });
+		const endpoint = `/api/prescriptions/${data.id}`;
 
-		afterAll(() => {
-			console.error = unmockedError;
-		});
+		await markPickedUp(data);
+		expect(putRequestSpy).toHaveBeenCalledWith(endpoint, dataString);
+	});
 
-		afterEach(() => {
-			errorSpy.mockReset();
-		});
+	it('should return result of RequestAPI.putRequest', async () => {
+		const expectedResult = 'result';
+		putRequestSpy.mockImplementationOnce(() => expectedResult);
+
+		const response = await markPickedUp({ id: 123456, status: 'FILLED' });
+		expect(response).toBe(expectedResult);
+	});
+});
+
+describe('exceptions', () => {
+	const unmockedError = console.error;
+	const errorSpy = jest.spyOn(console, 'error').mockImplementation();
+
+	afterAll(() => {
+		console.error = unmockedError;
+	});
+
+	afterEach(() => {
+		errorSpy.mockReset();
+	});
+
+	describe('fillPrescription', () => {
+		const putRequestSpy = jest.spyOn(RequestAPI, 'putRequest');
 
 		it('should throw if prescription.id is not a positive number', async () => {
 			await fillPrescription({ id: undefined });
@@ -121,49 +147,9 @@ describe('fillPrescription', () => {
 			expect(response.status).toBe(400);
 		});
 	});
-});
 
-describe('markPickedUp', () => {
-	const requestSpy = jest.spyOn(RequestAPI, 'putRequest');
-
-	it('should call RequestAPI.putRequest with correct args', async () => {
-		const data = {
-			id: 123456,
-			prescriptionId: 654321,
-			medicineId: 456789,
-			patientId: 987654,
-			quantity: 999,
-			instructions: 'instructions',
-			status: 'FILLED',
-		};
-		const dataString = JSON.stringify({ ...data, status: 'PICKED_UP' });
-		const endpoint = `/api/prescriptions/${data.id}`;
-
-		await markPickedUp(data);
-		expect(requestSpy).toHaveBeenCalledWith(endpoint, dataString);
-	});
-
-	it('should return result of RequestAPI.putRequest', async () => {
-		const expectedResult = 'result';
-		RequestAPI.putRequest = jest
-			.fn()
-			.mockImplementationOnce(() => expectedResult);
-
-		const response = await markPickedUp({});
-		expect(response).toBe(expectedResult);
-	});
-
-	describe('exceptions', () => {
-		const unmockedError = console.error;
-		const errorSpy = jest.spyOn(console, 'error').mockImplementation();
-
-		afterAll(() => {
-			console.error = unmockedError;
-		});
-
-		afterEach(() => {
-			errorSpy.mockReset();
-		});
+	describe('markPickedUp', () => {
+		const putRequestSpy = jest.spyOn(RequestAPI, 'putRequest');
 
 		it('should throw if prescription.id is not a positive number', async () => {
 			await markPickedUp({ id: undefined });
@@ -188,7 +174,7 @@ describe('markPickedUp', () => {
 		});
 
 		it('should throw if prescription.status is not FILLED', async () => {
-			const data = { status: 'NEW' };
+			const data = { id: 123456, status: 'NEW' };
 
 			await markPickedUp(data);
 
