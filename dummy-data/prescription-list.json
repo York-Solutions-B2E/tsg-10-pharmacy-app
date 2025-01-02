@@ -50,5 +50,83 @@
     "quantity": "120",
     "instructions": "Take 1 tablet every 12 hours",
     "status": "IN_STOCK"
+  },
+  {
+    "id": "5",
+    "prescriptionNumber": "fff337",
+    "patientId": "pat005",
+    "medicine": {
+      "id": "5",
+      "name": "Morphine",
+      "medCode": "med005"
+    },
+    "quantity": "150",
+    "instructions": "Take 1 tablet every 24 hours",
+    "status": "FILLED"
+  },
+  {
+    "id": "6",
+    "prescriptionNumber": "fff338",
+    "patientId": "pat006",
+    "medicine": {
+      "id": "6",
+      "name": "Hydrocodone",
+      "medCode": "med006"
+    },
+    "quantity": "180",
+    "instructions": "Take 1 tablet every 48 hours",
+    "status": "NEW"
+  },
+  {
+    "id": "7",
+    "prescriptionNumber": "fff339",
+    "patientId": "pat007",
+    "medicine": {
+      "id": "7",
+      "name": "Oxycodone",
+      "medCode": "med007"
+    },
+    "quantity": "210",
+    "instructions": "Take 1 tablet every 72 hours",
+    "status": "PICKED_UP"
+  },
+  {
+    "id": "8",
+    "prescriptionNumber": "fff340",
+    "patientId": "pat008",
+    "medicine": {
+      "id": "8",
+      "name": "Tramadol",
+      "medCode": "med008"
+    },
+    "quantity": "240",
+    "instructions": "Take 1 tablet every 96 hours",
+    "status": "AWAITING_SHIPMENT"
+  },
+  {
+    "id": "9",
+    "prescriptionNumber": "fff341",
+    "patientId": "pat009",
+    "medicine": {
+      "id": "9",
+      "name": "Methadone",
+      "medCode": "med009"
+    },
+    "quantity": "270",
+    "instructions": "Take 1 tablet every 120 hours",
+    "status": "IN_STOCK"
+  },
+  {
+    "id": "10",
+    "prescriptionNumber": "fff342",
+    "patientId": "pat010",
+    "medicine": {
+      "id": "10",
+      "name": "Fentanyl",
+      "medCode": "med010"
+    },
+    "quantity": "300",
+    "instructions": "Take 1 tablet every 144 hours",
+    "status": "FILLED"
   }
 ]
