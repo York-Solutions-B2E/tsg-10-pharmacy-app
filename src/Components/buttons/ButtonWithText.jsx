@@ -29,17 +29,19 @@ const ButtonWithText = (props) => {
 
   return (
     <Tooltip title={toolTipMessage}>
-      <Button
-        sx={buttonStyling}
-        variant={variant}
-        color={color}
-        disabled={disabled}
-        startIcon={startIcon}
-        endIcon={endIcon}
-        onClick={onClick}
-      >
-        {buttonText}
-      </Button>
+      <span>
+        <Button
+          sx={buttonStyling}
+          variant={variant}
+          color={color}
+          disabled={disabled}
+          startIcon={startIcon}
+          endIcon={endIcon}
+          onClick={onClick}
+        >
+          {buttonText}
+        </Button>
+      </span>
     </Tooltip>
   );
 };
