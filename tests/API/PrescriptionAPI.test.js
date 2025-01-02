@@ -42,7 +42,7 @@ describe('fillPrescription', () => {
 			patientId: 987654,
 			quantity: 999,
 			instructions: 'instructions',
-			status: 'AWAITING_SHIPMENT',
+			status: 'NEW',
 		};
 		const dataString = JSON.stringify({ ...data, status: 'FILLED' });
 		const endpoint = `/api/prescriptions/${data.id}`;
@@ -96,9 +96,9 @@ describe('fillPrescription', () => {
 		});
 
 		it('should throw if prescription.status is not NEW', async () => {
-			const data = { status: 'NEW' };
+			const data = { id: 123456, status: 'AWAITING_SHIPMENT' };
 
-			await markPickedUp(data);
+			await fillPrescription(data);
 
 			expect(errorSpy).toHaveBeenCalledWith(
 				new Error('Only NEW prescriptions can be FILLED')
