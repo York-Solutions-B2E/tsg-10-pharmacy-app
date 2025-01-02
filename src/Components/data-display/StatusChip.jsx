@@ -36,6 +36,7 @@ const StatusChip = ({ status, color = 'primary' }) => {
     case 'INSUFFICIENT_STOCK':
       color = 'error';
       chipText = 'Insufficient Stock';
+      break;
     case 'ORDERED':
       color = 'warning';
       chipText = 'Ordered';

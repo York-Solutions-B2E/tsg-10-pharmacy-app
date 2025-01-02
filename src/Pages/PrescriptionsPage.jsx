@@ -1,9 +1,9 @@
-import { Box } from "@mui/material";
-import PrescriptionsDataGrid from "../Components/data-display/PrescriptionsDataGrid";
+import { Box } from '@mui/material';
+import PrescriptionsDataGrid from '../Components/data-display/PrescriptionsDataGrid';
 
 const PrescriptionsPage = () => {
   const appointmentPageStyling = {
-    padding: "30px 30px",
+    padding: '30px 30px',
   };
 
   return (
