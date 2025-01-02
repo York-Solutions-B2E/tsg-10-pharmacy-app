@@ -1,8 +1,5 @@
 export const request = async (args) => {
-	if (args === undefined || args === null || args.endpoint === undefined)
-		return {ok: false, status: 400, body: null};
-
-	let { endpoint, method, body } = args;
+	let { endpoint, method, body } = args ?? {endpoint: null, method: "GET", body: null};
 
 	endpoint = `http://localhost:8080${endpoint}`;
 

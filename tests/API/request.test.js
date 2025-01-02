@@ -26,27 +26,11 @@ describe('request', () => {
 		global.fetch = unmockedFetch;
 	});
 
-	it('should return http response on good request', async () => {
+	it('should return http response', async () => {
 		global.fetch = jest.fn(async () => Promise.resolve({ok: true, status: 200, body: null}));
-		const response = await request({endpoint: "/", method: "GET"});
-
-		expect(isHttpResponse(response)).toBe(true);
-	});
-
-	it('should return http response on bad request', async () => {
 		const response = await request();
 
 		expect(isHttpResponse(response)).toBe(true);
-	});
-
-	it('should return 400 response status if args is undefined or null', async () => {
-		let response;
-
-		response = await request();
-		expect(response.status).toBe(400);
-
-		response = await request(null);
-		expect(response.status).toBe(400);
 	});
 
 	it('should return 405 for unsupported HTTP methods', async () => {
