@@ -7,13 +7,13 @@ import {
 	markPickedUp,
 } from '../../src/API/PrescriptionAPI';
 
-const requestSpy = jest.spyOn(RequestAPI, 'getRequest');
-
 afterEach(() => {
-	requestSpy.mockReset();
+	jest.resetAllMocks();
 });
 
 describe('getAllPrescriptions', () => {
+	const requestSpy = jest.spyOn(RequestAPI, 'getRequest');
+
 	it('should call RequestAPI.getRequest with correct args', async () => {
 		await getAllPrescriptions();
 
@@ -28,5 +28,21 @@ describe('getAllPrescriptions', () => {
 
 		const response = await getAllPrescriptions();
 		expect(response).toBe(expectedResult);
+	});
+});
+
+describe('fillPrescription', () => {
+	const requestSpy = jest.spyOn(RequestAPI, 'putRequest');
+
+	it('should call RequestAPI.putRequest with correct args', async () => {
+		throw new Error();
+	});
+
+	it('should throw if prescription arg is undefined or null', async () => {
+		throw new Error();
+	});
+
+	it('should return result of RequestAPI.putRequest', async () => {
+		throw new Error();
 	});
 });
