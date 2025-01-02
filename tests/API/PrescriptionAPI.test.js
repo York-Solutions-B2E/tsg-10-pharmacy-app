@@ -80,3 +80,17 @@ describe('fillPrescription', () => {
 		expect(response).toBe(expectedResult);
 	});
 });
+
+describe('markPickedUp', () => {
+	it('should call RequestAPI.putRequest with correct args', async () => {
+		throw new Error();
+	});
+
+	it('should throw if prescription arg is undefined or null', async () => {
+		throw new Error();
+	});
+
+	it('should return result of RequestAPI.putRequest', async () => {
+		throw new Error();
+	});
+});
