@@ -38,6 +38,10 @@ class RequestAPI {
 		}
 	}
 
+	static deleteRequest = async (endpoint) => {
+		return await request({endpoint: endpoint, method: "DELETE"});
+	}
+
 }
 
 export default RequestAPI;
