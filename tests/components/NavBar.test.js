@@ -9,18 +9,41 @@ describe('NavBar', () => {
 	});
 
 	it('should render', () => {
-		throw new Error();
+		render(<NavBar />);
+
+		expect(screen.getByText(/tsg pharmacy/i)).toBeInTheDocument();
 	});
 
 	it('should navigate to prescriptions page', async () => {
-		throw new Error();
+		const mockNavigate = jest.fn();
+		render(<NavBar navigate={mockNavigate} />);
+
+		const prescriptionButton = screen.getByText(/prescriptions/i);
+		expect(prescriptionButton).toBeInTheDocument();
+
+		await userEvent.click(prescriptionButton);
+		expect(mockNavigate).toHaveBeenCalledWith('/prescriptions');
 	});
 
 	it('should navigate to inventory page', async () => {
-		throw new Error();
+		const mockNavigate = jest.fn();
+		render(<NavBar navigate={mockNavigate} />);
+
+		const inventoryButton = screen.getByText(/inventory/i);
+		expect(inventoryButton).toBeInTheDocument();
+
+		await userEvent.click(inventoryButton);
+		expect(mockNavigate).toHaveBeenCalledWith('/inventory');
 	});
 
 	it('should navigate to orders page', async () => {
-		throw new Error();
+		const mockNavigate = jest.fn();
+		render(<NavBar navigate={mockNavigate} />);
+
+		const ordersButton = screen.getByText(/orders/i);
+		expect(ordersButton).toBeInTheDocument();
+
+		await userEvent.click(ordersButton);
+		expect(mockNavigate).toHaveBeenCalledWith('/orders');
 	});
 });
