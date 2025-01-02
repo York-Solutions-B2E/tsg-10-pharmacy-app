@@ -9,8 +9,6 @@ import ButtonWithText from '../buttons/ButtonWithText';
 const PrescriptionsDataGrid = () => {
   const [selectedDoctor, setSelectedDoctor] = useState(undefined);
 
-  console.log('prescriptionsList', prescriptionsList);
-
   // ******** Click Handlers
   const handleClickFillPrescription = (prescription) => {
     console.log('Fill Prescription, id is:', prescription.id);
@@ -24,7 +22,6 @@ const PrescriptionsDataGrid = () => {
     console.log('Picked up, id is:', prescription.id);
   };
   // END ******** click handlers
-
 
   // ******** GridActionButtons
   const FillPrescriptionButton = (prescription) => {
@@ -42,6 +39,7 @@ const PrescriptionsDataGrid = () => {
         onClick={() => {
           handleClickFillPrescription(prescription);
         }}
+        toolTipMessage="Fill this prescription"
         color={'success'}
         disabled={isDisabled}
         buttonText={'Fill'}
@@ -60,6 +58,7 @@ const PrescriptionsDataGrid = () => {
         onClick={() => {
           handleClickOrderMore(prescription);
         }}
+        toolTipMessage={'Order more of this medicine'}
         disabled={isDisabled}
         buttonText={'Order More'}
       />
@@ -72,17 +71,13 @@ const PrescriptionsDataGrid = () => {
         onClick={() => {
           handleClickMarkPickedUp(prescription);
         }}
-        // disabled={isDisabled}
-        // variant={"contained"}
         buttonText={'Marked Picked Up'}
-        // startIcon
-        // endIcon
       />
     );
   };
 
-  // NEW, OUT_OF_STOCK, AWAITING_SHIPMENT, IN_STOCK, FILLED, PICKED_UP, CANCELLED
-  // -* IN_STOCK is for post Awaiting Shipment status (not new, but not yet filled)
+  // NEW, OUT_OF_STOCK, AWAITING_SHIPMENT, STOCK_RECEIVED, FILLED, PICKED_UP, CANCELLED
+  // -* STOCK_RECEIVED is for post Awaiting Shipment status (not new, but not yet filled)
   // -* CANCELLED theoretically will never be in the list, but it's here to show what the statuses are.
   const renderActionButtonsForPrescriptions = (prescription) => {
     const prescriptionStatus = prescription.status;
@@ -97,7 +92,7 @@ const PrescriptionsDataGrid = () => {
       return [MarkPickedUpButton(prescription)];
     }
 
-    // If the prescription NEW, OUT_OF_STOCK, AWAITING_SHIPMENT, IN_STOCK
+    // If the prescription NEW, OUT_OF_STOCK, AWAITING_SHIPMENT, STOCK_RECEIVED
     // The actions are Fill Prescription and Order More
     // buttons are disabled based on the status
     return [
@@ -125,9 +120,9 @@ const PrescriptionsDataGrid = () => {
         color = 'warning';
         chipText = 'Awaiting Shipment';
         break;
-      case 'IN_STOCK':
+      case 'STOCK_RECEIVED':
         color = 'success';
-        chipText = 'In Stock';
+        chipText = 'Stock Received';
         break;
       case 'FILLED':
         color = 'primary';

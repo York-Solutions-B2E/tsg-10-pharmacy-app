@@ -49,7 +49,7 @@
     },
     "quantity": "120",
     "instructions": "Take 1 tablet every 12 hours",
-    "status": "IN_STOCK"
+    "status": "STOCK_RECEIVED"
   },
   {
     "id": "5",
@@ -114,7 +114,7 @@
     },
     "quantity": "270",
     "instructions": "Take 1 tablet every 120 hours",
-    "status": "IN_STOCK"
+    "status": "STOCK_RECEIVED"
   },
   {
     "id": "10",
