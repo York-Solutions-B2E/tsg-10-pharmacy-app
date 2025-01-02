@@ -22,6 +22,22 @@ class RequestAPI {
 		}
 	}
 
+	static putRequest = async (data, endpoint) => {
+		try {
+			if (data === undefined)
+				throw new Error("Put request body cannot be undefined");
+			if (data === null)
+				throw new Error("Put request body cannot be null");
+			if (data.constructor !== Object)
+				throw new Error("Put request body must be a JSON object");
+
+			return await request({endpoint: endpoint, method: "PUT", body: JSON.stringify(data)});
+		} catch (error) {
+			console.error(error);
+			return {ok: false, status: 400, body: "Client error"};
+		}
+	}
+
 }
 
 export default RequestAPI;
