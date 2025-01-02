@@ -1,12 +1,12 @@
-import CssBaseline from '@mui/material/CssBaseline';
+import { useNavigate } from 'react-router-dom';
 import NavBar from './components/NavBar';
 import AppRouter from './AppRouter';
 
 const App = () => {
+  const navigate = useNavigate();
   return (
     <>
-      <CssBaseline />
-      <NavBar />
+      <NavBar navigate={navigate} />
       <h1>Hello</h1>
       <AppRouter />
     </>
