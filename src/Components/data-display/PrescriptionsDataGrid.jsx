@@ -1,11 +1,12 @@
 import { Tooltip, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
-import prescriptionsList from '../../../dummy-data/prescription-list.json';
+import { useContext } from 'react';
 import ButtonWithText from '../buttons/ButtonWithText';
 import StatusChip from './StatusChip';
+// import { PrescriptionContext } from '../../contexts/PrescriptionContext'; // Adjust the import path as needed
 
-const PrescriptionsDataGrid = () => {
+const PrescriptionsDataGrid = ({prescriptionsList}) => {
   // const { prescriptionsList } = useContext(PrescriptionContext);
 
   // ******** Click Handlers
@@ -104,8 +105,6 @@ const PrescriptionsDataGrid = () => {
   };
   // END ******** GridActionButtons
 
-
-
   // ******** Columns headers and GridColDef
   const columns = [
     {
@@ -159,6 +158,7 @@ const PrescriptionsDataGrid = () => {
       headerName: 'Status',
       flex: 0.75,
       width: 100,
+      minWidth: 150,
       renderCell: (params) => {
         return <StatusChip status={params.row.status} />;
       },
