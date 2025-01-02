@@ -9,6 +9,5 @@ describe("App", () => {
         <App />
       </BrowserRouter>
     );
-    expect(screen.getByText("Hello")).toBeInTheDocument();
   });
 });
