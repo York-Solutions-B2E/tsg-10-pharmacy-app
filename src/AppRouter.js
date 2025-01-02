@@ -1,9 +1,10 @@
-import { Route, Routes, Navigate } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
+import PrescriptionsPage from './Pages/PrescriptionsPage';
 
 const AppRouter = () => {
   return (
     <Routes>
-      <Route path="/prescriptions" element={<div>prescriptions</div>} />
+      <Route path="/prescriptions" element={<PrescriptionsPage />} />
       <Route path="/inventory" element={<div>inventory</div>} />
       <Route path="/orders" element={<div>orders</div>} />
       <Route path="/*" element={<Navigate to="/prescriptions" replace />} />
