@@ -35,14 +35,45 @@ describe('fillPrescription', () => {
 	const requestSpy = jest.spyOn(RequestAPI, 'putRequest');
 
 	it('should call RequestAPI.putRequest with correct args', async () => {
-		throw new Error();
+		const data = {
+			id: 123456,
+			prescriptionId: 654321,
+			medicineId: 456789,
+			patientId: 987654,
+			quantity: 999,
+			instructions: 'instructions',
+			status: 'AWAITING_SHIPMENT',
+		};
+		const dataString = JSON.stringify({ ...data, status: 'FILLED' });
+		const endpoint = `/api/prescriptions/${data.id}`;
+
+		await fillPrescription(data);
+		expect(requestSpy).toHaveBeenCalledWith(endpoint, dataString);
 	});
 
 	it('should throw if prescription arg is undefined or null', async () => {
-		throw new Error();
+		jest.spyOn(console, 'error').mockImplementation();
+
+		await fillPrescription();
+		expect(console.error).toHaveBeenCalledWith(
+			new Error('No prescription provided')
+		);
+
+		await fillPrescription(null);
+		expect(console.error).toHaveBeenCalledWith(
+			new Error('Provided prescription is null')
+		);
+
+		console.error.mockRestore();
 	});
 
 	it('should return result of RequestAPI.putRequest', async () => {
-		throw new Error();
+		const expectedResult = 'result';
+		RequestAPI.putRequest = jest
+			.fn()
+			.mockImplementationOnce(() => expectedResult);
+
+		const response = await fillPrescription({});
+		expect(response).toBe(expectedResult);
 	});
 });
