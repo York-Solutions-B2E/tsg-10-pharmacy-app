@@ -24,7 +24,7 @@ describe('App', () => {
         <App />
       </BrowserRouter>
     );
-    const navBar = screen.getByTestId('navbar-test');
-    expect(navBar).toBeInTheDocument();
+    const app = screen.getByTestId('app-test-id');
+    expect(app).toBeInTheDocument();
   });
 });
