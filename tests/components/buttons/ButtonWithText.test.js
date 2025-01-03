@@ -1,7 +1,7 @@
 // import React from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import { fireEvent, render, screen } from '@testing-library/react';
-import ButtonWithText from '../../../src/Components/buttons/ButtonWithText';
+import ButtonWithText from '../../../src/components/buttons/ButtonWithText';
 
 describe('Test ButtonWithText', () => {
   test('Test that Button renders', () => {

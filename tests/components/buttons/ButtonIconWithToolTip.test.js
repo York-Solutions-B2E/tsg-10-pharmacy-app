@@ -1,7 +1,7 @@
 // import React from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import { fireEvent, render, screen } from '@testing-library/react';
-import ButtonIconWithToolTip from '../../../src/Components/buttons/ButtonIconWithToolTip';
+import ButtonIconWithToolTip from '../../../src/components/buttons/ButtonIconWithToolTip';
 
 describe('Test ButtonIconWithToolTip', () => {
   test('Test that Button renders', () => {

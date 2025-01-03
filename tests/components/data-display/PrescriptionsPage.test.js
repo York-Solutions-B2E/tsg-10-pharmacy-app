@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, within } from '@testing-library/react';
-import PrescriptionsDataGrid from '../../../src/Components/data-display/PrescriptionsDataGrid';
+import PrescriptionsDataGrid from '../../../src/components/data-display/PrescriptionsDataGrid';
 
 const mockPrescriptionsList = [
   {

@@ -1,6 +1,6 @@
 // import React from 'react';
 import { render, screen } from '@testing-library/react';
-import StatusChip from '../../../src/Components/data-display/StatusChip';
+import StatusChip from '../../../src/components/data-display/StatusChip';
 
 describe('Test StatusChip', () => {
   it('should render StatusChip Component with status prop', () => {

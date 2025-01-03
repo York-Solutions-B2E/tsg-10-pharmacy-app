@@ -1,5 +1,5 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
-import PrescriptionsPage from './Pages-renamed/PrescriptionsPage';
+import PrescriptionsPage from './pages/PrescriptionsPage';
 
 const AppRouter = () => {
   return (
