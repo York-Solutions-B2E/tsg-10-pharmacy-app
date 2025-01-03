@@ -1,4 +1,5 @@
-import { fireEvent, render, screen, within } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import PrescriptionsDataGrid from '../../../src/components/data-display/PrescriptionsDataGrid';
 
 const mockPrescriptionsList = [
@@ -93,11 +94,14 @@ const mockPrescriptionsList = [
 // };
 
 describe('Test PrescriptionsDataGrid Component Data Display', () => {
-  it('should render PrescriptionsDataGrid Component', () => {
+  it('Should render PrescriptionsDataGrid Component', () => {
     render(<PrescriptionsDataGrid prescriptionsList={mockPrescriptionsList} />);
+
+    const dataGrid = screen.getByRole('grid');
+    expect(dataGrid).toBeInTheDocument();
   });
 
-  it('should render all prescriptions in the list', () => {
+  it('Should render all prescriptions in the list', () => {
     render(<PrescriptionsDataGrid prescriptionsList={mockPrescriptionsList} />);
 
     mockPrescriptionsList.forEach((prescription) => {
@@ -112,7 +116,7 @@ describe('Test PrescriptionsDataGrid Component Data Display', () => {
     });
   });
 
-  it('should render row with OUT_OF_STOCK status with correct background', () => {
+  it('Should render row with OUT_OF_STOCK status with correct background class', () => {
     render(<PrescriptionsDataGrid prescriptionsList={mockPrescriptionsList} />);
     const outOfStockRow = screen
       .getByText('Out of Stock')
@@ -121,7 +125,7 @@ describe('Test PrescriptionsDataGrid Component Data Display', () => {
   });
 
   // TEST BUTTON CLICKS
-  it('should call handleClickFillPrescription when Fill button is clicked', () => {
+  it('Should call handleClickFillPrescription when Fill button is clicked', async () => {
     render(<PrescriptionsDataGrid prescriptionsList={mockPrescriptionsList} />);
     const newStatusRow = screen.getByText('New').closest('.MuiDataGrid-row');
 
@@ -132,13 +136,13 @@ describe('Test PrescriptionsDataGrid Component Data Display', () => {
     const consoleSpy = jest.spyOn(console, 'log');
 
     expect(fillButton.disabled).toBe(false);
-    fireEvent.click(fillButton);
+    await userEvent.click(fillButton);
     expect(consoleSpy).toHaveBeenCalledWith('Fill Prescription, id is:', '1');
 
     consoleSpy.mockRestore();
   });
 
-  it('should call handleClickOrderMore when Order More button is clicked', () => {
+  it('Should call handleClickOrderMore when Order More button is clicked', async () => {
     render(<PrescriptionsDataGrid prescriptionsList={mockPrescriptionsList} />);
     const outOfStockStatusRow = screen
       .getByText('Out of Stock')
@@ -151,7 +155,7 @@ describe('Test PrescriptionsDataGrid Component Data Display', () => {
     const consoleSpy = jest.spyOn(console, 'log');
 
     expect(orderMoreButton.disabled).toBe(false);
-    fireEvent.click(orderMoreButton);
+    await userEvent.click(orderMoreButton);
     expect(consoleSpy).toHaveBeenCalledWith(
       'Order More Medicine, medicine id is:',
       '1'
@@ -160,7 +164,7 @@ describe('Test PrescriptionsDataGrid Component Data Display', () => {
     consoleSpy.mockRestore();
   });
 
-  it('should call handleClickMarkPickedUp when Mark Picked Up button is clicked', () => {
+  it('Should call handleClickMarkPickedUp when Mark Picked Up button is clicked', async () => {
     render(<PrescriptionsDataGrid prescriptionsList={mockPrescriptionsList} />);
     const fillStatusRow = screen
       .getByText('Filled')
@@ -173,7 +177,7 @@ describe('Test PrescriptionsDataGrid Component Data Display', () => {
     const consoleSpy = jest.spyOn(console, 'log');
 
     expect(markPickedUpButton.disabled).toBe(false);
-    fireEvent.click(markPickedUpButton);
+    await userEvent.click(markPickedUpButton);
     expect(consoleSpy).toHaveBeenCalledWith(
       'Prescription Picked up, id is:',
       '5'
@@ -183,7 +187,7 @@ describe('Test PrescriptionsDataGrid Component Data Display', () => {
   });
 
   // TEST BUTTON RENDERING
-  it('NEW status should have an enabled Fill and Order More Button', () => {
+  it('Should have an enabled Fill and Order More Button if the status is NEW', () => {
     render(<PrescriptionsDataGrid prescriptionsList={mockPrescriptionsList} />);
     const newStatusRow = screen.getByText('New').closest('.MuiDataGrid-row');
 
@@ -195,13 +199,13 @@ describe('Test PrescriptionsDataGrid Component Data Display', () => {
     expect(orderMoreButton.disabled).toBe(false);
   });
 
-  it('OUT_OF_STOCK status should have a disabled Fill and enabled Order More Button', () => {
+  it('Should have a disabled Fill and enabled Order More Button if the status is OUT_OF_STOCK', () => {
     render(<PrescriptionsDataGrid prescriptionsList={mockPrescriptionsList} />);
-    const OutOfStockStatusRow = screen
+    const outOfStockStatusRow = screen
       .getByText('Out of Stock')
       .closest('.MuiDataGrid-row');
 
-    const { getByText } = within(OutOfStockStatusRow);
+    const { getByText } = within(outOfStockStatusRow);
     const fillButton = getByText('Fill');
     const orderMoreButton = getByText('Order More');
 
@@ -209,13 +213,13 @@ describe('Test PrescriptionsDataGrid Component Data Display', () => {
     expect(orderMoreButton.disabled).toBe(false);
   });
 
-  it('AWAITING_SHIPMENT status should have a disabled Fill and Order More Button', () => {
+  it('Should have a disabled Fill and Order More Button if the status is AWAITING_SHIPMENT', () => {
     render(<PrescriptionsDataGrid prescriptionsList={mockPrescriptionsList} />);
-    const newStatusRow = screen
+    const awaitingShipmentStatusRow = screen
       .getByText('Awaiting Shipment')
       .closest('.MuiDataGrid-row');
 
-    const { getByText } = within(newStatusRow);
+    const { getByText } = within(awaitingShipmentStatusRow);
     const fillButton = getByText('Fill');
     const orderMoreButton = getByText('Order More');
 
@@ -223,13 +227,13 @@ describe('Test PrescriptionsDataGrid Component Data Display', () => {
     expect(orderMoreButton.disabled).toBe(true);
   });
 
-  it('STOCK_RECEIVED status should have an enabled Fill and Order More Button', () => {
+  it('Should have an enabled Fill and Order More Button if the status is STOCK_RECEIVED', () => {
     render(<PrescriptionsDataGrid prescriptionsList={mockPrescriptionsList} />);
-    const newStatusRow = screen
+    const stockReceivedStatusRow = screen
       .getByText('Stock Received')
       .closest('.MuiDataGrid-row');
 
-    const { getByText } = within(newStatusRow);
+    const { getByText } = within(stockReceivedStatusRow);
     const fillButton = getByText('Fill');
     const orderMoreButton = getByText('Order More');
 
@@ -237,33 +241,27 @@ describe('Test PrescriptionsDataGrid Component Data Display', () => {
     expect(orderMoreButton.disabled).toBe(false);
   });
 
-  it('FILLED status should have an enabled Mark Picked Up Button', () => {
+  it('Should have an enabled Mark Picked Up Button if the status is FILLED', () => {
     render(<PrescriptionsDataGrid prescriptionsList={mockPrescriptionsList} />);
-    const filledRow = screen.getByText('Filled').closest('.MuiDataGrid-row');
+    const filledStatusRow = screen
+      .getByText('Filled')
+      .closest('.MuiDataGrid-row');
 
-    const { getByText } = within(filledRow);
+    const { getByText } = within(filledStatusRow);
     const pickUpButton = getByText('Mark Picked Up');
 
     expect(pickUpButton.disabled).toBe(false);
   });
 
-  it('PICKED_UP status should have no buttons', () => {
+  it('Should have no buttons if the status is PICKED_UP', () => {
     render(<PrescriptionsDataGrid prescriptionsList={mockPrescriptionsList} />);
-    const pickedUpRow = screen
+    const pickedUpStatusRow = screen
       .getByText('Picked Up')
       .closest('.MuiDataGrid-row');
 
-    const { queryByRole } = within(pickedUpRow);
+    const { queryByRole } = within(pickedUpStatusRow);
     const button = queryByRole('button');
 
     expect(button).toBeNull();
   });
-
-  // Button Rendering Ensure the correct buttons are rendered for each prescription status
-  //// -- NEW status should render Fill button & Order More button
-  //// -- OUT_OF_STOCK status should disable Fill Button and render Order More button
-  //// -- AWAITING_SHIPMENT status should disable Fill Button and Order More button
-  //// -- STOCK_RECEIVED status should render Fill button & Order More button
-  //// -- FILLED status should render marked picked up button
-  // -- PICKED_UP status should render nothing
 });
