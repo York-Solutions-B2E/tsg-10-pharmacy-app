@@ -24,14 +24,16 @@ const ButtonIconWithToolTip = (props) => {
 
   return (
     <Tooltip title={toolTipMessage}>
-      <IconButton
-        color={color}
-        disabled={disabled}
-        sx={iconButtonStyle}
-        onClick={onClick}
-      >
-        {icon}
-      </IconButton>
+      <span>
+        <IconButton
+          color={color}
+          disabled={disabled}
+          sx={iconButtonStyle}
+          onClick={onClick}
+        >
+          {icon}
+        </IconButton>
+      </span>
     </Tooltip>
   );
 };

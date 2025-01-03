@@ -8,10 +8,13 @@ describe('App', () => {
     jest
       .spyOn(appContext, 'useAppContext')
       .mockImplementation(() => ({ navigate: 'navigate' }));
+
+    jest.spyOn(console, 'warn').mockImplementation();
   });
 
   afterAll(() => {
     appContext.useAppContext.mockRestore();
+    console.warn.mockRestore();
   });
 
   afterEach(() => {
@@ -24,6 +27,8 @@ describe('App', () => {
         <App />
       </BrowserRouter>
     );
+
+    
     const app = screen.getByTestId('app-test-id');
     expect(app).toBeInTheDocument();
   });
