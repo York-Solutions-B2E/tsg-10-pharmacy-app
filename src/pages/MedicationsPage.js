@@ -7,11 +7,11 @@ const MedicationsPage = () => {
   const [medications, setMedications] = useState([]);
 
   const addMedication = (medication) => {
-    setMedications([...medications, medication]);
+    console.log("Add medication button clicked");
   };
 
-  const removeMedication = (id) => {
-    setMedications(medications.filter(med => med.id !== id));
+  const editMedicine = (id) => {
+    console.log("Edit medication button clicked");
   };
 
   useEffect(() => {
@@ -50,8 +50,8 @@ const MedicationsPage = () => {
         <h5>These are all of the medications that we provide.</h5>
         <MedicationsTable
           medications={medications}
-          orderMore={removeMedication}
-          editMedicine={removeMedication}
+          orderMore={addMedication}
+          editMedicine={editMedicine}
         />
       </Box>
     </div>

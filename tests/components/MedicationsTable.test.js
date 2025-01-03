@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import MedicationsTable from './MedicationsTable';
+import MedicationsTable from '../../src/components/MedicationsTable';
 
 const mockMedications = [
   {
@@ -37,11 +37,11 @@ const mockMedications = [
   },
 ];
 
-const mockOnRemove = jest.fn();
+const orderMoreFunc = jest.fn();
 
 describe('MedicationsTable', () => {
   test('renders the table with medications', () => {
-    render(<MedicationsTable medications={mockMedications} orderMore={mockOnRemove} editMedicine={mockOnRemove} />);
+    render(<MedicationsTable medications={mockMedications} orderMore={orderMoreFunc} editMedicine={orderMoreFunc} />);
 
     // Check if the medication names are rendered
     expect(screen.getByText('Medication 1')).toBeInTheDocument();
@@ -55,13 +55,26 @@ describe('MedicationsTable', () => {
     expect(screen.getByText('Invalid')).toHaveStyle('background-color: grey');
   });
 
-  test('calls onRemove when the "Order More" button is clicked', () => {
-    render(<MedicationsTable medications={mockMedications} orderMore={mockOnRemove} editMedicine={ () => {} } />);
+  test('calls orderMore when the "Order More" button is clicked', () => {
+    render(<MedicationsTable medications={mockMedications} orderMore={orderMoreFunc} editMedicine={ () => {} } />);
 
     // Click the "Order More" button for the first medication
     fireEvent.click(screen.getAllByText('Order More')[0]);
 
     // Check if the onRemove function was called with the correct id
-    expect(mockOnRemove).toHaveBeenCalledWith(1);
+    expect(orderMoreFunc).toHaveBeenCalledWith(1);
   });
+
+  test('editMedicine is called when the "Add Stock" button is clicked', () => {
+    const editMedicineFunc = jest.fn();
+    render(<MedicationsTable medications={mockMedications} orderMore={ () => {} } editMedicine={editMedicineFunc} />);
+
+    // Click the button for the first medication
+    fireEvent.click(screen.getAllByText(/Add Stock/i)[0]);
+
+    // Check if the function was called with the correct id
+    expect(editMedicineFunc).toHaveBeenCalledWith(1);
+  });
+
+  
 });
