@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 import prescriptionsList from '../../dummy-data/prescription-list.json';
-import PrescriptionsDataGrid from '../Components/data-display/PrescriptionsDataGrid';
+import PrescriptionsDataGrid from '../Components-renameFolder/data-display/PrescriptionsDataGrid';
 
 const PrescriptionsPage = () => {
   const appointmentPageStyling = {
