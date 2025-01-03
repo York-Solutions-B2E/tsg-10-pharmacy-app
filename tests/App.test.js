@@ -28,7 +28,6 @@ describe('App', () => {
       </BrowserRouter>
     );
 
-    
     const app = screen.getByTestId('app-test-id');
     expect(app).toBeInTheDocument();
   });
