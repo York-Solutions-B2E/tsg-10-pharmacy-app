@@ -3,10 +3,6 @@ import { render, screen } from '@testing-library/react';
 import StatusChip from '../../../src/components/data-display/StatusChip';
 
 describe('Test StatusChip', () => {
-  it('should render StatusChip Component with status prop', () => {
-    render(<StatusChip status="NEW" />);
-  });
-
   it('Should render New when NEW status is passed in', () => {
     render(<StatusChip status="NEW" />);
     const chip = screen.getByText('New');
@@ -109,7 +105,7 @@ describe('Test StatusChip', () => {
   });
 
   it('Should render status and custom color with 2 arguments are provided', () => {
-    render(<StatusChip status="TEST_STATUS" color='error'/>);
+    render(<StatusChip status="TEST_STATUS" color="error" />);
     const chip = screen.getByText('TEST_STATUS');
     const chipWrapper = chip.closest('.MuiChip-root');
 
