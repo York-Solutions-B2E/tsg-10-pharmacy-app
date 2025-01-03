@@ -39,3 +39,6 @@ export const markPickedUp = async (prescription) => {
 		return { ok: false, status: 400, body: null };
 	}
 };
+
+const PrescriptionAPI = { getAllPrescriptions, fillPrescription, markPickedUp };
+export default PrescriptionAPI;
