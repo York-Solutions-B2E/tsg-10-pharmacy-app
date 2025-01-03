@@ -1,14 +1,17 @@
 // import React from 'react';
 import AddIcon from '@mui/icons-material/Add';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import ButtonWithText from '../../../src/components/buttons/ButtonWithText';
 
 describe('Test ButtonWithText', () => {
-  test('Test that Button renders', () => {
+  it('Should render the Button element', () => {
     render(<ButtonWithText onClick={() => {}} />);
+    const button = screen.getByRole('button');
+    expect(button).toBeInTheDocument();
   });
 
-  test('Test Button receives the correct color prop', () => {
+  it('Should render the correct color prop', () => {
     render(<ButtonWithText onClick={() => {}} color="secondary" />);
     const button = screen.getByRole('button');
     expect(button).toHaveClass(
@@ -16,7 +19,7 @@ describe('Test ButtonWithText', () => {
     );
   });
 
-  test('Test Button renders the correct variant', () => {
+  it('Should render the correct button variant', () => {
     render(<ButtonWithText onClick={() => {}} variant="outlined" />);
     const button = screen.getByRole('button');
     expect(button).toHaveClass(
@@ -24,13 +27,13 @@ describe('Test ButtonWithText', () => {
     );
   });
 
-  test('Test Button is disabled when disabled prop is true', () => {
+  it('Should disable the button when the disabled prop is true', () => {
     render(<ButtonWithText onClick={() => {}} disabled />);
     const button = screen.getByRole('button');
     expect(button).toBeDisabled();
   });
 
-  test('Test Tooltip displays the correct message', () => {
+  it('Should display the correct Tool Tip message', async () => {
     render(
       <ButtonWithText
         onClick={() => {}}
@@ -39,31 +42,36 @@ describe('Test ButtonWithText', () => {
       />
     );
 
-    const buttonToolTip = screen.getByRole('button').closest('span');
+    userEvent.hover(screen.getByRole('button'));
 
-    expect(buttonToolTip).toHaveAttribute('aria-label', 'Test ToolTip Message');
+    await waitFor(() => {
+      expect(screen.getByText('Test ToolTip Message')).toBeVisible();
+    });
   });
 
-  test('Test the onClick function is called when the button is clicked', () => {
+  it('Should call the onClick function when the button is clicked', async () => {
     const handleClick = jest.fn();
     render(<ButtonWithText onClick={handleClick} />);
 
-    fireEvent.click(screen.getByRole('button'));
+    const button = screen.getByRole('button');
+
+    expect(button).not.toBeDisabled();
+    await userEvent.click(button);
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 
-  test('Test test the startIcon is rendered when provided', () => {
+  it('Should render the startIcon when provided', () => {
     render(<ButtonWithText onClick={() => {}} startIcon={<AddIcon />} />);
 
     expect(screen.getByTestId('AddIcon')).toBeInTheDocument();
   });
 
-  test('Test test the endIcon is rendered when provided', () => {
+  it('Should render the endIcon when provided', () => {
     render(<ButtonWithText onClick={() => {}} endIcon={<AddIcon />} />);
     expect(screen.getByTestId('AddIcon')).toBeInTheDocument();
   });
 
-  test('Test test the Button Text is rendered when provided', () => {
+  it('Should render the Button Text when provided', () => {
     render(<ButtonWithText onClick={() => {}} buttonText="Text Button Text" />);
     expect(screen.getByText('Text Button Text')).toBeInTheDocument();
   });

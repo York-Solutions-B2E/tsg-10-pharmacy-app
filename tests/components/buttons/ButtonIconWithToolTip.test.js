@@ -1,14 +1,16 @@
-// import React from 'react';
 import AddIcon from '@mui/icons-material/Add';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import ButtonIconWithToolTip from '../../../src/components/buttons/ButtonIconWithToolTip';
 
 describe('Test ButtonIconWithToolTip', () => {
-  test('Test that Button renders', () => {
+  it('Should render the Button element', () => {
     render(<ButtonIconWithToolTip onClick={() => {}} />);
+    const button = screen.getByRole('button');
+    expect(button).toBeInTheDocument();
   });
 
-  test('Test IconButton receives the correct color prop', () => {
+  it('Should render the correct color prop', () => {
     render(<ButtonIconWithToolTip onClick={() => {}} color="secondary" />);
     const button = screen.getByRole('button');
     expect(button).toHaveClass(
@@ -16,13 +18,13 @@ describe('Test ButtonIconWithToolTip', () => {
     );
   });
 
-  test('Test IconButton is disabled when disabled prop is true', () => {
+  it('Should disable the button when the disabled prop is true', () => {
     render(<ButtonIconWithToolTip onClick={() => {}} disabled />);
     const button = screen.getByRole('button');
     expect(button).toBeDisabled();
   });
 
-  test('Test Tooltip displays the correct message', () => {
+  it('Should display the correct Tool Tip message', async () => {
     render(
       <ButtonIconWithToolTip
         onClick={() => {}}
@@ -31,20 +33,25 @@ describe('Test ButtonIconWithToolTip', () => {
       />
     );
 
-    const button = screen.getByRole('button');
+    userEvent.hover(screen.getByRole('button'));
 
-    expect(button).toHaveAttribute('aria-label', 'Test ToolTip Message');
+    await waitFor(() => {
+      expect(screen.getByText('Test ToolTip Message')).toBeVisible();
+    });
   });
 
-  test('Test the onClick function is called when the button is clicked', () => {
+  it('Should call the onClick function when the button is clicked', async () => {
     const handleClick = jest.fn();
     render(<ButtonIconWithToolTip onClick={handleClick} />);
+
     const button = screen.getByRole('button');
-    fireEvent.click(button);
+    
+    expect(button).not.toBeDisabled();
+    await userEvent.click(button);
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 
-  test('Test test the icon is rendered when provided', () => {
+  it('Should render the Icon when provided', () => {
     render(<ButtonIconWithToolTip onClick={() => {}} icon={<AddIcon />} />);
 
     const iconTestId = screen.getByTestId('AddIcon');
