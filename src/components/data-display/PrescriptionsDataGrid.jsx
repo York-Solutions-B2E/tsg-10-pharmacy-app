@@ -1,17 +1,15 @@
-import { Tooltip, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
 import ButtonWithText from '../buttons/ButtonWithText';
 import StatusChip from './StatusChip';
-// import { PrescriptionContext } from '../../contexts/PrescriptionContext'; // Adjust the import path as needed
 
 const PrescriptionsDataGrid = ({ prescriptionsList }) => {
-  // const { prescriptionsList } = useContext(PrescriptionContext);
+  // const navigate = useNavigate();
 
   // ******** Click Handlers
   const handleClickFillPrescription = (prescription) => {
     console.log('Fill Prescription, id is:', prescription.id);
-    // TODO: Implement the fill prescription api call
+    // TODO: Implement the fill prescription api call, api function takes full prescription object
   };
 
   const handleClickOrderMore = (prescription) => {
@@ -19,12 +17,14 @@ const PrescriptionsDataGrid = ({ prescriptionsList }) => {
       'Order More Medicine, medicine id is:',
       prescription.medicine.id
     );
+
+    // navigate('/orders', { state: prescription.medicine });
     // TODO: Navigate to the order more page with the medicine id
   };
 
   const handleClickMarkPickedUp = (prescription) => {
     console.log('Prescription Picked up, id is:', prescription.id);
-    // TODO: Implement the picked up api call
+    // TODO: Implement the picked up api call, api function takes full prescription object
   };
   // END ******** click handlers
 
@@ -81,18 +81,16 @@ const PrescriptionsDataGrid = ({ prescriptionsList }) => {
     );
   };
 
-  // NEW, OUT_OF_STOCK, AWAITING_SHIPMENT, STOCK_RECEIVED, FILLED, PICKED_UP, CANCELLED
-  // -* STOCK_RECEIVED is for post Awaiting Shipment status (not new, but not yet filled)
-  // -* CANCELLED theoretically will never be in the list, but it's here to show what the statuses are.
+  // Renders the action buttons based on the prescription status
   const renderActionButtonsForPrescriptions = (prescription) => {
     const prescriptionStatus = prescription.status;
 
-    // If the prescription is picked up, there is no action to take
+    // If the prescription is PICKED_UP, there is no action to take
     if (prescriptionStatus === 'PICKED_UP') {
       return [];
     }
 
-    // If the prescription is filled, the only action is to mark it as picked up
+    // If the prescription is FILLED, the only action is to mark it as picked up
     if (prescriptionStatus === 'FILLED') {
       return [MarkPickedUpButton(prescription)];
     }
@@ -147,13 +145,6 @@ const PrescriptionsDataGrid = ({ prescriptionsList }) => {
       field: 'instructions',
       flex: 1,
       headerName: 'Instructions',
-      // width: 80,
-      renderCell: (params) => {
-        <Tooltip title={params.row.instructions}>
-          <Typography>{params.row.instructions}</Typography>
-        </Tooltip>;
-        return params.row.instructions;
-      },
     },
     {
       field: 'status',
