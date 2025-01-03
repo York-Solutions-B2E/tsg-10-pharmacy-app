@@ -39,9 +39,9 @@ describe('Test ButtonWithText', () => {
       />
     );
 
-    const button = screen.getByRole('button');
+    const buttonToolTip = screen.getByRole('button').closest('span');
 
-    expect(button).toHaveAttribute('aria-label', 'Test ToolTip Message');
+    expect(buttonToolTip).toHaveAttribute('aria-label', 'Test ToolTip Message');
   });
 
   test('Test the onClick function is called when the button is clicked', () => {
