@@ -1,12 +1,11 @@
 import { Tooltip, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
-import { useContext } from 'react';
 import ButtonWithText from '../buttons/ButtonWithText';
 import StatusChip from './StatusChip';
 // import { PrescriptionContext } from '../../contexts/PrescriptionContext'; // Adjust the import path as needed
 
-const PrescriptionsDataGrid = ({prescriptionsList}) => {
+const PrescriptionsDataGrid = ({ prescriptionsList }) => {
   // const { prescriptionsList } = useContext(PrescriptionContext);
 
   // ******** Click Handlers
@@ -16,12 +15,15 @@ const PrescriptionsDataGrid = ({prescriptionsList}) => {
   };
 
   const handleClickOrderMore = (prescription) => {
-    console.log('Order More, medicine id is:', prescription.medicine.id);
+    console.log(
+      'Order More Medicine, medicine id is:',
+      prescription.medicine.id
+    );
     // TODO: Navigate to the order more page with the medicine id
   };
 
   const handleClickMarkPickedUp = (prescription) => {
-    console.log('Picked up, id is:', prescription.id);
+    console.log('Prescription Picked up, id is:', prescription.id);
     // TODO: Implement the picked up api call
   };
   // END ******** click handlers
