@@ -1,9 +1,18 @@
 import RequestAPI from './RequestAPI';
 
+/**
+ * Sends a get request to get all prescriptions from remote server
+ * @Returns {Object} HTTP response: {ok: boolean, status: int, body: String}
+ */
 export const getAllPrescriptions = async () => {
 	return await RequestAPI.getRequest('/api/prescriptions');
 };
 
+/**
+ * Sends put request to update the prescription status to FILLED
+ * @Params {Object} prescription
+ * @Returns {Object} HTTP response: {ok: boolean, status: int, body: String}
+ */
 export const fillPrescription = async (prescription) => {
 	try {
 		if (prescription === undefined) throw new Error('No prescription provided');
@@ -22,6 +31,11 @@ export const fillPrescription = async (prescription) => {
 	}
 };
 
+/**
+ * Sends put request to update the prescription status to PICKED_UP
+ * @Params {Object} prescription
+ * @Returns {Object} HTTP response: {ok: boolean, status: int, body: String}
+ */
 export const markPickedUp = async (prescription) => {
 	try {
 		if (prescription === undefined) throw new Error('No prescription provided');
