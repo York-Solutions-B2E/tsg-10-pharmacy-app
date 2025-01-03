@@ -1,9 +1,9 @@
-import { useNavigate } from 'react-router-dom';
+import { useAppContext } from './HOC/AppContext';
 import NavBar from './components/NavBar';
 import AppRouter from './AppRouter';
 
 const App = () => {
-  const navigate = useNavigate();
+  const { navigate } = useAppContext();
   return (
     <>
       <NavBar navigate={navigate} />
