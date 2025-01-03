@@ -4,13 +4,13 @@ import userEvent from '@testing-library/user-event';
 import ButtonIconWithToolTip from '../../../src/components/buttons/ButtonIconWithToolTip';
 
 describe('Test ButtonIconWithToolTip', () => {
-  it('Should render the Button element', () => {
+  it('should render the Button element', () => {
     render(<ButtonIconWithToolTip onClick={() => {}} />);
     const button = screen.getByRole('button');
     expect(button).toBeInTheDocument();
   });
 
-  it('Should render the correct color prop', () => {
+  it('should render the correct color prop', () => {
     render(<ButtonIconWithToolTip onClick={() => {}} color="secondary" />);
     const button = screen.getByRole('button');
     expect(button).toHaveClass(
@@ -18,13 +18,13 @@ describe('Test ButtonIconWithToolTip', () => {
     );
   });
 
-  it('Should disable the button when the disabled prop is true', () => {
+  it('should disable the button when the disabled prop is true', () => {
     render(<ButtonIconWithToolTip onClick={() => {}} disabled />);
     const button = screen.getByRole('button');
     expect(button).toBeDisabled();
   });
 
-  it('Should display the correct Tool Tip message', async () => {
+  it('should display the correct Tool Tip message', async () => {
     render(
       <ButtonIconWithToolTip
         onClick={() => {}}
@@ -40,18 +40,18 @@ describe('Test ButtonIconWithToolTip', () => {
     });
   });
 
-  it('Should call the onClick function when the button is clicked', async () => {
+  it('should call the onClick function when the button is clicked', async () => {
     const handleClick = jest.fn();
     render(<ButtonIconWithToolTip onClick={handleClick} />);
 
     const button = screen.getByRole('button');
-    
+
     expect(button).not.toBeDisabled();
     await userEvent.click(button);
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 
-  it('Should render the Icon when provided', () => {
+  it('should render the Icon when provided', () => {
     render(<ButtonIconWithToolTip onClick={() => {}} icon={<AddIcon />} />);
 
     const iconTestId = screen.getByTestId('AddIcon');

@@ -94,14 +94,14 @@ const mockPrescriptionsList = [
 // };
 
 describe('Test PrescriptionsDataGrid Component Data Display', () => {
-  it('Should render PrescriptionsDataGrid Component', () => {
+  it('should render PrescriptionsDataGrid Component', () => {
     render(<PrescriptionsDataGrid prescriptionsList={mockPrescriptionsList} />);
 
     const dataGrid = screen.getByRole('grid');
     expect(dataGrid).toBeInTheDocument();
   });
 
-  it('Should render all prescriptions in the list', () => {
+  it('should render all prescriptions in the list', () => {
     render(<PrescriptionsDataGrid prescriptionsList={mockPrescriptionsList} />);
 
     mockPrescriptionsList.forEach((prescription) => {
@@ -116,7 +116,7 @@ describe('Test PrescriptionsDataGrid Component Data Display', () => {
     });
   });
 
-  it('Should render row with OUT_OF_STOCK status with correct background class', () => {
+  it('should render row with OUT_OF_STOCK status with correct background class', () => {
     render(<PrescriptionsDataGrid prescriptionsList={mockPrescriptionsList} />);
     const outOfStockRow = screen
       .getByText('Out of Stock')
@@ -125,7 +125,7 @@ describe('Test PrescriptionsDataGrid Component Data Display', () => {
   });
 
   // TEST BUTTON CLICKS
-  it('Should call handleClickFillPrescription when Fill button is clicked', async () => {
+  it('should call handleClickFillPrescription when Fill button is clicked', async () => {
     render(<PrescriptionsDataGrid prescriptionsList={mockPrescriptionsList} />);
     const newStatusRow = screen.getByText('New').closest('.MuiDataGrid-row');
 
@@ -142,7 +142,7 @@ describe('Test PrescriptionsDataGrid Component Data Display', () => {
     consoleSpy.mockRestore();
   });
 
-  it('Should call handleClickOrderMore when Order More button is clicked', async () => {
+  it('should call handleClickOrderMore when Order More button is clicked', async () => {
     render(<PrescriptionsDataGrid prescriptionsList={mockPrescriptionsList} />);
     const outOfStockStatusRow = screen
       .getByText('Out of Stock')
@@ -164,7 +164,7 @@ describe('Test PrescriptionsDataGrid Component Data Display', () => {
     consoleSpy.mockRestore();
   });
 
-  it('Should call handleClickMarkPickedUp when Mark Picked Up button is clicked', async () => {
+  it('should call handleClickMarkPickedUp when Mark Picked Up button is clicked', async () => {
     render(<PrescriptionsDataGrid prescriptionsList={mockPrescriptionsList} />);
     const fillStatusRow = screen
       .getByText('Filled')
@@ -187,7 +187,7 @@ describe('Test PrescriptionsDataGrid Component Data Display', () => {
   });
 
   // TEST BUTTON RENDERING
-  it('Should have an enabled Fill and Order More Button if the status is NEW', () => {
+  it('should have an enabled Fill and Order More Button if the status is NEW', () => {
     render(<PrescriptionsDataGrid prescriptionsList={mockPrescriptionsList} />);
     const newStatusRow = screen.getByText('New').closest('.MuiDataGrid-row');
 
@@ -199,7 +199,7 @@ describe('Test PrescriptionsDataGrid Component Data Display', () => {
     expect(orderMoreButton.disabled).toBe(false);
   });
 
-  it('Should have a disabled Fill and enabled Order More Button if the status is OUT_OF_STOCK', () => {
+  it('should have a disabled Fill and enabled Order More Button if the status is OUT_OF_STOCK', () => {
     render(<PrescriptionsDataGrid prescriptionsList={mockPrescriptionsList} />);
     const outOfStockStatusRow = screen
       .getByText('Out of Stock')
@@ -213,7 +213,7 @@ describe('Test PrescriptionsDataGrid Component Data Display', () => {
     expect(orderMoreButton.disabled).toBe(false);
   });
 
-  it('Should have a disabled Fill and Order More Button if the status is AWAITING_SHIPMENT', () => {
+  it('should have a disabled Fill and Order More Button if the status is AWAITING_SHIPMENT', () => {
     render(<PrescriptionsDataGrid prescriptionsList={mockPrescriptionsList} />);
     const awaitingShipmentStatusRow = screen
       .getByText('Awaiting Shipment')
@@ -227,7 +227,7 @@ describe('Test PrescriptionsDataGrid Component Data Display', () => {
     expect(orderMoreButton.disabled).toBe(true);
   });
 
-  it('Should have an enabled Fill and Order More Button if the status is STOCK_RECEIVED', () => {
+  it('should have an enabled Fill and Order More Button if the status is STOCK_RECEIVED', () => {
     render(<PrescriptionsDataGrid prescriptionsList={mockPrescriptionsList} />);
     const stockReceivedStatusRow = screen
       .getByText('Stock Received')
@@ -241,7 +241,7 @@ describe('Test PrescriptionsDataGrid Component Data Display', () => {
     expect(orderMoreButton.disabled).toBe(false);
   });
 
-  it('Should have an enabled Mark Picked Up Button if the status is FILLED', () => {
+  it('should have an enabled Mark Picked Up Button if the status is FILLED', () => {
     render(<PrescriptionsDataGrid prescriptionsList={mockPrescriptionsList} />);
     const filledStatusRow = screen
       .getByText('Filled')
@@ -253,7 +253,7 @@ describe('Test PrescriptionsDataGrid Component Data Display', () => {
     expect(pickUpButton.disabled).toBe(false);
   });
 
-  it('Should have no buttons if the status is PICKED_UP', () => {
+  it('should have no buttons if the status is PICKED_UP', () => {
     render(<PrescriptionsDataGrid prescriptionsList={mockPrescriptionsList} />);
     const pickedUpStatusRow = screen
       .getByText('Picked Up')

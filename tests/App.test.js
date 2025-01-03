@@ -3,7 +3,7 @@ import { BrowserRouter } from 'react-router-dom';
 import App from '../src/App';
 
 describe('App', () => {
-  it('Should render the App Component', () => {
+  it('should render the App Component', () => {
     render(
       <BrowserRouter>
         <App />

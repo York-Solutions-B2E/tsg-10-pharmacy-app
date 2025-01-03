@@ -5,13 +5,13 @@ import userEvent from '@testing-library/user-event';
 import ButtonWithText from '../../../src/components/buttons/ButtonWithText';
 
 describe('Test ButtonWithText', () => {
-  it('Should render the Button element', () => {
+  it('should render the Button element', () => {
     render(<ButtonWithText onClick={() => {}} />);
     const button = screen.getByRole('button');
     expect(button).toBeInTheDocument();
   });
 
-  it('Should render the correct color prop', () => {
+  it('should render the correct color prop', () => {
     render(<ButtonWithText onClick={() => {}} color="secondary" />);
     const button = screen.getByRole('button');
     expect(button).toHaveClass(
@@ -19,7 +19,7 @@ describe('Test ButtonWithText', () => {
     );
   });
 
-  it('Should render the correct button variant', () => {
+  it('should render the correct button variant', () => {
     render(<ButtonWithText onClick={() => {}} variant="outlined" />);
     const button = screen.getByRole('button');
     expect(button).toHaveClass(
@@ -27,13 +27,13 @@ describe('Test ButtonWithText', () => {
     );
   });
 
-  it('Should disable the button when the disabled prop is true', () => {
+  it('should disable the button when the disabled prop is true', () => {
     render(<ButtonWithText onClick={() => {}} disabled />);
     const button = screen.getByRole('button');
     expect(button).toBeDisabled();
   });
 
-  it('Should display the correct Tool Tip message', async () => {
+  it('should display the correct Tool Tip message', async () => {
     render(
       <ButtonWithText
         onClick={() => {}}
@@ -49,7 +49,7 @@ describe('Test ButtonWithText', () => {
     });
   });
 
-  it('Should call the onClick function when the button is clicked', async () => {
+  it('should call the onClick function when the button is clicked', async () => {
     const handleClick = jest.fn();
     render(<ButtonWithText onClick={handleClick} />);
 
@@ -60,18 +60,18 @@ describe('Test ButtonWithText', () => {
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 
-  it('Should render the startIcon when provided', () => {
+  it('should render the startIcon when provided', () => {
     render(<ButtonWithText onClick={() => {}} startIcon={<AddIcon />} />);
 
     expect(screen.getByTestId('AddIcon')).toBeInTheDocument();
   });
 
-  it('Should render the endIcon when provided', () => {
+  it('should render the endIcon when provided', () => {
     render(<ButtonWithText onClick={() => {}} endIcon={<AddIcon />} />);
     expect(screen.getByTestId('AddIcon')).toBeInTheDocument();
   });
 
-  it('Should render the Button Text when provided', () => {
+  it('should render the Button Text when provided', () => {
     render(<ButtonWithText onClick={() => {}} buttonText="Text Button Text" />);
     expect(screen.getByText('Text Button Text')).toBeInTheDocument();
   });
