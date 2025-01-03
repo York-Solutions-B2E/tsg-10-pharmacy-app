@@ -83,15 +83,13 @@ const PrescriptionsDataGrid = ({ prescriptionsList }) => {
 
   // Renders the action buttons based on the prescription status
   const renderActionButtonsForPrescriptions = (prescription) => {
-    const prescriptionStatus = prescription.status;
-
     // If the prescription is PICKED_UP, there is no action to take
-    if (prescriptionStatus === 'PICKED_UP') {
+    if (prescription.status === 'PICKED_UP') {
       return [];
     }
 
     // If the prescription is FILLED, the only action is to mark it as picked up
-    if (prescriptionStatus === 'FILLED') {
+    if (prescription.status === 'FILLED') {
       return [MarkPickedUpButton(prescription)];
     }
 
