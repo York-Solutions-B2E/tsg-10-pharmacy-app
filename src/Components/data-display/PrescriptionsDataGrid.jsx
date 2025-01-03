@@ -76,7 +76,7 @@ const PrescriptionsDataGrid = ({ prescriptionsList }) => {
         onClick={() => {
           handleClickMarkPickedUp(prescription);
         }}
-        buttonText={'Marked Picked Up'}
+        buttonText={'Mark Picked Up'}
       />
     );
   };
