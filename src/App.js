@@ -1,15 +1,14 @@
-import { useAppContext } from './HOC/AppContext';
-import NavBar from './components/NavBar';
 import AppRouter from './AppRouter';
+import NavBar from './components/NavBar';
+import { useAppContext } from './HOC/AppContext';
 
 const App = () => {
   const { navigate } = useAppContext();
   return (
-    <>
+    <div data-testid="app-test-id"> 
       <NavBar navigate={navigate} />
-      <h1>Hello</h1>
       <AppRouter />
-    </>
+    </div>
   );
 };
 

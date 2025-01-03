@@ -8,22 +8,28 @@ describe('App', () => {
     jest
       .spyOn(appContext, 'useAppContext')
       .mockImplementation(() => ({ navigate: 'navigate' }));
+
+    jest.spyOn(console, 'warn').mockImplementation();
   });
 
   afterAll(() => {
     appContext.useAppContext.mockRestore();
+    console.warn.mockRestore();
   });
 
   afterEach(() => {
     appContext.useAppContext.mockReset();
   });
 
-  it('renders Hello heading', () => {
+  it('should render the App Component', () => {
     render(
       <BrowserRouter>
         <App />
       </BrowserRouter>
     );
-    expect(screen.getByText('Hello')).toBeInTheDocument();
+
+    
+    const app = screen.getByTestId('app-test-id');
+    expect(app).toBeInTheDocument();
   });
 });

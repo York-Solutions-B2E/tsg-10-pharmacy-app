@@ -1,0 +1,80 @@
+[
+  {
+    "id": "1",
+    "prescriptionNumber": "fff333",
+    "patientId": "pat001",
+    "medicine": {
+      "id": "2",
+      "name": "Paracetamol",
+      "medCode": "med001"
+    },
+    "quantity": "60",
+    "instructions": "Take 1 tablet every 4 hours",
+    "status": "NEW"
+  },
+  {
+    "id": "2",
+    "prescriptionNumber": "fff334",
+    "patientId": "pat002",
+    "medicine": {
+      "id": "1",
+      "name": "Aspirin",
+      "medCode": "med002"
+    },
+    "quantity": "30",
+    "instructions": "Take 1 tablet every 6 hours",
+    "status": "OUT_OF_STOCK"
+  },
+  {
+    "id": "3",
+    "prescriptionNumber": "fff335",
+    "patientId": "pat003",
+    "medicine": {
+      "id": "3",
+      "name": "Ibuprofen",
+      "medCode": "med003"
+    },
+    "quantity": "90",
+    "instructions": "Take 1 tablet every 8 hours",
+    "status": "AWAITING_SHIPMENT"
+  },
+  {
+    "id": "4",
+    "prescriptionNumber": "fff336",
+    "patientId": "pat004",
+    "medicine": {
+      "id": "4",
+      "name": "Codeine",
+      "medCode": "med004"
+    },
+    "quantity": "120",
+    "instructions": "Take 1 tablet every 12 hours",
+    "status": "STOCK_RECEIVED"
+  },
+  {
+    "id": "5",
+    "prescriptionNumber": "fff337",
+    "patientId": "pat005",
+    "medicine": {
+      "id": "5",
+      "name": "Morphine",
+      "medCode": "med005"
+    },
+    "quantity": "150",
+    "instructions": "Take 1 tablet every 24 hours",
+    "status": "FILLED"
+  },
+  {
+    "id": "6",
+    "prescriptionNumber": "fff338",
+    "patientId": "pat006",
+    "medicine": {
+      "id": "6",
+      "name": "Hydrocodone",
+      "medCode": "med006"
+    },
+    "quantity": "180",
+    "instructions": "Take 1 tablet every 48 hours",
+    "status": "PICKED_UP"
+  }
+]

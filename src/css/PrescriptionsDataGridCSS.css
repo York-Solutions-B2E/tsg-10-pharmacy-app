@@ -1,0 +1,7 @@
+.row-out-of-stock {
+  background-color: #ffebee; /* Light red */
+}
+
+.row-awaiting-shipment {
+  background-color: #fff3e0; /* Light orange */
+}

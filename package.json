@@ -65,9 +65,8 @@
       "/coverage",
       "package.json",
       "package-lock.json",
-      "reportWebVitals.ts",
-      "setupTests.ts",
-      "index.tsx"
+      "jest.setup.js",
+      "index.js"
     ],
     "transform": {
       "^.+\\.(js|jsx|ts|tsx)$": [
