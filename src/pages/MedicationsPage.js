@@ -6,12 +6,25 @@ import { useEffect } from 'react';
 const MedicationsPage = () => {
   const [medications, setMedications] = useState([]);
 
-  const orderMoreMedication = (medication) => {
-    console.log('Add medication button clicked');
+  const [open, setOpen] = useState(false);
+  const [currentMedication, setCurrentMedication] = useState(null);
+
+  const handleOpen = (medication) => {
+    setCurrentMedication(medication);
+    setOpen(true);
   };
 
-  const editMedicine = (id) => {
-    console.log('Edit medication button clicked');
+  const handleClose = () => {
+    setOpen(false);
+    setCurrentMedication(null);
+  };
+
+  const editMedication = (medication) => {
+    handleOpen(medication);
+  };
+
+  const orderMoreMedication = (id) => {
+    setMedications(medications.filter(med => med.id !== id));
   };
 
   useEffect(() => {
