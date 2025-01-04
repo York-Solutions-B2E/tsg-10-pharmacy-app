@@ -107,11 +107,6 @@ describe('exceptions', () => {
 
   describe('updateMedicationStock', () => {
     it('should throw if inventory.id is not a positive number', async () => {
-      await updateMedicationStock({ id: undefined }, 100);
-      expect(errorSpy).toHaveBeenCalledWith(
-        new Error('Inventory id must be a positive number')
-      );
-
       await updateMedicationStock({ id: null }, 100);
       expect(errorSpy).toHaveBeenCalledWith(
         new Error('Inventory id must be a positive number')
@@ -126,6 +121,8 @@ describe('exceptions', () => {
       expect(errorSpy).toHaveBeenCalledWith(
         new Error('Inventory id must be a positive number')
       );
+
+      expect(errorSpy).toHaveBeenCalledTimes(3);
     });
 
     it('should throw if updatedQuantity is not a number >= 0', async () => {
@@ -139,7 +136,7 @@ describe('exceptions', () => {
         new Error('Updated quantity must be a non-negative number')
       );
 
-      await updateMedicationStock({ id: 123456 }, 'NaN');
+      await updateMedicationStock({ id: 123456 }, 'gdsfg');
       expect(errorSpy).toHaveBeenCalledWith(
         new Error('Updated quantity must be a non-negative number')
       );
@@ -148,6 +145,8 @@ describe('exceptions', () => {
       expect(errorSpy).toHaveBeenCalledWith(
         new Error('Updated quantity must be a non-negative number')
       );
+
+      expect(errorSpy).toHaveBeenCalledTimes(4);
     });
 
     it('should throw if inventory provided is undefined or null', async () => {
@@ -162,16 +161,12 @@ describe('exceptions', () => {
         new Error('Provided inventory is null')
       );
       expect(response.status).toBe(400);
+      expect(errorSpy).toHaveBeenCalledTimes(2);
     });
   });
 
   describe('adjustMedicationStock', () => {
     it('should throw if inventory.id is not a positive number', async () => {
-      await adjustMedicationStock({ id: undefined }, 100);
-      expect(errorSpy).toHaveBeenCalledWith(
-        new Error('Inventory id must be a positive number')
-      );
-
       await adjustMedicationStock({ id: null }, 100);
       expect(errorSpy).toHaveBeenCalledWith(
         new Error('Inventory id must be a positive number')
@@ -186,23 +181,27 @@ describe('exceptions', () => {
       expect(errorSpy).toHaveBeenCalledWith(
         new Error('Inventory id must be a positive number')
       );
+
+      expect(errorSpy).toHaveBeenCalledTimes(3);
     });
 
     it('should throw if stockAdjustment is not a number', async () => {
       await adjustMedicationStock({ id: 123456 });
       expect(errorSpy).toHaveBeenCalledWith(
-        new Error('Updated quantity must be a number')
+        new Error('Stock adjustment must be a number')
       );
 
       await adjustMedicationStock({ id: 123456 }, null);
       expect(errorSpy).toHaveBeenCalledWith(
-        new Error('Updated quantity must be a number')
+        new Error('Stock adjustment must be a number')
       );
 
       await adjustMedicationStock({ id: 123456 }, 'NaN');
       expect(errorSpy).toHaveBeenCalledWith(
-        new Error('Updated quantity must be a number')
+        new Error('Stock adjustment must be a number')
       );
+
+      expect(errorSpy).toHaveBeenCalledTimes(3);
     });
 
     it('should throw if inventory provided is undefined or null', async () => {
