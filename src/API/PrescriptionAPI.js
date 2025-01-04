@@ -9,6 +9,15 @@ export const getAllPrescriptions = async () => {
 };
 
 /**
+ * Sends a get request to get all active prescriptions from remote server
+ * Excludes CANCELLED and PICKED_UP prescriptions
+ * @Returns {Object} HTTP response: {ok: boolean, status: int, body: String}
+ */
+export const getAllActivePrescriptions = async () => {
+	return await RequestAPI.getRequest('/api/prescriptions/active');
+};
+
+/**
  * Sends put request to update the prescription status to FILLED
  * @Params {Object} prescription
  * @Returns {Object} HTTP response: {ok: boolean, status: int, body: String}
