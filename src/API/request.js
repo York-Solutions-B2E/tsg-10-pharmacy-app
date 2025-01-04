@@ -1,3 +1,5 @@
+export const domain = 'http://localhost:8080';
+
 /**
  * Makes a fetch request using http://localhost:8080 as the base URL
  * @Returns {Object} HTTP response: {ok: boolean, status: int, body: String}
@@ -13,7 +15,7 @@ export const request = async (args) => {
 		body: null,
 	};
 
-	endpoint = `http://localhost:8080${endpoint}`;
+	endpoint = `${domain}${endpoint}`;
 
 	if (method === undefined) method = 'GET';
 	else if (

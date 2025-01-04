@@ -42,8 +42,9 @@ describe('request', () => {
 
 		await request({ endpoint: '/' });
 
-		expect(mockFetch.mock.calls).toHaveLength(1);
-		expect(mockFetch.mock.calls[0][1].method).toBe('GET');
+		expect(mockFetch).toHaveBeenCalledWith(`${API.domain}/`, {
+			method: 'GET',
+		});
 	});
 
 	describe('exceptions', () => {
