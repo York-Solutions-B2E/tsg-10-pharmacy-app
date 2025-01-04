@@ -1,9 +1,19 @@
 import RequestAPI from './RequestAPI';
 
+/**
+ * Sends a get request to get all medications from remote server
+ * @Returns {Object} HTTP response: {ok: boolean, status: int, body: String}
+ */
 export const getAllMedications = async () => {
   return await RequestAPI.getRequest('/api/inventory');
 };
 
+/**
+ * Sends a put request to update the stock of the provided inventory to the provided quantity
+ * @Param {Object} inventory
+ * @Param {Integer} updatedQuantity
+ * @Returns {Object} HTTP response: {ok: boolean, status: int, body: String}
+ */
 export const updateMedicationStock = async (inventory, updatedQuantity) => {
   try {
     if (inventory === undefined) throw new Error('No inventory provided');
@@ -26,6 +36,12 @@ export const updateMedicationStock = async (inventory, updatedQuantity) => {
   }
 };
 
+/**
+ * Sends a put request to adjust the stock of the provided inventory by the provided quantity
+ * @Param {Object} inventory
+ * @Param {Integer} stockAdjustment
+ * @Returns {Object} HTTP response: {ok: boolean, status: int, body: String}
+ */
 export const adjustMedicationStock = async (inventory, stockAdjustment) => {
   try {
     if (inventory === undefined) throw new Error('No inventory provided');
