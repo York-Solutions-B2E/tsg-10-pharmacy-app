@@ -1,6 +1,7 @@
 jest.mock('../../src/API/RequestAPI');
 
 import RequestAPI from '../../src/API/RequestAPI';
+import { getAllMedications } from '../../src/API/MedicationAPI';
 
 const getRequestSpy = jest.spyOn(RequestAPI, 'getRequest');
 
@@ -10,11 +11,18 @@ afterEach(() => {
 
 describe('getAllMedications', () => {
   it('should call RequestAPI.getRequest with correct args', async () => {
-    throw new Error();
+    await getAllMedications();
+
+    expect(getRequestSpy).toHaveBeenCalledWith('/api/inventory');
   });
 
   it('should return result of RequestAPI.getRequest', async () => {
-    throw new Error();
+    const expectedResult = 'result';
+    getRequestSpy.mockImplementationOnce(() => expectedResult);
+
+    const response = await getAllMedications();
+
+    expect(response).toBe(expectedResult);
   });
 });
 
