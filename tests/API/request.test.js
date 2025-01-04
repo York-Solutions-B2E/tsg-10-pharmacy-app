@@ -64,7 +64,6 @@ describe('request', () => {
 
 			const response = await request({ endpoint: '/' });
 
-			expect(errorSpy).toHaveBeenCalled();
 			expect(errorSpy).toHaveBeenCalledWith(
 				new Error('An unexpected error occurred')
 			);
@@ -78,7 +77,6 @@ describe('request', () => {
 
 			const response = await request({ endpoint: '/' });
 
-			expect(errorSpy).toHaveBeenCalled();
 			expect(errorSpy).toHaveBeenCalledWith(
 				new Error('An unexpected error occurred')
 			);
