@@ -59,3 +59,10 @@ export const adjustMedicationStock = async (inventory, stockAdjustment) => {
     return { ok: false, status: 400, body: null };
   }
 };
+
+const MedicationAPI = {
+  getAllMedications,
+  updateMedicationStock,
+  adjustMedicationStock,
+};
+export default MedicationAPI;
