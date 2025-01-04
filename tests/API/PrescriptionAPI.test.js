@@ -104,8 +104,6 @@ describe('exceptions', () => {
 	});
 
 	describe('fillPrescription', () => {
-		const putRequestSpy = jest.spyOn(RequestAPI, 'putRequest');
-
 		it('should throw if prescription.id is not a positive number', async () => {
 			await fillPrescription({ id: undefined });
 			expect(errorSpy).toHaveBeenCalledWith(
@@ -156,8 +154,6 @@ describe('exceptions', () => {
 	});
 
 	describe('markPickedUp', () => {
-		const putRequestSpy = jest.spyOn(RequestAPI, 'putRequest');
-
 		it('should throw if prescription.id is not a positive number', async () => {
 			await markPickedUp({ id: undefined });
 			expect(errorSpy).toHaveBeenCalledWith(
