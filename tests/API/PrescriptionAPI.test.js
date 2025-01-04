@@ -30,6 +30,16 @@ describe('getAllPrescriptions', () => {
 	});
 });
 
+describe('getAllActivePrescriptions', () => {
+	it('should call RequestAPI.getRequest with correct args', async () => {
+		throw new Error();
+	});
+
+	it('should return result of RequestAPI.getRequest', async () => {
+		throw new Error();
+	});
+});
+
 describe('fillPrescription', () => {
 	it('should call RequestAPI.putRequest with correct args', async () => {
 		const data = {
