@@ -34,11 +34,6 @@ describe('fillPrescription', () => {
 	it('should call RequestAPI.putRequest with correct args', async () => {
 		const data = {
 			id: 123456,
-			prescriptionId: 654321,
-			medicineId: 456789,
-			patientId: 987654,
-			quantity: 999,
-			instructions: 'instructions',
 			status: 'NEW',
 		};
 		const dataString = JSON.stringify({ ...data, status: 'FILLED' });
@@ -61,11 +56,6 @@ describe('markPickedUp', () => {
 	it('should call RequestAPI.putRequest with correct args', async () => {
 		const data = {
 			id: 123456,
-			prescriptionId: 654321,
-			medicineId: 456789,
-			patientId: 987654,
-			quantity: 999,
-			instructions: 'instructions',
 			status: 'FILLED',
 		};
 		const dataString = JSON.stringify({ ...data, status: 'PICKED_UP' });

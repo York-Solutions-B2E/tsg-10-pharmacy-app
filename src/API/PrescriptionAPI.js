@@ -23,7 +23,7 @@ export const fillPrescription = async (prescription) => {
 			throw new Error('Only NEW prescriptions can be FILLED');
 		return await RequestAPI.putRequest(
 			`/api/prescriptions/${prescription.id}`,
-			JSON.stringify({ ...prescription, status: 'FILLED' })
+			JSON.stringify({ id: prescription.id, status: 'FILLED' })
 		);
 	} catch (error) {
 		console.error(error);
@@ -46,7 +46,7 @@ export const markPickedUp = async (prescription) => {
 			throw new Error('Only FILLED prescriptions can be picked up');
 		return await RequestAPI.putRequest(
 			`/api/prescriptions/${prescription.id}`,
-			JSON.stringify({ ...prescription, status: 'PICKED_UP' })
+			JSON.stringify({ id: prescription.id, status: 'PICKED_UP' })
 		);
 	} catch (error) {
 		console.error(error);
