@@ -26,8 +26,24 @@ describe('getAllMedications', () => {
   });
 });
 
+describe('updateMedicationStock', () => {
+  it('should call RequestAPI.putRequest with correct args', async () => {
+    throw new Error();
+  });
+
+  it('should return result of RequestAPI.putRequest', async () => {
+    throw new Error();
+  });
+});
+
 describe('exceptions', () => {
-  it('', async () => {
-    // throw new Error();
+  describe('updateMedicationStock', () => {
+    it('should throw if inventory.id is not a positive number', async () => {
+      throw new Error();
+    });
+
+    it('should throw if updatedQuantity is not a positive number', async () => {
+      throw new Error();
+    });
   });
 });
