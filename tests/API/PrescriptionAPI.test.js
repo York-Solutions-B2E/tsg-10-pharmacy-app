@@ -124,6 +124,8 @@ describe('exceptions', () => {
 			expect(errorSpy).toHaveBeenCalledWith(
 				new Error('Prescription id must be a positive number')
 			);
+
+			expect(errorSpy).toHaveBeenCalledTimes(4);
 		});
 
 		it('should throw if prescription.status is not NEW', async () => {
@@ -174,6 +176,8 @@ describe('exceptions', () => {
 			expect(errorSpy).toHaveBeenCalledWith(
 				new Error('Prescription id must be a positive number')
 			);
+
+			expect(errorSpy).toHaveBeenCalledTimes(4);
 		});
 
 		it('should throw if prescription.status is not FILLED', async () => {
