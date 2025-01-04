@@ -43,7 +43,7 @@ describe('updateMedicationStock', () => {
       stockQuantity: updatedQuantity,
     });
     const endpoint = `/api/inventory/${data.id}`;
-    await updateMedicationStock(data);
+    await updateMedicationStock(data, updatedQuantity);
 
     expect(putRequestSpy).toHaveBeenCalledWith(endpoint, dataString);
   });
