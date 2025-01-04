@@ -81,13 +81,13 @@ describe('adjustMedicationStock', () => {
     const expectedResult = 'result';
     putRequestSpy.mockImplementationOnce(() => expectedResult);
 
-    const response = adjustMedicationStock({ id: 123456 }, -38);
+    const response = await adjustMedicationStock({ id: 123456 }, -38);
 
     expect(response).toBe(expectedResult);
   });
 
   it('should return response.ok if stockAdjustment == 0', async () => {
-    const response = adjustMedicationStock({ id: 123456 }, 0);
+    const response = await adjustMedicationStock({ id: 123456 }, 0);
 
     expect(response.ok).toBe(true);
   });
