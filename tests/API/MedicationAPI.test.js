@@ -65,6 +65,16 @@ describe('updateMedicationStock', () => {
   });
 });
 
+describe('adjustMedicationStock', () => {
+  it('should call RequestAPI.putRequest with correct args', async () => {
+    throw new Error();
+  });
+
+  it('should return result of RequestAPI.putRequest', async () => {
+    throw new Error();
+  });
+});
+
 describe('exceptions', () => {
   const unmockedError = console.error;
   const errorSpy = jest.spyOn(console, 'error').mockImplementation();
@@ -134,6 +144,20 @@ describe('exceptions', () => {
         new Error('Provided inventory is null')
       );
       expect(response.status).toBe(400);
+    });
+  });
+
+  describe('adjustMedicationStock', () => {
+    it('should throw if inventory.id is not a positive number', async () => {
+      throw new Error();
+    });
+
+    it('should throw if stockAdjustment is not a number', async () => {
+      throw new Error();
+    });
+
+    it('should throw if inventory provided is undefined or null', async () => {
+      throw new Error();
     });
   });
 });
