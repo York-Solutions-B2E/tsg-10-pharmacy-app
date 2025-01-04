@@ -3,6 +3,7 @@ jest.mock('../../src/API/RequestAPI');
 import RequestAPI from '../../src/API/RequestAPI';
 import {
 	getAllPrescriptions,
+	getAllActivePrescriptions,
 	fillPrescription,
 	markPickedUp,
 } from '../../src/API/PrescriptionAPI';
@@ -32,11 +33,17 @@ describe('getAllPrescriptions', () => {
 
 describe('getAllActivePrescriptions', () => {
 	it('should call RequestAPI.getRequest with correct args', async () => {
-		throw new Error();
+		await getAllActivePrescriptions();
+
+		expect(getRequestSpy).toHaveBeenCalledWith('/api/prescriptions/active');
 	});
 
 	it('should return result of RequestAPI.getRequest', async () => {
-		throw new Error();
+		const expectedResult = 'result';
+		getRequestSpy.mockImplementationOnce(() => expectedResult);
+
+		const response = await getAllActivePrescriptions();
+		expect(response).toBe(expectedResult);
 	});
 });
 
