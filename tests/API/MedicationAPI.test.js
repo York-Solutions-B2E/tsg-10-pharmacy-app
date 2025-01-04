@@ -4,6 +4,7 @@ import RequestAPI from '../../src/API/RequestAPI';
 import {
   getAllMedications,
   updateMedicationStock,
+  adjustMedicationStock,
 } from '../../src/API/MedicationAPI';
 
 const getRequestSpy = jest.spyOn(RequestAPI, 'getRequest');
@@ -67,11 +68,28 @@ describe('updateMedicationStock', () => {
 
 describe('adjustMedicationStock', () => {
   it('should call RequestAPI.putRequest with correct args', async () => {
-    throw new Error();
+    const data = { id: 123456 };
+    const stockAdjustment = 57;
+    const endpoint = `/api/inventory/${data.id}/adjust-stock/${stockAdjustment}`;
+
+    await adjustMedicationStock(data, stockAdjustment);
+
+    expect(putRequestSpy).toHaveBeenCalledWith(endpoint);
   });
 
   it('should return result of RequestAPI.putRequest', async () => {
-    throw new Error();
+    const expectedResult = 'result';
+    putRequestSpy.mockImplementationOnce(() => expectedResult);
+
+    const response = adjustMedicationStock({ id: 123456 }, -38);
+
+    expect(response).toBe(expectedResult);
+  });
+
+  it('should return response.ok if stockAdjustment == 0', async () => {
+    const response = adjustMedicationStock({ id: 123456 }, 0);
+
+    expect(response.ok).toBe(true);
   });
 });
 
@@ -149,15 +167,56 @@ describe('exceptions', () => {
 
   describe('adjustMedicationStock', () => {
     it('should throw if inventory.id is not a positive number', async () => {
-      throw new Error();
+      await updateMedicationStock({ id: undefined }, 100);
+      expect(errorSpy).toHaveBeenCalledWith(
+        new Error('Inventory id must be a positive number')
+      );
+
+      await updateMedicationStock({ id: null }, 100);
+      expect(errorSpy).toHaveBeenCalledWith(
+        new Error('Inventory id must be a positive number')
+      );
+
+      await updateMedicationStock({ id: 'NaN' }, 100);
+      expect(errorSpy).toHaveBeenCalledWith(
+        new Error('Inventory id must be a positive number')
+      );
+
+      await updateMedicationStock({ id: 0 }, 100);
+      expect(errorSpy).toHaveBeenCalledWith(
+        new Error('Inventory id must be a positive number')
+      );
     });
 
     it('should throw if stockAdjustment is not a number', async () => {
-      throw new Error();
+      await updateMedicationStock({ id: 123456 });
+      expect(errorSpy).toHaveBeenCalledWith(
+        new Error('Updated quantity must be a number')
+      );
+
+      await updateMedicationStock({ id: 123456 }, null);
+      expect(errorSpy).toHaveBeenCalledWith(
+        new Error('Updated quantity must be a number')
+      );
+
+      await updateMedicationStock({ id: 123456 }, 'NaN');
+      expect(errorSpy).toHaveBeenCalledWith(
+        new Error('Updated quantity must be a number')
+      );
     });
 
     it('should throw if inventory provided is undefined or null', async () => {
-      throw new Error();
+      let response;
+
+      response = await adjustMedicationStock();
+      expect(errorSpy).toHaveBeenCalledWith(new Error('No inventory provided'));
+      expect(response.status).toBe(400);
+
+      response = await adjustMedicationStock(null);
+      expect(errorSpy).toHaveBeenCalledWith(
+        new Error('Provided inventory is null')
+      );
+      expect(response.status).toBe(400);
     });
   });
 });
