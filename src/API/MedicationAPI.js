@@ -8,9 +8,13 @@ export const updateMedicationStock = async (inventory, updatedQuantity) => {
   try {
     if (inventory === undefined) throw new Error('No inventory provided');
     if (inventory === null) throw new Error('Provided inventory is null');
-    if (isNaN(inventory.id))
+    if (inventory.id === null || isNaN(inventory.id) || inventory.id <= 0)
       throw new Error('Inventory id must be a positive number');
-    if (isNaN(updatedQuantity))
+    if (
+      updatedQuantity === null ||
+      isNaN(updatedQuantity) ||
+      updatedQuantity < 0
+    )
       throw new Error('Updated quantity must be a non-negative number');
     return await RequestAPI.putRequest(
       `/api/inventory/${inventory.id}`,
