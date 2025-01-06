@@ -5,6 +5,7 @@
   "source": "public/index.html",
   "scripts": {
     "start": "parcel",
+    "start:clean": "rm -rf .parcel-cache dist && parcel",
     "build": "parcel build",
     "test": "jest",
     "test:cov": "jest --coverage --watchAll"
