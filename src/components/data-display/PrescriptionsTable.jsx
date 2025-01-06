@@ -3,7 +3,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import ButtonWithText from '../buttons/ButtonWithText';
 import StatusChip from './StatusChip';
 
-const PrescriptionsDataGrid = ({ prescriptionsList }) => {
+const PrescriptionsTable = ({ prescriptionsList }) => {
   // const navigate = useNavigate();
 
   // ******** Click Handlers
@@ -108,7 +108,7 @@ const PrescriptionsDataGrid = ({ prescriptionsList }) => {
     {
       field: 'prescriptionNumber',
       headerName: 'Prescription',
-      type: 'number',
+      type: 'string',
       width: 110,
       align: 'left',
       headerAlign: 'left',
@@ -127,11 +127,11 @@ const PrescriptionsDataGrid = ({ prescriptionsList }) => {
       },
     },
     {
-      field: 'medicine.medCode',
+      field: 'medicine.code',
       headerName: 'Med Code',
       width: 100,
       renderCell: (params) => {
-        return params.row.medicine.medCode;
+        return params.row.medicine.code;
       },
     },
     {
@@ -202,4 +202,4 @@ const PrescriptionsDataGrid = ({ prescriptionsList }) => {
   );
 };
 
-export default PrescriptionsDataGrid;
+export default PrescriptionsTable;
