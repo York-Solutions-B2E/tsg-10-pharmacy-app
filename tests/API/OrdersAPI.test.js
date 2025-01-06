@@ -7,10 +7,12 @@ import {
   validateOrder,
   getAllOrders,
   placeOrder,
+  markOrderReceived,
 } from '../../src/API/OrdersAPI';
 
 const getRequestSpy = jest.spyOn(RequestAPI, 'getRequest');
 const postRequestSpy = jest.spyOn(RequestAPI, 'postRequest');
+const putRequestSpy = jest.spyOn(RequestAPI, 'putRequest');
 
 afterEach(() => {
   jest.resetAllMocks();
@@ -70,15 +72,28 @@ describe('placeOrder', () => {
 /**
  * Tests for markOrderReceived
  * */
-// describe('markOrderReceived', () => {
-//   it('should call RequestAPI.putRequest with correct args', async () => {
-//     throw new Error();
-//   });
+describe('markOrderReceived', () => {
+  it('should call RequestAPI.putRequest with correct args', async () => {
+    const data = { id: 12, status: 'ORDERED' };
+    const dataString = JSON.stringify(data);
+    const endpoint = '/api/order/received';
+    await markOrderReceived(data);
 
-//   it('should return result of RequestAPI.putRequest', async () => {
-//     throw new Error();
-//   });
-// });
+    expect(putRequestSpy).toHaveBeenCalledWith(endpoint, dataString);
+  });
+
+  it('should return result of RequestAPI.putRequest', async () => {
+    const expectedResult = 'result';
+    putRequestSpy.mockImplementationOnce(() => expectedResult);
+
+    const response = await markOrderReceived({
+      id: 12,
+      status: 'ORDERED',
+    });
+
+    expect(response).toBe(expectedResult);
+  });
+});
 
 /**
  * Tests for validateOrder
@@ -215,7 +230,15 @@ describe('exceptions', () => {
 
   describe('markOrderReceived', () => {
     it('should throw if order already received', async () => {
-      throw new Error();
+      const response = await markOrderReceived({
+        id: 12,
+        status: 'RECEIVED',
+      });
+
+      expect(errorSpy).toHaveBeenCalledWith(
+        new Error('Order already received')
+      );
+      expect(response.status).toBe(400);
     });
   });
 });
