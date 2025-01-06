@@ -3,7 +3,11 @@ jest.mock('../../src/API/RequestAPI');
 import RequestAPI from '../../src/API/RequestAPI';
 import dayjs from 'dayjs';
 
-import { getAllOrders, placeOrder } from '../../src/API/OrdersAPI';
+import {
+  getAllOrders,
+  placeOrder,
+  validateOrder,
+} from '../../src/API/OrdersAPI';
 
 const getRequestSpy = jest.spyOn(RequestAPI, 'getRequest');
 const postRequestSpy = jest.spyOn(RequestAPI, 'postRequest');
@@ -12,6 +16,9 @@ afterEach(() => {
   jest.resetAllMocks();
 });
 
+/**
+ * Tests for getAllOrders
+ * */
 describe('getAllOrders', () => {
   it('should call RequestAPI.getRequest with correct args', async () => {
     await getAllOrders();
@@ -29,6 +36,9 @@ describe('getAllOrders', () => {
   });
 });
 
+/**
+ * Tests for placeOrder
+ * */
 describe('placeOrder', () => {
   it('should call RequestAPI.postRequest with correct args', async () => {
     const data = {
@@ -57,6 +67,9 @@ describe('placeOrder', () => {
   });
 });
 
+/**
+ * Tests for markOrderReceived
+ * */
 describe('markOrderReceived', () => {
   it('should call RequestAPI.putRequest with correct args', async () => {
     throw new Error();
@@ -67,6 +80,38 @@ describe('markOrderReceived', () => {
   });
 });
 
+/**
+ * Tests for validateOrder
+ * */
+describe('validateOrder', () => {
+  it('should return true if order is valid', async () => {
+    throw new Error();
+  });
+
+  it('should return error if order.id is not a positive number', async () => {
+    throw new Error();
+  });
+
+  it('should return error if order.medicineId is not a positive number', async () => {
+    throw new Error();
+  });
+
+  it('should return error if order.quantity is not a positive number', async () => {
+    throw new Error();
+  });
+
+  it('should return error if oder.deliveryDate is not a date in the future', async () => {
+    throw new Error();
+  });
+
+  it('should return error if oder is undefined or null', async () => {
+    throw new Error();
+  });
+});
+
+/**
+ * Tests for exception cases
+ * */
 describe('exceptions', () => {
   const unmockedError = console.error;
   const errorSpy = jest.spyOn(console, 'error').mockImplementation();
