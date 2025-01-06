@@ -26,3 +26,13 @@ describe('getAllOrders', () => {
     expect(response).toBe(expectedResult);
   });
 });
+
+describe('placeOrder', () => {
+  it('should call RequestAPI.postRequest with correct args', async () => {
+    throw new Error();
+  });
+
+  it('should return result of RequestAPI.postRequest', async () => {
+    throw new Error();
+  });
+});
