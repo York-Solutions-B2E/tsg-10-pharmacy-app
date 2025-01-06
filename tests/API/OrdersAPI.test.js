@@ -55,3 +55,34 @@ describe('placeOrder', () => {
     expect(response).toBe(expectedResult);
   });
 });
+
+describe('exceptions', () => {
+  const unmockedError = console.error;
+  const errorSpy = jest.spyOn(console, 'error').mockImplementation();
+
+  afterAll(() => {
+    console.error = unmockedError;
+  });
+
+  afterEach(() => {
+    errorSpy.mockReset();
+  });
+
+  describe('placeOrder', () => {
+    it('should throw if medicineId is not a positive number', async () => {
+      throw new Error();
+    });
+
+    it('should throw if order quantity is not a positive number', async () => {
+      throw new Error();
+    });
+
+    it('should throw if deliveryDate is not in the future', async () => {
+      throw new Error();
+    });
+
+    it('should throw if order is undefined or null', async () => {
+      throw new Error();
+    });
+  });
+});
