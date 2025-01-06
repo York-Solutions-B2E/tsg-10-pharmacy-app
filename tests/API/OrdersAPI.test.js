@@ -4,9 +4,9 @@ import RequestAPI from '../../src/API/RequestAPI';
 import dayjs from 'dayjs';
 
 import OrdersAPI from '../../src/API/OrdersAPI';
+import { validateOrder } from '../../src/API/OrdersAPI';
 
-const { validateOrder, getAllOrders, placeOrder, markOrderReceived } =
-  OrdersAPI;
+const { getAllOrders, placeOrder, markOrderReceived } = OrdersAPI;
 
 const getRequestSpy = jest.spyOn(RequestAPI, 'getRequest');
 const postRequestSpy = jest.spyOn(RequestAPI, 'postRequest');

@@ -59,7 +59,6 @@ export const markOrderReceived = async (order) => {
 };
 
 const OrdersAPI = {
-  validateOrder,
   getAllOrders,
   placeOrder,
   markOrderReceived,
