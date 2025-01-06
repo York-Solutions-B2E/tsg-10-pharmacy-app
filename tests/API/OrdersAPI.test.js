@@ -4,9 +4,9 @@ import RequestAPI from '../../src/API/RequestAPI';
 import dayjs from 'dayjs';
 
 import {
+  validateOrder,
   getAllOrders,
   placeOrder,
-  validateOrder,
 } from '../../src/API/OrdersAPI';
 
 const getRequestSpy = jest.spyOn(RequestAPI, 'getRequest');
@@ -70,42 +70,131 @@ describe('placeOrder', () => {
 /**
  * Tests for markOrderReceived
  * */
-describe('markOrderReceived', () => {
-  it('should call RequestAPI.putRequest with correct args', async () => {
-    throw new Error();
-  });
+// describe('markOrderReceived', () => {
+//   it('should call RequestAPI.putRequest with correct args', async () => {
+//     throw new Error();
+//   });
 
-  it('should return result of RequestAPI.putRequest', async () => {
-    throw new Error();
-  });
-});
+//   it('should return result of RequestAPI.putRequest', async () => {
+//     throw new Error();
+//   });
+// });
 
 /**
  * Tests for validateOrder
  * */
 describe('validateOrder', () => {
   it('should return true if order is valid', async () => {
-    throw new Error();
-  });
+    const orderValid = validateOrder({
+      medicineId: 22,
+      quantity: 50,
+      deliveryDate: dayjs().add(1, 'week'),
+    });
 
-  it('should return error if order.id is not a positive number', async () => {
-    throw new Error();
+    expect(orderValid).toBe(true);
   });
 
   it('should return error if order.medicineId is not a positive number', async () => {
-    throw new Error();
+    let orderValid;
+
+    orderValid = await validateOrder({
+      quantity: 300,
+      deliveryDate: dayjs().add(1, 'week'),
+    });
+    expect(orderValid instanceof Error).toBe(true);
+
+    orderValid = await validateOrder({
+      medicineId: null,
+      quantity: 300,
+      deliveryDate: dayjs().add(1, 'week'),
+    });
+    expect(orderValid instanceof Error).toBe(true);
+
+    orderValid = await validateOrder({
+      medicineId: 'hello',
+      quantity: 300,
+      deliveryDate: dayjs().add(1, 'week'),
+    });
+    expect(orderValid instanceof Error).toBe(true);
+
+    orderValid = await validateOrder({
+      medicineId: -45,
+      quantity: 300,
+      deliveryDate: dayjs().add(1, 'week'),
+    });
+    expect(orderValid instanceof Error).toBe(true);
   });
 
   it('should return error if order.quantity is not a positive number', async () => {
-    throw new Error();
+    let orderValid;
+
+    orderValid = await validateOrder({
+      medicineId: 201,
+      deliveryDate: dayjs().add(1, 'week'),
+    });
+    expect(orderValid instanceof Error).toBe(true);
+
+    orderValid = await validateOrder({
+      medicineId: 201,
+      quantity: null,
+      deliveryDate: dayjs().add(1, 'week'),
+    });
+    expect(orderValid instanceof Error).toBe(true);
+
+    orderValid = await validateOrder({
+      medicineId: 201,
+      quantity: 'NaN',
+      deliveryDate: dayjs().add(1, 'week'),
+    });
+    expect(orderValid instanceof Error).toBe(true);
+
+    orderValid = await validateOrder({
+      medicineId: 201,
+      quantity: -78,
+      deliveryDate: dayjs().add(1, 'week'),
+    });
+    expect(orderValid instanceof Error).toBe(true);
   });
 
   it('should return error if oder.deliveryDate is not a date in the future', async () => {
-    throw new Error();
+    let orderValid;
+
+    orderValid = await validateOrder({
+      medicineId: 201,
+      quantity: 300,
+    });
+    expect(orderValid instanceof Error).toBe(true);
+
+    orderValid = await validateOrder({
+      medicineId: 201,
+      quantity: 300,
+      deliveryDate: null,
+    });
+    expect(orderValid instanceof Error).toBe(true);
+
+    orderValid = await validateOrder({
+      medicineId: 201,
+      quantity: 300,
+      deliveryDate: 'hello',
+    });
+    expect(orderValid instanceof Error).toBe(true);
+
+    orderValid = await validateOrder({
+      medicineId: 201,
+      quantity: 300,
+      deliveryDate: dayjs('2000-01-01'),
+    });
+    expect(orderValid instanceof Error).toBe(true);
   });
 
-  it('should return error if oder is undefined or null', async () => {
-    throw new Error();
+  it('should return error if order is undefined or null', async () => {
+    let orderValid;
+
+    orderValid = await validateOrder();
+    expect(orderValid instanceof Error).toBe(true);
+
+    orderValid = await validateOrder(null);
+    expect(orderValid instanceof Error).toBe(true);
   });
 });
 
