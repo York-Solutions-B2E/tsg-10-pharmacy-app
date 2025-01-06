@@ -50,7 +50,7 @@ describe('placeOrder', () => {
     const response = await placeOrder({
       medicineId: 4,
       quantity: 300,
-      deliveryDate: '2025-06-26',
+      deliveryDate: dayjs().add(1, 'week'),
     });
 
     expect(response).toBe(expectedResult);
