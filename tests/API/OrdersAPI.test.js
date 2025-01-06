@@ -1,6 +1,7 @@
 jest.mock('../../src/API/RequestAPI');
 
 import RequestAPI from '../../src/API/RequestAPI';
+import dayjs from 'dayjs';
 
 import { getAllOrders, placeOrder } from '../../src/API/OrdersAPI';
 
@@ -70,19 +71,149 @@ describe('exceptions', () => {
 
   describe('placeOrder', () => {
     it('should throw if medicineId is not a positive number', async () => {
-      throw new Error();
+      let response;
+
+      response = await placeOrder({
+        quantity: 300,
+        deliveryDate: dayjs().add(1, 'week'),
+      });
+      expect(errorSpy).toHaveBeenCalledWith(
+        new Error('Medicine id must be a positive number')
+      );
+      expect(response.status).toBe(400);
+
+      response = await placeOrder({
+        medicineId: null,
+        quantity: 300,
+        deliveryDate: dayjs().add(1, 'week'),
+      });
+      expect(errorSpy).toHaveBeenCalledWith(
+        new Error('Medicine id must be a positive number')
+      );
+      expect(response.status).toBe(400);
+
+      response = await placeOrder({
+        medicineId: 'hello',
+        quantity: 300,
+        deliveryDate: dayjs().add(1, 'week'),
+      });
+      expect(errorSpy).toHaveBeenCalledWith(
+        new Error('Medicine id must be a positive number')
+      );
+      expect(response.status).toBe(400);
+
+      response = await placeOrder({
+        medicineId: -45,
+        quantity: 300,
+        deliveryDate: dayjs().add(1, 'week'),
+      });
+      expect(errorSpy).toHaveBeenCalledWith(
+        new Error('Medicine id must be a positive number')
+      );
+      expect(response.status).toBe(400);
+
+      expect(errorSpy).toHaveBeenCalledTimes(4);
     });
 
     it('should throw if order quantity is not a positive number', async () => {
-      throw new Error();
+      let response;
+
+      response = await placeOrder({
+        medicineId: 34,
+        deliveryDate: dayjs().add(1, 'week'),
+      });
+      expect(errorSpy).toHaveBeenCalledWith(
+        new Error('Medicine id must be a positive number')
+      );
+      expect(response.status).toBe(400);
+
+      response = await placeOrder({
+        medicineId: 34,
+        quantity: null,
+        deliveryDate: dayjs().add(1, 'week'),
+      });
+      expect(errorSpy).toHaveBeenCalledWith(
+        new Error('Medicine id must be a positive number')
+      );
+      expect(response.status).toBe(400);
+
+      response = await placeOrder({
+        medicineId: 34,
+        quantity: 'hello',
+        deliveryDate: dayjs().add(1, 'week'),
+      });
+      expect(errorSpy).toHaveBeenCalledWith(
+        new Error('Medicine id must be a positive number')
+      );
+      expect(response.status).toBe(400);
+
+      response = await placeOrder({
+        medicineId: 34,
+        quantity: -78,
+        deliveryDate: dayjs().add(1, 'week'),
+      });
+      expect(errorSpy).toHaveBeenCalledWith(
+        new Error('Quantity must be a positive number')
+      );
+      expect(response.status).toBe(400);
+
+      expect(errorSpy).toHaveBeenCalledTimes(4);
     });
 
     it('should throw if deliveryDate is not in the future', async () => {
-      throw new Error();
+      let response;
+
+      response = await placeOrder({ medicineId: 34, quantity: 73 });
+      expect(errorSpy).toHaveBeenCalledWith(
+        new Error('Delivery date must be in the future')
+      );
+      expect(response.status).toBe(400);
+
+      response = await placeOrder({
+        medicineId: 34,
+        quantity: 73,
+        deliveryDate: null,
+      });
+      expect(errorSpy).toHaveBeenCalledWith(
+        new Error('Delivery date must be in the future')
+      );
+      expect(response.status).toBe(400);
+
+      response = await placeOrder({
+        medicineId: 34,
+        quantity: 73,
+        deliveryDate: 'hello',
+      });
+      expect(errorSpy).toHaveBeenCalledWith(
+        new Error('Delivery date must be in the future')
+      );
+      expect(response.status).toBe(400);
+
+      response = await placeOrder({
+        medicineId: 34,
+        quantity: 73,
+        deliveryDate: dayjs('2000-01-01'),
+      });
+      expect(errorSpy).toHaveBeenCalledWith(
+        new Error('Delivery date must be in the future')
+      );
+      expect(response.status).toBe(400);
+
+      expect(errorSpy).toHaveBeenCalledTimes(4);
     });
 
     it('should throw if order is undefined or null', async () => {
-      throw new Error();
+      let response;
+
+      response = await placeOrder();
+      expect(errorSpy).toHaveBeenCalledWith(
+        new Error('Order cannot be undefined')
+      );
+      expect(response.status).toBe(400);
+
+      response = await placeOrder(null);
+      expect(errorSpy).toHaveBeenCalledWith(new Error('Order cannot be null'));
+      expect(response.status).toBe(400);
     });
   });
 });
