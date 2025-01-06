@@ -123,7 +123,7 @@ describe('exceptions', () => {
         deliveryDate: dayjs().add(1, 'week'),
       });
       expect(errorSpy).toHaveBeenCalledWith(
-        new Error('Medicine id must be a positive number')
+        new Error('Order quantity must be a positive number')
       );
       expect(response.status).toBe(400);
 
@@ -133,7 +133,7 @@ describe('exceptions', () => {
         deliveryDate: dayjs().add(1, 'week'),
       });
       expect(errorSpy).toHaveBeenCalledWith(
-        new Error('Medicine id must be a positive number')
+        new Error('Order quantity must be a positive number')
       );
       expect(response.status).toBe(400);
 
@@ -143,7 +143,7 @@ describe('exceptions', () => {
         deliveryDate: dayjs().add(1, 'week'),
       });
       expect(errorSpy).toHaveBeenCalledWith(
-        new Error('Medicine id must be a positive number')
+        new Error('Order quantity must be a positive number')
       );
       expect(response.status).toBe(400);
 
@@ -153,7 +153,7 @@ describe('exceptions', () => {
         deliveryDate: dayjs().add(1, 'week'),
       });
       expect(errorSpy).toHaveBeenCalledWith(
-        new Error('Quantity must be a positive number')
+        new Error('Order quantity must be a positive number')
       );
       expect(response.status).toBe(400);
 
