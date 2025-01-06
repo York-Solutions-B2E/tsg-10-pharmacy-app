@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 import prescriptionsList from '../../dummy-data/prescription-list.json';
-import PrescriptionsDataGrid from '../components/data-display/PrescriptionsDataGrid';
+import PrescriptionsTable from '../components/data-display/PrescriptionsTable';
 
 const PrescriptionsPage = () => {
   const appointmentPageStyling = {
@@ -10,7 +10,7 @@ const PrescriptionsPage = () => {
   return (
     <Box sx={appointmentPageStyling} data-testid="prescriptions-page">
       <h1>PrescriptionsPage</h1>
-      <PrescriptionsDataGrid prescriptionsList={prescriptionsList} />
+      <PrescriptionsTable prescriptionsList={prescriptionsList} />
     </Box>
   );
 };

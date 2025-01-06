@@ -3,7 +3,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import ButtonWithText from '../buttons/ButtonWithText';
 import StatusChip from './StatusChip';
 
-const PrescriptionsDataGrid = ({ prescriptionsList }) => {
+const PrescriptionsTable = ({ prescriptionsList }) => {
   // const navigate = useNavigate();
 
   // ******** Click Handlers
@@ -202,4 +202,4 @@ const PrescriptionsDataGrid = ({ prescriptionsList }) => {
   );
 };
 
-export default PrescriptionsDataGrid;
+export default PrescriptionsTable;
