@@ -39,7 +39,7 @@ export const request = async (args) => {
 		const ret = {
 			ok: true,
 			status: response.status,
-			body: await response.text(),
+			body: await JSON.parse(await response.text()),
 		};
 
 		return ret;
