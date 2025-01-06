@@ -45,6 +45,17 @@ const mockOrdersList = [
   },
 ];
 
+// import { markOrderReceived, getAllOrders } from '../api/orders';
+// import { throwErrorMessage } from '../api/error-handling';
+// jest.mock('../api/orders', () => ({
+//   markOrderReceived: jest.fn(),
+//   getAllOrders: jest.fn(),
+// }));
+
+// jest.mock('../api/error-handling', () => ({
+//   throwErrorMessage: jest.fn(),
+// }));
+
 describe('Test OrdersTable Component Data Display', () => {
   it('should render OrdersTable Component', () => {
     render(<OrdersTable ordersList={mockOrdersList} />);
@@ -69,22 +80,48 @@ describe('Test OrdersTable Component Data Display', () => {
   });
 
   // TEST BUTTON CLICKS
-
   it('should call handleClickMarkReceived when Mark Received button is clicked', async () => {
+    markOrderReceived.mockResolvedValue({ status: 201 });
     render(<OrdersTable ordersList={mockOrdersList} />);
+
     const orderRow = screen.getByText('Ordered').closest('.MuiDataGrid-row');
 
     const { getByText } = within(orderRow);
     const markReceivedButton = getByText('Mark Received');
-
-    // TODO: replace with api function being called
-    const consoleSpy = jest.spyOn(console, 'log');
-
-    expect(markReceivedButton.disabled).toBe(false);
     await userEvent.click(markReceivedButton);
-    expect(consoleSpy).toHaveBeenCalledWith('Order Received, id is:', 1);
 
-    consoleSpy.mockRestore();
+    expect(markOrderReceived).toHaveBeenCalledWith(1); // ? called with order id or order object?
+  });
+
+  it('should call handleClickMarkReceived and refresh the state when return status is 201', async () => {
+    markOrderReceived.mockResolvedValue({ status: 201 });
+    getAllOrders.mockResolvedValue(mockOrdersList[0]);
+    render(<OrdersTable ordersList={mockOrdersList} />);
+
+    const orderRow = screen.getByText('Ordered').closest('.MuiDataGrid-row');
+
+    const { getByText } = within(orderRow);
+    const markReceivedButton = getByText('Mark Received');
+    await userEvent.click(markReceivedButton);
+
+    expect(markOrderReceived).toHaveBeenCalledWith(1); // ? called with order id or order object?
+    expect(getAllOrders).toHaveBeenCalledTimes(1);
+  });
+
+  it('should call handleClickMarkReceived and throw an error when return status is NOT 201', async () => {
+    markOrderReceived.mockResolvedValue({ status: 400 });
+    throwErrorMessage.mockResolvedValue('Error Status 400');
+
+    render(<OrdersTable ordersList={mockOrdersList} />);
+
+    const orderRow = screen.getByText('Ordered').closest('.MuiDataGrid-row');
+
+    const { getByText } = within(orderRow);
+    const markReceivedButton = getByText('Mark Received');
+    await userEvent.click(markReceivedButton);
+
+    expect(markOrderReceived).toHaveBeenCalledWith(1); // ? called with order id or order object?
+    expect(throwErrorMessage).toHaveBeenCalledTimes(1);
   });
 
   // TEST BUTTON RENDERING
