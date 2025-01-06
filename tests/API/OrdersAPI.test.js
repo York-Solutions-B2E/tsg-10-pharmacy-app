@@ -3,12 +3,10 @@ jest.mock('../../src/API/RequestAPI');
 import RequestAPI from '../../src/API/RequestAPI';
 import dayjs from 'dayjs';
 
-import {
-  validateOrder,
-  getAllOrders,
-  placeOrder,
-  markOrderReceived,
-} from '../../src/API/OrdersAPI';
+import OrdersAPI from '../../src/API/OrdersAPI';
+
+const { validateOrder, getAllOrders, placeOrder, markOrderReceived } =
+  OrdersAPI;
 
 const getRequestSpy = jest.spyOn(RequestAPI, 'getRequest');
 const postRequestSpy = jest.spyOn(RequestAPI, 'postRequest');
@@ -74,9 +72,16 @@ describe('placeOrder', () => {
  * */
 describe('markOrderReceived', () => {
   it('should call RequestAPI.putRequest with correct args', async () => {
-    const data = { id: 12, status: 'ORDERED' };
+    const data = {
+      id: 12,
+      medicineId: 23,
+      quantity: 45,
+      deliveryDate: dayjs().add(1, 'week'),
+      status: 'ORDERED',
+    };
     const dataString = JSON.stringify(data);
     const endpoint = `/api/orders/received/${data.id}`;
+
     await markOrderReceived(data);
 
     expect(putRequestSpy).toHaveBeenCalledWith(endpoint, dataString);
@@ -88,6 +93,9 @@ describe('markOrderReceived', () => {
 
     const response = await markOrderReceived({
       id: 12,
+      medicineId: 23,
+      quantity: 45,
+      deliveryDate: dayjs().add(1, 'week'),
       status: 'ORDERED',
     });
 
@@ -232,6 +240,9 @@ describe('exceptions', () => {
     it('should throw if order already received', async () => {
       const response = await markOrderReceived({
         id: 12,
+        medicineId: 23,
+        quantity: 45,
+        deliveryDate: dayjs().add(1, 'week'),
         status: 'RECEIVED',
       });
 
