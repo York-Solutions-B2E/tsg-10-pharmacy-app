@@ -27,12 +27,22 @@ export const request = async (args) => {
 		return { ok: false, status: 405, body: null };
 
 	try {
-		const response = await fetch(endpoint, { method: method, body: body });
+		const response = await fetch(endpoint, {
+			method: method,
+			body: body,
+			headers: { 'content-type': 'application/json' },
+		});
 
 		if (response === undefined || response === null)
 			throw new Error('An unexpected error occurred');
 
-		return response;
+		const ret = {
+			ok: true,
+			status: response.status,
+			body: await response.text(),
+		};
+
+		return ret;
 	} catch (error) {
 		console.error(error);
 		return { ok: false, status: 600, body: null };
