@@ -8,7 +8,7 @@ const PrescriptionsPage = () => {
   };
 
   return (
-    <Box sx={appointmentPageStyling}>
+    <Box sx={appointmentPageStyling} data-testid="prescriptions-page">
       <h1>PrescriptionsPage</h1>
       <PrescriptionsDataGrid prescriptionsList={prescriptionsList} />
     </Box>
