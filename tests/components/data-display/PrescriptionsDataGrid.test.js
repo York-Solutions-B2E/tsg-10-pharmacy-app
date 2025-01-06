@@ -5,12 +5,14 @@ import PrescriptionsDataGrid from '../../../src/components/data-display/Prescrip
 const mockPrescriptionsList = [
   {
     id: '1',
-    prescriptionNumber: 'fff333',
-    patientId: 'pat001',
+    prescriptionNumber: 123456,
+    patientId: 32567548,
     medicine: {
       id: '2',
-      name: 'Paracetamol',
-      medCode: 'med001',
+      name: 'ChocoRelief',
+      code: 'CRX-001',
+      createdAt: '2025-01-06T16:39:13.726428Z',
+      updatedAt: '2025-01-06T16:39:13.726428Z',
     },
     quantity: '60',
     instructions: 'Take 1 tablet every 4 hours',
@@ -18,12 +20,14 @@ const mockPrescriptionsList = [
   },
   {
     id: '2',
-    prescriptionNumber: 'fff334',
-    patientId: 'pat002',
+    prescriptionNumber: 123457,
+    patientId: 32567549,
     medicine: {
       id: '1',
-      name: 'Aspirin',
-      medCode: 'med002',
+      name: 'MintyCure',
+      code: 'MCX-002',
+      createdAt: '2025-01-06T16:39:13.726428Z',
+      updatedAt: '2025-01-06T16:39:13.726428Z',
     },
     quantity: '30',
     instructions: 'Take 1 tablet every 6 hours',
@@ -31,12 +35,14 @@ const mockPrescriptionsList = [
   },
   {
     id: '3',
-    prescriptionNumber: 'fff335',
-    patientId: 'pat003',
+    prescriptionNumber: 123458,
+    patientId: 32567550,
     medicine: {
       id: '3',
-      name: 'Ibuprofen',
-      medCode: 'med003',
+      name: 'Caramelex',
+      code: 'CEX-003',
+      createdAt: '2025-01-06T16:39:13.726428Z',
+      updatedAt: '2025-01-06T16:39:13.726428Z',
     },
     quantity: '90',
     instructions: 'Take 1 tablet every 8 hours',
@@ -44,12 +50,14 @@ const mockPrescriptionsList = [
   },
   {
     id: '4',
-    prescriptionNumber: 'fff336',
-    patientId: 'pat004',
+    prescriptionNumber: 123459,
+    patientId: 32567551,
     medicine: {
       id: '4',
-      name: 'Codeine',
-      medCode: 'med004',
+      name: 'GummyVita',
+      code: 'GVX-004',
+      createdAt: '2025-01-06T16:39:13.726428Z',
+      updatedAt: '2025-01-06T16:39:13.726428Z',
     },
     quantity: '120',
     instructions: 'Take 1 tablet every 12 hours',
@@ -57,12 +65,14 @@ const mockPrescriptionsList = [
   },
   {
     id: '5',
-    prescriptionNumber: 'fff337',
-    patientId: 'pat005',
+    prescriptionNumber: 123460,
+    patientId: 32567552,
     medicine: {
       id: '5',
-      name: 'Morphine',
-      medCode: 'med005',
+      name: 'Lollipoprin',
+      code: 'LPX-005',
+      createdAt: '2025-01-06T16:39:13.726428Z',
+      updatedAt: '2025-01-06T16:39:13.726428Z',
     },
     quantity: '150',
     instructions: 'Take 1 tablet every 24 hours',
@@ -70,15 +80,17 @@ const mockPrescriptionsList = [
   },
   {
     id: '6',
-    prescriptionNumber: 'fff338',
-    patientId: 'pat007',
+    prescriptionNumber: 123461,
+    patientId: 32567553,
     medicine: {
-      id: '7',
-      name: 'Oxycodone',
-      medCode: 'med007',
+      id: '6',
+      name: 'CandyCaps',
+      code: 'CCX-006',
+      createdAt: '2025-01-06T16:39:13.726428Z',
+      updatedAt: '2025-01-06T16:39:13.726428Z',
     },
-    quantity: '210',
-    instructions: 'Take 1 tablet every 72 hours',
+    quantity: '180',
+    instructions: 'Take 1 tablet every 48 hours',
     status: 'PICKED_UP',
   },
 ];
@@ -112,7 +124,7 @@ describe('Test PrescriptionsDataGrid Component Data Display', () => {
 
       const { getByText } = within(prescriptionRow);
       expect(getByText(prescription.patientId)).toBeInTheDocument();
-      expect(getByText(prescription.medicine.medCode)).toBeInTheDocument();
+      expect(getByText(prescription.medicine.code)).toBeInTheDocument();
     });
   });
 
