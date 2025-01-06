@@ -79,12 +79,11 @@ describe('markOrderReceived', () => {
       deliveryDate: dayjs().add(1, 'week'),
       status: 'ORDERED',
     };
-    const dataString = JSON.stringify(data);
     const endpoint = `/api/orders/received/${data.id}`;
 
     await markOrderReceived(data);
 
-    expect(putRequestSpy).toHaveBeenCalledWith(endpoint, dataString);
+    expect(putRequestSpy).toHaveBeenCalledWith(endpoint);
   });
 
   it('should return result of RequestAPI.putRequest', async () => {

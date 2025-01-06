@@ -67,10 +67,7 @@ export const markOrderReceived = async (order) => {
     if (isNaN(order.id) || order.id < 1)
       throw new Error('Order id must be a positive number');
     if (order.status === 'RECEIVED') throw new Error('Order already received');
-    return await RequestAPI.putRequest(
-      `/api/orders/received/${order.id}`,
-      JSON.stringify(order)
-    );
+    return await RequestAPI.putRequest(`/api/orders/received/${order.id}`);
   } catch (error) {
     console.error(error);
     return { ok: false, status: 400, body: { message: error.message } };
