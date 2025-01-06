@@ -1,3 +1,9 @@
+export const parseResponseBody = async (response) => {
+	const text = await response.text();
+	const responseBody = text ? await JSON.parse(text) : null;
+	return responseBody;
+};
+
 /**
  * Makes a fetch request using http://localhost:8080 as the base URL
  * @Optional
@@ -34,13 +40,11 @@ export const request = async (args) => {
 		if (response === undefined || response === null)
 			throw new Error('An unexpected error occurred');
 
-		const ret = {
+		return {
 			ok: true,
 			status: response.status,
-			body: await response.text(),
+			body: await parseResponseBody(response),
 		};
-
-		return ret;
 	} catch (error) {
 		console.error(error);
 		return {
