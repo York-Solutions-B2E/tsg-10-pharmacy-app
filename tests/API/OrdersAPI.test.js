@@ -2,9 +2,10 @@ jest.mock('../../src/API/RequestAPI');
 
 import RequestAPI from '../../src/API/RequestAPI';
 
-import { getAllOrders } from '../../src/API/OrdersAPI';
+import { getAllOrders, placeOrder } from '../../src/API/OrdersAPI';
 
 const getRequestSpy = jest.spyOn(RequestAPI, 'getRequest');
+const postRequestSpy = jest.spyOn(RequestAPI, 'postRequest');
 
 afterEach(() => {
   jest.resetAllMocks();
@@ -29,10 +30,28 @@ describe('getAllOrders', () => {
 
 describe('placeOrder', () => {
   it('should call RequestAPI.postRequest with correct args', async () => {
-    throw new Error();
+    const data = {
+      medicineId: 1,
+      quantity: 100,
+      deliveryDate: '2025-02-17',
+    };
+    const dataString = JSON.stringify(data);
+    const endpoint = '/api/orders';
+    await placeOrder(data);
+
+    expect(postRequestSpy).toHaveBeenCalledWith(endpoint, dataString);
   });
 
   it('should return result of RequestAPI.postRequest', async () => {
-    throw new Error();
+    const expectedResult = 'result';
+    postRequestSpy.mockImplementationOnce(() => expectedResult);
+
+    const response = await placeOrder({
+      medicineId: 4,
+      quantity: 300,
+      deliveryDate: '2025-06-26',
+    });
+
+    expect(response).toBe(expectedResult);
   });
 });
