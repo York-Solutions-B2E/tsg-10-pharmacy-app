@@ -42,8 +42,9 @@ describe('request', () => {
 
 		await request({ endpoint: '/' });
 
-		expect(mockFetch).toHaveBeenCalledWith(`${API.domain}/`, {
+		expect(mockFetch).toHaveBeenCalledWith(`http://localhost:8080/`, {
 			method: 'GET',
+			headers: { 'content-type': 'application/json' },
 		});
 	});
 
