@@ -1,6 +1,31 @@
 import RequestAPI from './RequestAPI';
 import dayjs from 'dayjs';
 
+export const validateOrder = (order) => {
+  if (order === undefined) return new Error('Order cannot be undefined');
+  if (order === null) return new Error('Order cannot be null');
+  if (
+    order.medicineId === undefined ||
+    isNaN(order.medicineId) ||
+    order.medicineId < 1
+  )
+    return new Error('Medicine id must be a positive number');
+  if (
+    order.quantity === undefined ||
+    isNaN(order.quantity) ||
+    order.quantity < 1
+  )
+    return new Error('Order quantity must be a positive number');
+  if (
+    order.deliveryDate === undefined ||
+    order.deliveryDate === null ||
+    !dayjs(order.deliveryDate).isValid() ||
+    dayjs().isAfter(order.deliveryDate)
+  )
+    return new Error('Delivery date must be a date in the future');
+  return true;
+};
+
 export const getAllOrders = async () => {
   return await RequestAPI.getRequest('/api/orders');
 };
