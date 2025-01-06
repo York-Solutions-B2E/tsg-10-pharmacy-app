@@ -3,7 +3,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import ButtonWithText from '../buttons/ButtonWithText';
 import StatusChip from './StatusChip';
 
-const OrdersTable = ({ prescriptionsList }) => {
+const OrdersTable = ({ ordersList }) => {
   // const navigate = useNavigate();
 
   // ******** Click Handlers
@@ -90,7 +90,7 @@ const OrdersTable = ({ prescriptionsList }) => {
   return (
     <Box sx={{ height: 700, margin: 'auto', maxWidth: '800px' }}>
       <DataGrid
-        rows={prescriptionsList}
+        rows={ordersList}
         columns={columns}
         initialState={{
           pagination: {

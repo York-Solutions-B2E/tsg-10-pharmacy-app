@@ -10,7 +10,7 @@ const OrdersPage = () => {
   return (
     <Box sx={appointmentPageStyling} data-testid="orders-page">
       <h1>OrdersPage</h1>
-      <OrdersTable prescriptionsList={ordersList} />
+      <OrdersTable ordersList={ordersList} />
     </Box>
   );
 };
