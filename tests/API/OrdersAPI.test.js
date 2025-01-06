@@ -165,7 +165,7 @@ describe('exceptions', () => {
 
       response = await placeOrder({ medicineId: 34, quantity: 73 });
       expect(errorSpy).toHaveBeenCalledWith(
-        new Error('Delivery date must be in the future')
+        new Error('Delivery date must be a date in the future')
       );
       expect(response.status).toBe(400);
 
@@ -175,7 +175,7 @@ describe('exceptions', () => {
         deliveryDate: null,
       });
       expect(errorSpy).toHaveBeenCalledWith(
-        new Error('Delivery date must be in the future')
+        new Error('Delivery date must be a date in the future')
       );
       expect(response.status).toBe(400);
 
@@ -185,7 +185,7 @@ describe('exceptions', () => {
         deliveryDate: 'hello',
       });
       expect(errorSpy).toHaveBeenCalledWith(
-        new Error('Delivery date must be in the future')
+        new Error('Delivery date must be a date in the future')
       );
       expect(response.status).toBe(400);
 
@@ -195,7 +195,7 @@ describe('exceptions', () => {
         deliveryDate: dayjs('2000-01-01'),
       });
       expect(errorSpy).toHaveBeenCalledWith(
-        new Error('Delivery date must be in the future')
+        new Error('Delivery date must be a date in the future')
       );
       expect(response.status).toBe(400);
 
