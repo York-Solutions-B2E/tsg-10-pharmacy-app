@@ -1,0 +1,132 @@
+[
+  {
+    "id": 1,
+    "medicine": {
+      "id": 1,
+      "name": "ChocoRelief",
+      "code": "CRX-001",
+      "createdAt": "2025-01-06T21:30:42.035039Z",
+      "updatedAt": "2025-01-06T21:30:42.035039Z"
+    },
+    "stockQuantity": 100,
+    "sufficientStock": true,
+    "deliveryDate": "2025-01-11"
+  },
+  {
+    "id": 2,
+    "medicine": {
+      "id": 2,
+      "name": "MintyCure",
+      "code": "MCX-002",
+      "createdAt": "2025-01-06T21:30:42.037949Z",
+      "updatedAt": "2025-01-06T21:30:42.037949Z"
+    },
+    "stockQuantity": 200,
+    "sufficientStock": true,
+    "deliveryDate": "2025-01-16"
+  },
+  {
+    "id": 3,
+    "medicine": {
+      "id": 3,
+      "name": "Caramelex",
+      "code": "CEX-003",
+      "createdAt": "2025-01-06T21:30:42.038488Z",
+      "updatedAt": "2025-01-06T21:30:42.038488Z"
+    },
+    "stockQuantity": 150,
+    "sufficientStock": true,
+    "deliveryDate": "2025-01-13"
+  },
+  {
+    "id": 4,
+    "medicine": {
+      "id": 4,
+      "name": "GummyVita",
+      "code": "GVX-004",
+      "createdAt": "2025-01-06T21:30:42.038908Z",
+      "updatedAt": "2025-01-06T21:30:42.038908Z"
+    },
+    "stockQuantity": 180,
+    "sufficientStock": true,
+    "deliveryDate": "2025-01-09"
+  },
+  {
+    "id": 5,
+    "medicine": {
+      "id": 5,
+      "name": "Lollipoprin",
+      "code": "LPX-005",
+      "createdAt": "2025-01-06T21:30:42.039278Z",
+      "updatedAt": "2025-01-06T21:30:42.039278Z"
+    },
+    "stockQuantity": 90,
+    "sufficientStock": true,
+    "deliveryDate": "2025-01-26"
+  },
+  {
+    "id": 6,
+    "medicine": {
+      "id": 6,
+      "name": "CandyCaps",
+      "code": "CCX-006",
+      "createdAt": "2025-01-06T21:30:42.039645Z",
+      "updatedAt": "2025-01-06T21:30:42.039645Z"
+    },
+    "stockQuantity": 120,
+    "sufficientStock": true,
+    "deliveryDate": null
+  },
+  {
+    "id": 7,
+    "medicine": {
+      "id": 7,
+      "name": "JellyGel",
+      "code": "JGX-007",
+      "createdAt": "2025-01-06T21:30:42.039990Z",
+      "updatedAt": "2025-01-06T21:30:42.039990Z"
+    },
+    "stockQuantity": 140,
+    "sufficientStock": true,
+    "deliveryDate": null
+  },
+  {
+    "id": 8,
+    "medicine": {
+      "id": 8,
+      "name": "SourSooth",
+      "code": "SSX-008",
+      "createdAt": "2025-01-06T21:30:42.040342Z",
+      "updatedAt": "2025-01-06T21:30:42.040342Z"
+    },
+    "stockQuantity": 160,
+    "sufficientStock": true,
+    "deliveryDate": null
+  },
+  {
+    "id": 9,
+    "medicine": {
+      "id": 9,
+      "name": "FizzFluAid",
+      "code": "FFX-009",
+      "createdAt": "2025-01-06T21:30:42.040884Z",
+      "updatedAt": "2025-01-06T21:30:42.040884Z"
+    },
+    "stockQuantity": 110,
+    "sufficientStock": true,
+    "deliveryDate": null
+  },
+  {
+    "id": 10,
+    "medicine": {
+      "id": 10,
+      "name": "NougatNite",
+      "code": "NNX-010",
+      "createdAt": "2025-01-06T21:30:42.041269Z",
+      "updatedAt": "2025-01-06T21:30:42.041269Z"
+    },
+    "stockQuantity": 130,
+    "sufficientStock": true,
+    "deliveryDate": null
+  }
+]
