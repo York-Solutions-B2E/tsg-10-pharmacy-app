@@ -76,7 +76,7 @@ describe('markOrderReceived', () => {
   it('should call RequestAPI.putRequest with correct args', async () => {
     const data = { id: 12, status: 'ORDERED' };
     const dataString = JSON.stringify(data);
-    const endpoint = '/api/order/received';
+    const endpoint = `/api/orders/received/${data.id}`;
     await markOrderReceived(data);
 
     expect(putRequestSpy).toHaveBeenCalledWith(endpoint, dataString);
