@@ -24,7 +24,7 @@ export const request = async (args) => {
 		method !== 'POST' &&
 		method !== 'DELETE'
 	)
-		return { ok: false, status: 405, body: null };
+		return { ok: false, status: 405, body: { message: 'unsupported method' } };
 
 	try {
 		const response = await fetch(endpoint, {
@@ -45,6 +45,10 @@ export const request = async (args) => {
 		return ret;
 	} catch (error) {
 		console.error(error);
-		return { ok: false, status: 600, body: null };
+		return {
+			ok: false,
+			status: 600,
+			body: { message: 'unable to make request' },
+		};
 	}
 };
