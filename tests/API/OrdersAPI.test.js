@@ -57,6 +57,16 @@ describe('placeOrder', () => {
   });
 });
 
+describe('markOrderReceived', () => {
+  it('should call RequestAPI.putRequest with correct args', async () => {
+    throw new Error();
+  });
+
+  it('should return result of RequestAPI.putRequest', async () => {
+    throw new Error();
+  });
+});
+
 describe('exceptions', () => {
   const unmockedError = console.error;
   const errorSpy = jest.spyOn(console, 'error').mockImplementation();
@@ -214,6 +224,12 @@ describe('exceptions', () => {
       response = await placeOrder(null);
       expect(errorSpy).toHaveBeenCalledWith(new Error('Order cannot be null'));
       expect(response.status).toBe(400);
+    });
+  });
+
+  describe('markOrderReceived', () => {
+    it('should throw if order already received', async () => {
+      throw new Error();
     });
   });
 });
