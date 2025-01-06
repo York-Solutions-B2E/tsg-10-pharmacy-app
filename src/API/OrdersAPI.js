@@ -1,6 +1,11 @@
 import RequestAPI from './RequestAPI';
 import dayjs from 'dayjs';
 
+/**
+ * Helper function for validating the order argument passed to placeOrder and markOrderReceived
+ * @Returns {Boolean} true if order is valid
+ * @Returns {Error} if order is not valid (the error is thrown in the calling function)
+ * */
 export const validateOrder = (order) => {
   if (order === undefined) return new Error('Order cannot be undefined');
   if (order === null) return new Error('Order cannot be null');
@@ -26,10 +31,19 @@ export const validateOrder = (order) => {
   return true;
 };
 
+/**
+ * Sends a get request to get all medications from remote server
+ * @Returns {Object} HTTP response: {ok: boolean, status: int, body: {Object}}
+ */
 export const getAllOrders = async () => {
   return await RequestAPI.getRequest('/api/orders');
 };
 
+/**
+ * Sends a POST request to the server to create a new order
+ * @Param {Object} order: {medicineId: {Integer}, quantity: {Integer}, deliveryDate: {dayjs}, }
+ * @Returns {Object} HTTP response: {ok: boolean, status: int, body: {Object}}
+ * */
 export const placeOrder = async (order) => {
   try {
     const orderValid = validateOrder(order);
@@ -41,6 +55,11 @@ export const placeOrder = async (order) => {
   }
 };
 
+/**
+ * Sends a PUT request to the server to update an existing order to 'RECEIVED' status
+ * @Param {Object} order: {id: {Integer}, medicineId: {Integer}, quantity: {Integer}, deliveryDate: {dayjs}, status: 'ORDERED'}
+ * @Returns {Object} HTTP response: {ok: boolean, status: int, body: {Object}}
+ * */
 export const markOrderReceived = async (order) => {
   try {
     const orderValid = validateOrder(order);
