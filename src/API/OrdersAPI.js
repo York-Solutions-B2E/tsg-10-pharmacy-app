@@ -40,3 +40,28 @@ export const placeOrder = async (order) => {
     return { ok: false, status: 400, body: { message: error.message } };
   }
 };
+
+export const markOrderReceived = async (order) => {
+  try {
+    const orderValid = validateOrder(order);
+    if (orderValid instanceof Error) throw orderValid;
+    if (isNaN(order.id) || order.id < 1)
+      throw new Error('Order id must be a positive number');
+    if (order.status === 'RECEIVED') throw new Error('Order already received');
+    return await RequestAPI.putRequest(
+      `/api/orders/received/${order.id}`,
+      JSON.stringify(order)
+    );
+  } catch (error) {
+    console.error(error);
+    return { ok: false, status: 400, body: { message: error.message } };
+  }
+};
+
+const OrdersAPI = {
+  validateOrder,
+  getAllOrders,
+  placeOrder,
+  markOrderReceived,
+};
+export default OrdersAPI;
