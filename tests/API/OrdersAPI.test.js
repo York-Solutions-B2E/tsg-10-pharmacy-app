@@ -237,6 +237,53 @@ describe('exceptions', () => {
   });
 
   describe('markOrderReceived', () => {
+    it('should throw if order.id is not a positive number', async () => {
+      await markOrderReceived({
+        medicineId: 23,
+        quantity: 45,
+        deliveryDate: dayjs().add(1, 'week'),
+        status: 'ORDERED',
+      });
+      expect(errorSpy).toHaveBeenCalledWith(
+        new Error('Order id must be a positive number')
+      );
+
+      await markOrderReceived({
+        id: null,
+        medicineId: 23,
+        quantity: 45,
+        deliveryDate: dayjs().add(1, 'week'),
+        status: 'ORDERED',
+      });
+      expect(errorSpy).toHaveBeenCalledWith(
+        new Error('Order id must be a positive number')
+      );
+
+      await markOrderReceived({
+        id: 'NaN',
+        medicineId: 23,
+        quantity: 45,
+        deliveryDate: dayjs().add(1, 'week'),
+        status: 'ORDERED',
+      });
+      expect(errorSpy).toHaveBeenCalledWith(
+        new Error('Order id must be a positive number')
+      );
+
+      await markOrderReceived({
+        id: -12,
+        medicineId: 23,
+        quantity: 45,
+        deliveryDate: dayjs().add(1, 'week'),
+        status: 'ORDERED',
+      });
+      expect(errorSpy).toHaveBeenCalledWith(
+        new Error('Order id must be a positive number')
+      );
+
+      expect(errorSpy).toHaveBeenCalledTimes(4);
+    });
+
     it('should throw if order already received', async () => {
       const response = await markOrderReceived({
         id: 12,
