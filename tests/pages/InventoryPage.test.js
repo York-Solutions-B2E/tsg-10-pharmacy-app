@@ -1,10 +1,10 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import React from 'react';
-import MedicationsPage from '../../src/pages/MedicationsPage';
+import InventoryPage from '../../src/pages/InventoryPage';
 import Modal from 'react-modal';
 import { cleanup } from '@testing-library/react';
 
-describe('MedicationsPage', () => {
+describe('InventoryPage', () => {
   beforeEach(() => {
     Modal.setAppElement(document.body);
   });
@@ -14,7 +14,7 @@ describe('MedicationsPage', () => {
   });
 
   test('renders MedicationsTable', () => {
-    render(<MedicationsPage />);
+    render(<InventoryPage />);
     const tableElement = screen.getByRole('grid');
 
     expect(tableElement).toBeInTheDocument();
@@ -22,7 +22,7 @@ describe('MedicationsPage', () => {
 
   describe('Edit Medication Modal', () => {
     test('clicking add stock brings up the modal', async () => {
-      render(<MedicationsPage />);
+      render(<InventoryPage />);
 
       const clickResult = fireEvent.click(
         screen.getAllByText(/Edit Stock/i)[0]
@@ -35,7 +35,7 @@ describe('MedicationsPage', () => {
     });
 
     test('count field is present when modal opens', async () => {
-      render(<MedicationsPage />);
+      render(<InventoryPage />);
       fireEvent.click(screen.getAllByText(/Edit Stock/i)[0]);
       let inputComponent;
       await waitFor(() => {
@@ -52,7 +52,7 @@ describe('MedicationsPage', () => {
     });
 
     test('clicking edit stock button and inputting data into the text field', async () => {
-      render(<MedicationsPage />);
+      render(<InventoryPage />);
       fireEvent.click(screen.getAllByText(/Edit Stock/i)[0]);
 
       await waitFor(() => {

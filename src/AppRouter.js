@@ -1,5 +1,5 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
-import InventoryPage from './pages/MedicationsPage';
+import InventoryPage from './pages/InventoryPage';
 import PrescriptionsPage from './pages/PrescriptionsPage';
 
 const AppRouter = () => {

@@ -6,7 +6,7 @@ import CustomModal from '../components/CustomModal';
 import { TextField } from '@mui/material';
 import Tooltip from '@mui/material/Tooltip';
 
-const MedicationsPage = () => {
+const InventoryPage = () => {
   const [medications, setMedications] = useState([]);
 
   const [open, setOpen] = useState(false);
@@ -114,4 +114,4 @@ const MedicationsPage = () => {
   );
 };
 
-export default MedicationsPage;
+export default InventoryPage;
