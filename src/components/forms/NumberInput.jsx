@@ -2,7 +2,7 @@ import {
   Unstable_NumberInput as BaseNumberInput,
   numberInputClasses,
 } from '@mui/base/Unstable_NumberInput';
-import { FormControl, FormHelperText, InputLabel } from '@mui/material';
+import { FormControl, FormHelperText } from '@mui/material';
 import { styled } from '@mui/system';
 import { forwardRef } from 'react';
 
@@ -39,9 +39,7 @@ const NumberInput = ({
   min,
 }) => {
   return (
-    <FormControl sx={{ margin: '20px' }} error={error}>
-      <InputLabel htmlFor="my-input">{label}</InputLabel>
-
+    <FormControl error={error}>
       <NumberInputBasic
         aria-label="Number input"
         placeholder={placeholder}
