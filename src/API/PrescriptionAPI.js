@@ -19,7 +19,17 @@ export const getAllActivePrescriptions = async () => {
 
 /**
  * Sends put request to update the prescription status to FILLED
- * @Params {Object} prescription
+ * @Params {Object} {
+ * 	id: {Integer},
+ * 	status: {String},
+ * 	quantity: {Integer},
+ * 	instructions: {String},
+ * 	medicine: {
+ * 		id: {Integer},
+ * 		name: {String},
+ * 		code: {String}
+ * 	}
+ * }
  * @Returns {Object} HTTP response: {ok: boolean, status: int, body: String}
  */
 export const fillPrescription = async (prescription) => {
@@ -42,7 +52,17 @@ export const fillPrescription = async (prescription) => {
 
 /**
  * Sends put request to update the prescription status to PICKED_UP
- * @Params {Object} prescription
+ * @Params {Object} {
+ * 	id: {Integer},
+ * 	status: {String},
+ * 	quantity: {Integer},
+ * 	instructions: {String},
+ * 	medicine: {
+ * 		id: {Integer},
+ * 		name: {String},
+ * 		code: {String}
+ * 	}
+ * }
  * @Returns {Object} HTTP response: {ok: boolean, status: int, body: String}
  */
 export const markPickedUp = async (prescription) => {
