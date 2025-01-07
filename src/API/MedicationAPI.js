@@ -1,4 +1,5 @@
 import RequestAPI from './RequestAPI';
+import { validateInventory } from '../util/ValidateAPI';
 
 /**
  * Sends a get request to get all medications from remote server
@@ -26,10 +27,7 @@ export const getAllMedications = async () => {
  */
 export const updateMedicationStock = async (inventory, updatedQuantity) => {
   try {
-    if (inventory === undefined) throw new Error('No inventory provided');
-    if (inventory === null) throw new Error('Provided inventory is null');
-    if (inventory.id === null || isNaN(inventory.id) || inventory.id <= 0)
-      throw new Error('Inventory id must be a positive number');
+    validateInventory(inventory);
     if (
       updatedQuantity === null ||
       isNaN(updatedQuantity) ||
