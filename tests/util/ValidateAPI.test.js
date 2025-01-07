@@ -88,3 +88,13 @@ describe('validateOrder', () => {
     expect(errorSpy).toHaveBeenCalledTimes(2);
   });
 });
+
+describe('validatePrescription', () => {
+  it('should not throw if prescription is valid', () => {
+    throw new Error();
+  });
+
+  it('should throw if prescription is not a positive number', () => {
+    throw new Error();
+  });
+});
