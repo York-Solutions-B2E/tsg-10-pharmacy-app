@@ -2,6 +2,7 @@ import dayjs from 'dayjs';
 import {
   validateOrder,
   validatePrescription,
+  validateInventory,
 } from '../../src/util/ValidateAPI';
 
 const unmockedError = console.error;
@@ -151,5 +152,45 @@ describe('validatePrescription', () => {
     }
 
     expect(errorSpy).toHaveBeenCalledTimes(2);
+  });
+});
+
+describe('validateInventory', () => {
+  it('should not throw if inventory is valid', () => {
+    validateInventory({ id: 12 });
+    expect(errorSpy).not.toHaveBeenCalled();
+  });
+
+  it('should throw if inventory is undefined or null', () => {
+    try {
+      validateInventory();
+    } catch (error) {
+      console.error(error);
+    }
+
+    try {
+      validateInventory(null);
+    } catch (error) {
+      console.error(error);
+    }
+
+    expect(errorSpy).toHaveBeenCalledTimes(2);
+  });
+
+  it('should throw if inventory.id is not a positive number', () => {
+    const invalidArgs = [undefined, null, 'NaN', -34];
+    for (var i = 0; i < invalidArgs.length; i++) {
+      try {
+        validateInventory({
+          id: invalidArgs[i],
+        });
+      } catch (error) {
+        console.error(error);
+      }
+      expect(errorSpy).toHaveBeenCalledWith(
+        new Error('Inventory id must be a positive number')
+      );
+    }
+    expect(errorSpy).toHaveBeenCalledTimes(invalidArgs.length);
   });
 });

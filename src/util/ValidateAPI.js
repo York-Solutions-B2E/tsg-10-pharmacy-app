@@ -34,3 +34,13 @@ export const validatePrescription = (prescription) => {
   if (prescription.status === undefined || prescription.status === null)
     throw new Error('Prescription must have a status');
 };
+
+/**
+ * Helper function for validating the inventory argument passed to updateInventory
+ * */
+export const validateInventory = (inventory) => {
+  if (inventory === undefined) throw new Error('Inventory cannot be undefined');
+  if (inventory === null) throw new Error('Inventory cannot be null');
+  if (inventory.id === undefined || isNaN(inventory.id) || inventory.id < 1)
+    throw new Error('Inventory id must be a positive number');
+};
