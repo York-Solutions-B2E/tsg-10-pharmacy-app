@@ -1,5 +1,8 @@
 import dayjs from 'dayjs';
-import { validateOrder } from '../../src/util/ValidateAPI';
+import {
+  validateOrder,
+  validatePrescription,
+} from '../../src/util/ValidateAPI';
 
 const unmockedError = console.error;
 const errorSpy = jest.spyOn(console, 'error').mockImplementation();
@@ -84,6 +87,68 @@ describe('validateOrder', () => {
       new Error('Order cannot be undefined')
     );
     expect(errorSpy).toHaveBeenCalledWith(new Error('Order cannot be null'));
+
+    expect(errorSpy).toHaveBeenCalledTimes(2);
+  });
+});
+
+describe('validatePrescription', () => {
+  it('should not throw if prescription is valid', () => {
+    try {
+      validatePrescription({ id: 12, status: 'FILLED' });
+    } catch (error) {
+      console.error(error);
+    }
+
+    expect(errorSpy).not.toHaveBeenCalled();
+  });
+
+  it('should throw if prescription is undefined or null', () => {
+    try {
+      validatePrescription();
+    } catch (error) {
+      console.error(error);
+    }
+
+    try {
+      validatePrescription(null);
+    } catch (error) {
+      console.error(error);
+    }
+
+    expect(errorSpy).toHaveBeenCalledTimes(2);
+  });
+
+  it('should throw if prescription id is not a positive number', () => {
+    const invalidArgs = [undefined, null, 'hello', -45];
+    for (var i = 0; i < invalidArgs.length; i++) {
+      try {
+        validatePrescription({
+          id: invalidArgs[i],
+          status: 'FILLED',
+        });
+      } catch (error) {
+        console.error(error);
+      }
+      expect(errorSpy).toHaveBeenCalledWith(
+        new Error('Prescription id must be a positive number')
+      );
+    }
+    expect(errorSpy).toHaveBeenCalledTimes(invalidArgs.length);
+  });
+
+  it('should throw if prescription status is undefined or null', () => {
+    try {
+      validatePrescription({ id: 12 });
+    } catch (error) {
+      console.error(error);
+    }
+
+    try {
+      validatePrescription({ id: 12, status: null });
+    } catch (error) {
+      console.error(error);
+    }
 
     expect(errorSpy).toHaveBeenCalledTimes(2);
   });

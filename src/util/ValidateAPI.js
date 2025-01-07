@@ -17,3 +17,20 @@ export const validateOrder = (order) => {
   )
     throw new Error('Order quantity must be a positive number');
 };
+
+/**
+ * Helper function for validating the prescription argument passed to fillPrescription and markPickedUp
+ * */
+export const validatePrescription = (prescription) => {
+  if (prescription === undefined)
+    throw new Error('Prescription cannot be undefined');
+  if (prescription === null) throw new Error('Prescription cannot be null');
+  if (
+    prescription.id === undefined ||
+    isNaN(prescription.id) ||
+    prescription.id < 1
+  )
+    throw new Error('Prescription id must be a positive number');
+  if (prescription.status === undefined || prescription.status === null)
+    throw new Error('Prescription must have a status');
+};
