@@ -119,14 +119,23 @@ describe('exceptions', () => {
 			expect(response.status).toBe(400);
 		});
 
-		it('should throw if prescription.status is not NEW', async () => {
+		it('should throw if prescription.status is not NEW or STOCK_RECEIVED', async () => {
 			const data = { id: 123456, status: 'AWAITING_SHIPMENT' };
 
 			await fillPrescription(data);
 
 			expect(errorSpy).toHaveBeenCalledWith(
-				new Error('Only NEW prescriptions can be FILLED')
+				new Error(
+					'Only prescriptions with a status of NEW or STOCK_RECEIVED can be FILLED'
+				)
 			);
+
+			expect(errorSpy).toHaveBeenCalledTimes(1);
+
+			await fillPrescription({ ...data, status: 'NEW' });
+			await fillPrescription({ ...data, status: 'STOCK_RECEIVED' });
+
+			expect(errorSpy).toHaveBeenCalledTimes(1);
 		});
 	});
 

@@ -36,8 +36,13 @@ export const getAllActivePrescriptions = async () => {
 export const fillPrescription = async (prescription) => {
 	try {
 		validatePrescription(prescription);
-		if (prescription.status !== 'NEW')
-			throw new Error('Only NEW prescriptions can be FILLED');
+		if (
+			prescription.status !== 'NEW' &&
+			prescription.status !== 'STOCK_RECEIVED'
+		)
+			throw new Error(
+				'Only prescriptions with a status of NEW or STOCK_RECEIVED can be FILLED'
+			);
 		return await RequestAPI.putRequest(
 			`/api/prescriptions/${prescription.id}`,
 			JSON.stringify({ id: prescription.id, status: 'FILLED' })
