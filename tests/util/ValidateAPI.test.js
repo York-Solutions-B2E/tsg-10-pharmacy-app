@@ -26,7 +26,7 @@ describe('validateOrder', () => {
     } catch (error) {
       console.error(error);
     }
-    expect(errorSpy).toHaveBeenCalledTimes(0);
+    expect(errorSpy).not.toHaveBeenCalled();
   });
 
   it('should throw if order.inventoryId is not a positive number', async () => {
