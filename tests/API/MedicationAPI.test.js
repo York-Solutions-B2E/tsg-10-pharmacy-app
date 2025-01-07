@@ -95,5 +95,29 @@ describe('exceptions', () => {
       expect(errorSpy).toHaveBeenCalledTimes(1);
       expect(response.status).toBe(400);
     });
+
+    it('should throw if updatedQuantity is not a number >= 0', async () => {
+      await updateMedicationStock({ id: 123456 });
+      expect(errorSpy).toHaveBeenCalledWith(
+        new Error('Updated quantity must be a non-negative number')
+      );
+
+      await updateMedicationStock({ id: 123456 }, null);
+      expect(errorSpy).toHaveBeenCalledWith(
+        new Error('Updated quantity must be a non-negative number')
+      );
+
+      await updateMedicationStock({ id: 123456 }, 'gdsfg');
+      expect(errorSpy).toHaveBeenCalledWith(
+        new Error('Updated quantity must be a non-negative number')
+      );
+
+      await updateMedicationStock({ id: 123456 }, -15);
+      expect(errorSpy).toHaveBeenCalledWith(
+        new Error('Updated quantity must be a non-negative number')
+      );
+
+      expect(errorSpy).toHaveBeenCalledTimes(4);
+    });
   });
 });
