@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { Box } from '@mui/material';
 
@@ -7,12 +7,15 @@ const MedicationsTable = ({ medications, editMedicine, orderMore }) => {
     { field: 'name', headerName: 'Medication', width: 150 },
     { field: 'code', headerName: 'Code', width: 100 },
     { field: 'count', headerName: 'Count', width: 100 },
-    { field: 'nextDelivery', headerName: 'Next Delivery', width: 150,
-      valueFormatter: (param) => new Date(param).toLocaleDateString()
+    {
+      field: 'nextDelivery',
+      headerName: 'Next Delivery',
+      width: 150,
+      valueFormatter: (param) => new Date(param).toLocaleDateString(),
     },
-    { 
-      field: 'sufficiency', 
-      headerName: 'Sufficiency', 
+    {
+      field: 'sufficiency',
+      headerName: 'Sufficiency',
       width: 150,
       renderCell: (params) => {
         let backgroundColor;
@@ -59,7 +62,7 @@ const MedicationsTable = ({ medications, editMedicine, orderMore }) => {
       renderCell: (params) => (
         <Box>
           <button
-            onClick={() => editMedicine(params.id)}
+            onClick={() => editMedicine(params.row)}
             style={{
               background: 'linear-gradient(to right, #1e3c72, #2a5298)',
               color: 'white',
@@ -69,7 +72,7 @@ const MedicationsTable = ({ medications, editMedicine, orderMore }) => {
               cursor: 'pointer',
             }}
           >
-            + Add Stock
+            + Edit Stock
           </button>
           &nbsp;&nbsp;
           <button
