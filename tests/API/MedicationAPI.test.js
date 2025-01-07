@@ -36,10 +36,8 @@ describe('updateMedicationStock', () => {
     const data = {
       id: 56,
       stockQuantity: 300,
-      sufficientStock: true,
     };
     const dataString = JSON.stringify({
-      ...data,
       stockQuantity: updatedQuantity,
     });
     const endpoint = `/api/inventory/${data.id}`;

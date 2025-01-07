@@ -38,7 +38,7 @@ export const updateMedicationStock = async (inventory, updatedQuantity) => {
       throw new Error('Updated quantity must be a non-negative number');
     return await RequestAPI.putRequest(
       `/api/inventory/${inventory.id}`,
-      JSON.stringify({ ...inventory, stockQuantity: updatedQuantity })
+      JSON.stringify({ stockQuantity: updatedQuantity })
     );
   } catch (error) {
     console.error(error);
