@@ -22,8 +22,9 @@ export const validateOrder = (order) => {
  * Helper function for validating the prescription argument passed to fillPrescription and markPickedUp
  * */
 export const validatePrescription = (prescription) => {
-  if (prescription === undefined) throw new Error('Order cannot be undefined');
-  if (prescription === null) throw new Error('Order cannot be null');
+  if (prescription === undefined)
+    throw new Error('Prescription cannot be undefined');
+  if (prescription === null) throw new Error('Prescription cannot be null');
   if (
     prescription.id === undefined ||
     isNaN(prescription.id) ||
