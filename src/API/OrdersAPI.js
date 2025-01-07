@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 
 /**
  * Sends a get request to get all medications from remote server
- * @Returns {Object} HTTP response: {ok: boolean, status: int, body: {Object}}
+ * @Returns {Object} HTTP response: {ok: {Boolean}, status: {Integer}, body: {Object}}
  */
 export const getAllOrders = async () => {
   return await RequestAPI.getRequest('/api/orders');
@@ -13,7 +13,7 @@ export const getAllOrders = async () => {
 /**
  * Sends a POST request to the server to create a new order
  * @Param {Object} order: {medicineId: {Integer}, quantity: {Integer}, deliveryDate: {dayjs}, }
- * @Returns {Object} HTTP response: {ok: boolean, status: int, body: {Object}}
+ * @Returns {Object} HTTP response: {ok: {Boolean}, status: {Integer}, body: {Object}}
  * */
 export const placeOrder = async (order) => {
   try {
@@ -35,7 +35,7 @@ export const placeOrder = async (order) => {
 /**
  * Sends a PUT request to the server to update an existing order to 'RECEIVED' status
  * @Param {Object} order: {id: {Integer}, medicineId: {Integer}, quantity: {Integer}, deliveryDate: {dayjs}, status: 'ORDERED'}
- * @Returns {Object} HTTP response: {ok: boolean, status: int, body: {Object}}
+ * @Returns {Object} HTTP response: {ok: {Boolean}, status: {Integer}, body: {Object}}
  * */
 export const markOrderReceived = async (order) => {
   try {
