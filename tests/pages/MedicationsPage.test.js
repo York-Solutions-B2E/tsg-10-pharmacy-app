@@ -59,7 +59,7 @@ describe('MedicationsPage', () => {
         expect(screen.getByText('Edit Inventory')).toBeInTheDocument();
       });
 
-      const inputComponent = screen.getByTestId('totalStockInput').firstChild;
+      const inputComponent = screen.getByTestId('totalStockInput');
       fireEvent.change(inputComponent, { target: { value: '50' } });
 
       expect(inputComponent.value).toBe('50');

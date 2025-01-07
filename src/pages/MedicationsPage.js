@@ -95,7 +95,9 @@ const MedicationsPage = () => {
               };
               setCurrentMedication(updatedMedication);
             }}
-            slotProps={{ input: { step: 1, 'data-testid': 'totalStockInput' } }}
+            slotProps={{
+              htmlInput: { step: 1, min: 0, 'data-testid': 'totalStockInput' },
+            }}
           />
         </Tooltip>
       </CustomModal>
