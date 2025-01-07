@@ -2,7 +2,7 @@ import RequestAPI from './RequestAPI';
 
 /**
  * Sends a get request to get all medications from remote server
- * @Returns {Object} HTTP response: {ok: boolean, status: int, body: String}
+ * @Returns {Object} HTTP response: {ok: {Boolean}, status: {Integer}, body: {Object}}
  */
 export const getAllMedications = async () => {
   return await RequestAPI.getRequest('/api/inventory');
@@ -10,9 +10,19 @@ export const getAllMedications = async () => {
 
 /**
  * Sends a put request to update the stock of the provided inventory to the provided quantity
- * @Param {Object} inventory
+ * @Param {Object} {
+ *  id: {Integer},
+ *  stockQuantity: {Integer},
+ *  sufficientStock: {Integer},
+ *  deliveryDate: {dayjs},
+ *  medicine: {
+ *   id: {Integer},
+ *   name: {String},
+ *   code: {String}
+ *  }
+ * }
  * @Param {Integer} updatedQuantity
- * @Returns {Object} HTTP response: {ok: boolean, status: int, body: String}
+ * @Returns {Object} HTTP response: {ok: {Boolean}, status: {Integer}, body: {Object}}
  */
 export const updateMedicationStock = async (inventory, updatedQuantity) => {
   try {
@@ -38,9 +48,19 @@ export const updateMedicationStock = async (inventory, updatedQuantity) => {
 
 /**
  * Sends a put request to adjust the stock of the provided inventory by the provided quantity
- * @Param {Object} inventory
+ * @Param {Object} {
+ *  id: {Integer},
+ *  stockQuantity: {Integer},
+ *  sufficientStock: {Integer},
+ *  deliveryDate: {dayjs},
+ *  medicine: {
+ *   id: {Integer},
+ *   name: {String},
+ *   code: {String}
+ *  }
+ * }
  * @Param {Integer} stockAdjustment
- * @Returns {Object} HTTP response: {ok: boolean, status: int, body: String}
+ * @Returns {Object} HTTP response: {ok: {Boolean}, status: {Integer}, body: {Object}}
  */
 export const adjustMedicationStock = async (inventory, stockAdjustment) => {
   try {
