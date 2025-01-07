@@ -3,7 +3,6 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
-import inventoryList from '../../../dummy-data/inventory-list.json';
 import ButtonWithText from '../buttons/ButtonWithText';
 import NumberInput from './NumberInput';
 
@@ -18,7 +17,7 @@ const containerStyling = {
   borderRadius: '12px',
 };
 
-const OrderForm = () => {
+const OrderForm = ({ inventoryList }) => {
   const [selectedMedicine, setSelectedMedicine] = useState(null);
   const [quantity, setQuantity] = useState(null);
   const [deliveryDate, setDeliveryDate] = useState('');
@@ -27,6 +26,7 @@ const OrderForm = () => {
   const [minQuantity, setMinQuantity] = useState(1);
   const [quantityMessage, setQuantityMessage] = useState('');
   const [numberError, setNumberError] = useState(false);
+  const [medicineErrorMessage, setMedicineErrorMessage] = useState('');
 
   useEffect(() => {
     // Set the default delivery date to 3 days from today
@@ -56,6 +56,7 @@ const OrderForm = () => {
     setMinQuantity(1);
     setQuantityMessage(`Quantity must be at least ${1}`);
     setNumberError(false);
+    setMedicineErrorMessage('');
 
     // Set the quantity to 1 if the quantity is null
     if (quantity === null) {
@@ -91,30 +92,35 @@ const OrderForm = () => {
   // *** Form submission ***
   const handleOrderSubmit = async () => {
     console.log('Clicked on Order Submit');
+    let isValid = true;
 
     // validation
     if (!selectedMedicine) {
-      console.log('No medicine selected');
-      // TODO: Throw error message
-      return;
+      setMedicineErrorMessage('No medicine selected');
+      isValid = false;
     }
 
     if (quantity < minQuantity || quantity === null) {
       console.log('Quantity less than min');
       setNumberError(true);
-      // TODO: Throw error message
-      return;
+      setQuantityMessage(`Quantity must be at least ${minQuantity}`);
+      isValid = false;
     }
 
     if (!deliveryDate) {
       console.log('No delivery date selected');
       // TODO: Throw error message
-      return;
+      isValid = false;
     }
 
     if (deliveryDate < dayjs()) {
       console.log('Delivery date is in the past');
-      // TODO: Throw error message
+      // TODO: Throw error message?
+      isValid = false;
+    }
+
+    if (!isValid) {
+      // TODO: Throw error message?
       return;
     }
 
@@ -143,7 +149,7 @@ const OrderForm = () => {
   };
 
   return (
-    <Box sx={containerStyling}>
+    <Box sx={containerStyling} data-testid="order-form">
       <h3>Order Form</h3>
       <Autocomplete
         id="controllable-states-demo"
@@ -157,7 +163,14 @@ const OrderForm = () => {
           handleInputValueChange(event, newInputValue);
         }}
         options={formatOptions}
-        renderInput={(params) => <TextField {...params} label="Medicine" />}
+        renderInput={(params) => (
+          <TextField
+            helperText={medicineErrorMessage}
+            error={medicineErrorMessage}
+            {...params}
+            label="Medicine"
+          />
+        )}
         filterOptions={(options, { inputValue }) =>
           options.filter(
             (option) =>
