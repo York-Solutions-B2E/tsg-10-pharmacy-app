@@ -1,4 +1,5 @@
 import RequestAPI from './RequestAPI';
+import { validatePrescription } from '../util/ValidateAPI';
 
 /**
  * Sends a get request to get all prescriptions from remote server
@@ -34,10 +35,7 @@ export const getAllActivePrescriptions = async () => {
  */
 export const fillPrescription = async (prescription) => {
 	try {
-		if (prescription === undefined) throw new Error('No prescription provided');
-		if (prescription === null) throw new Error('Provided prescription is null');
-		if (isNaN(prescription.id) || prescription.id <= 0)
-			throw new Error('Prescription id must be a positive number');
+		validatePrescription(prescription);
 		if (prescription.status !== 'NEW')
 			throw new Error('Only NEW prescriptions can be FILLED');
 		return await RequestAPI.putRequest(
@@ -67,10 +65,7 @@ export const fillPrescription = async (prescription) => {
  */
 export const markPickedUp = async (prescription) => {
 	try {
-		if (prescription === undefined) throw new Error('No prescription provided');
-		if (prescription === null) throw new Error('Provided prescription is null');
-		if (isNaN(prescription.id) || prescription.id <= 0)
-			throw new Error('Prescription id must be a positive number');
+		validatePrescription(prescription);
 		if (prescription.status !== 'FILLED')
 			throw new Error('Only FILLED prescriptions can be picked up');
 		return await RequestAPI.putRequest(
