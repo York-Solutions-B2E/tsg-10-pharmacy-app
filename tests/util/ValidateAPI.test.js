@@ -153,3 +153,17 @@ describe('validatePrescription', () => {
     expect(errorSpy).toHaveBeenCalledTimes(2);
   });
 });
+
+describe('validateInventory', () => {
+  it('should not throw if inventory is valid', () => {
+    throw new Error();
+  });
+
+  it('should throw if inventory is undefined or null', () => {
+    throw new Error();
+  });
+
+  it('should throw if inventory.id is not a positive number', () => {
+    throw new Error();
+  });
+});
