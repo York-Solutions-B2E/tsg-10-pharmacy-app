@@ -1,11 +1,11 @@
 jest.mock('../../src/API/RequestAPI');
+jest.mock('../../src/util/ValidateAPI');
 
 import RequestAPI from '../../src/API/RequestAPI';
 import dayjs from 'dayjs';
 
 import OrdersAPI from '../../src/API/OrdersAPI';
-import { validateOrder } from '../../src/API/OrdersAPI';
-
+import * as ValidateAPI from '../../src/util/ValidateAPI';
 const { getAllOrders, placeOrder, markOrderReceived } = OrdersAPI;
 
 const getRequestSpy = jest.spyOn(RequestAPI, 'getRequest');
@@ -103,124 +103,6 @@ describe('markOrderReceived', () => {
 });
 
 /**
- * Tests for validateOrder
- * */
-describe('validateOrder', () => {
-  it('should return true if order is valid', async () => {
-    const orderValid = validateOrder({
-      medicineId: 22,
-      quantity: 50,
-      deliveryDate: dayjs().add(1, 'week'),
-    });
-
-    expect(orderValid).toBe(true);
-  });
-
-  it('should return error if order.medicineId is not a positive number', async () => {
-    let orderValid;
-
-    orderValid = await validateOrder({
-      quantity: 300,
-      deliveryDate: dayjs().add(1, 'week'),
-    });
-    expect(orderValid instanceof Error).toBe(true);
-
-    orderValid = await validateOrder({
-      medicineId: null,
-      quantity: 300,
-      deliveryDate: dayjs().add(1, 'week'),
-    });
-    expect(orderValid instanceof Error).toBe(true);
-
-    orderValid = await validateOrder({
-      medicineId: 'hello',
-      quantity: 300,
-      deliveryDate: dayjs().add(1, 'week'),
-    });
-    expect(orderValid instanceof Error).toBe(true);
-
-    orderValid = await validateOrder({
-      medicineId: -45,
-      quantity: 300,
-      deliveryDate: dayjs().add(1, 'week'),
-    });
-    expect(orderValid instanceof Error).toBe(true);
-  });
-
-  it('should return error if order.quantity is not a positive number', async () => {
-    let orderValid;
-
-    orderValid = await validateOrder({
-      medicineId: 201,
-      deliveryDate: dayjs().add(1, 'week'),
-    });
-    expect(orderValid instanceof Error).toBe(true);
-
-    orderValid = await validateOrder({
-      medicineId: 201,
-      quantity: null,
-      deliveryDate: dayjs().add(1, 'week'),
-    });
-    expect(orderValid instanceof Error).toBe(true);
-
-    orderValid = await validateOrder({
-      medicineId: 201,
-      quantity: 'NaN',
-      deliveryDate: dayjs().add(1, 'week'),
-    });
-    expect(orderValid instanceof Error).toBe(true);
-
-    orderValid = await validateOrder({
-      medicineId: 201,
-      quantity: -78,
-      deliveryDate: dayjs().add(1, 'week'),
-    });
-    expect(orderValid instanceof Error).toBe(true);
-  });
-
-  it('should return error if oder.deliveryDate is not a date in the future', async () => {
-    let orderValid;
-
-    orderValid = await validateOrder({
-      medicineId: 201,
-      quantity: 300,
-    });
-    expect(orderValid instanceof Error).toBe(true);
-
-    orderValid = await validateOrder({
-      medicineId: 201,
-      quantity: 300,
-      deliveryDate: null,
-    });
-    expect(orderValid instanceof Error).toBe(true);
-
-    orderValid = await validateOrder({
-      medicineId: 201,
-      quantity: 300,
-      deliveryDate: 'hello',
-    });
-    expect(orderValid instanceof Error).toBe(true);
-
-    orderValid = await validateOrder({
-      medicineId: 201,
-      quantity: 300,
-      deliveryDate: dayjs('2000-01-01'),
-    });
-    expect(orderValid instanceof Error).toBe(true);
-  });
-
-  it('should return error if order is undefined or null', async () => {
-    let orderValid;
-
-    orderValid = await validateOrder();
-    expect(orderValid instanceof Error).toBe(true);
-
-    orderValid = await validateOrder(null);
-    expect(orderValid instanceof Error).toBe(true);
-  });
-});
-
-/**
  * Tests for exception cases
  * */
 describe('exceptions', () => {
@@ -235,58 +117,61 @@ describe('exceptions', () => {
     errorSpy.mockReset();
   });
 
+  describe('placeOrder', () => {
+    it('should throw if validateOrder throws', async () => {
+      jest.spyOn(ValidateAPI, 'validateOrder').mockImplementationOnce(() => {
+        throw new Error();
+      });
+
+      const response = await placeOrder({
+        inventoryId: 23,
+        quantity: 45,
+        deliveryDate: dayjs().add(1, 'week'),
+      });
+
+      expect(errorSpy).toHaveBeenCalledTimes(1);
+      expect(response.status).toBe(400);
+    });
+  });
+
   describe('markOrderReceived', () => {
     it('should throw if order.id is not a positive number', async () => {
       let response;
+      const invalidArgs = [undefined, null, 'hello', -45];
+      for (var i = 0; i < invalidArgs.length; i++) {
+        try {
+          response = await markOrderReceived({
+            id: invalidArgs[i],
+            inventoryId: 23,
+            quantity: 300,
+            deliveryDate: dayjs().add(1, 'week'),
+          });
+        } catch (error) {
+          console.error(error);
+        }
+        expect(errorSpy).toHaveBeenCalledWith(
+          new Error('Order id must be a positive number')
+        );
+        expect(response.status).toBe(400);
+      }
+      expect(errorSpy).toHaveBeenCalledTimes(invalidArgs.length);
+    });
+
+    it('should throw if validateOrder throws', async () => {
+      jest.spyOn(ValidateAPI, 'validateOrder').mockImplementationOnce(() => {
+        throw new Error();
+      });
+      let response;
 
       response = await markOrderReceived({
-        medicineId: 23,
+        id: 79,
+        inventoryId: 23,
         quantity: 45,
         deliveryDate: dayjs().add(1, 'week'),
         status: 'ORDERED',
       });
-      expect(errorSpy).toHaveBeenCalledWith(
-        new Error('Order id must be a positive number')
-      );
+      expect(errorSpy).toHaveBeenCalledWith(new Error());
       expect(response.status).toBe(400);
-
-      response = await markOrderReceived({
-        id: null,
-        medicineId: 23,
-        quantity: 45,
-        deliveryDate: dayjs().add(1, 'week'),
-        status: 'ORDERED',
-      });
-      expect(errorSpy).toHaveBeenCalledWith(
-        new Error('Order id must be a positive number')
-      );
-      expect(response.status).toBe(400);
-
-      response = await markOrderReceived({
-        id: 'NaN',
-        medicineId: 23,
-        quantity: 45,
-        deliveryDate: dayjs().add(1, 'week'),
-        status: 'ORDERED',
-      });
-      expect(errorSpy).toHaveBeenCalledWith(
-        new Error('Order id must be a positive number')
-      );
-      expect(response.status).toBe(400);
-
-      response = await markOrderReceived({
-        id: -12,
-        medicineId: 23,
-        quantity: 45,
-        deliveryDate: dayjs().add(1, 'week'),
-        status: 'ORDERED',
-      });
-      expect(errorSpy).toHaveBeenCalledWith(
-        new Error('Order id must be a positive number')
-      );
-      expect(response.status).toBe(400);
-
-      expect(errorSpy).toHaveBeenCalledTimes(4);
     });
 
     it('should throw if order already received', async () => {
