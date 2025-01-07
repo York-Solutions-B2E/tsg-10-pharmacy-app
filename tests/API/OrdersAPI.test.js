@@ -44,7 +44,7 @@ describe('placeOrder', () => {
     const data = {
       medicineId: 1,
       quantity: 100,
-      deliveryDate: '2025-02-17',
+      deliveryDate: dayjs().add(1, 'week'),
     };
     const dataString = JSON.stringify(data);
     const endpoint = '/api/orders';
@@ -131,6 +131,27 @@ describe('exceptions', () => {
 
       expect(errorSpy).toHaveBeenCalledTimes(1);
       expect(response.status).toBe(400);
+    });
+
+    it('should throw if order.deliveryDate is not a date in the future', async () => {
+      let response;
+      const invalidArgs = [undefined, null, 'hello', '2000-01-01'];
+      for (var i = 0; i < invalidArgs.length; i++) {
+        try {
+          response = await placeOrder({
+            inventoryId: 201,
+            quantity: 105,
+            deliveryDate: invalidArgs[i],
+          });
+        } catch (error) {
+          console.error(error);
+        }
+        expect(errorSpy).toHaveBeenCalledWith(
+          new Error('Delivery date must be a date in the future')
+        );
+        expect(response.status).toBe(400);
+      }
+      expect(errorSpy).toHaveBeenCalledTimes(invalidArgs.length);
     });
   });
 

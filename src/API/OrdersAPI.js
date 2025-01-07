@@ -1,5 +1,6 @@
 import RequestAPI from './RequestAPI';
 import { validateOrder } from '../util/ValidateAPI';
+import dayjs from 'dayjs';
 
 /**
  * Sends a get request to get all medications from remote server
@@ -17,6 +18,13 @@ export const getAllOrders = async () => {
 export const placeOrder = async (order) => {
   try {
     validateOrder(order);
+    if (
+      order.deliveryDate === undefined ||
+      order.deliveryDate === null ||
+      !dayjs(order.deliveryDate).isValid() ||
+      dayjs().isAfter(order.deliveryDate)
+    )
+      throw new Error('Delivery date must be a date in the future');
     return await RequestAPI.postRequest('/api/orders', JSON.stringify(order));
   } catch (error) {
     console.error(error);

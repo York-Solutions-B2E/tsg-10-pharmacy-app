@@ -67,25 +67,6 @@ describe('validateOrder', () => {
     expect(errorSpy).toHaveBeenCalledTimes(invalidArgs.length);
   });
 
-  it('should throw if order.deliveryDate is not a date in the future', async () => {
-    const invalidArgs = [undefined, null, 'hello', '2000-01-01'];
-    for (var i = 0; i < invalidArgs.length; i++) {
-      try {
-        validateOrder({
-          inventoryId: 201,
-          quantity: 105,
-          deliveryDate: invalidArgs[i],
-        });
-      } catch (error) {
-        console.error(error);
-      }
-      expect(errorSpy).toHaveBeenCalledWith(
-        new Error('Delivery date must be a date in the future')
-      );
-    }
-    expect(errorSpy).toHaveBeenCalledTimes(invalidArgs.length);
-  });
-
   it('should throw if order is undefined or null', async () => {
     try {
       validateOrder();

@@ -1,5 +1,3 @@
-import dayjs from 'dayjs';
-
 /**
  * Helper function for validating the order argument passed to placeOrder and markOrderReceived
  * */
@@ -18,11 +16,4 @@ export const validateOrder = (order) => {
     order.quantity < 1
   )
     throw new Error('Order quantity must be a positive number');
-  if (
-    order.deliveryDate === undefined ||
-    order.deliveryDate === null ||
-    !dayjs(order.deliveryDate).isValid() ||
-    dayjs().isAfter(order.deliveryDate)
-  )
-    throw new Error('Delivery date must be a date in the future');
 };
