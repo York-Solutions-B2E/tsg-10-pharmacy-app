@@ -1,5 +1,7 @@
 jest.mock('../../src/API/RequestAPI');
+jest.mock('../../src/util/ValidateAPI');
 
+import * as ValidateAPI from '../../src/util/ValidateAPI';
 import RequestAPI from '../../src/API/RequestAPI';
 import {
   getAllMedications,
@@ -76,62 +78,22 @@ describe('exceptions', () => {
   });
 
   describe('updateMedicationStock', () => {
-    it('should throw if inventory.id is not a positive number', async () => {
-      await updateMedicationStock({ id: null }, 100);
-      expect(errorSpy).toHaveBeenCalledWith(
-        new Error('Inventory id must be a positive number')
+    it('should throw if validateInventory throws', async () => {
+      jest
+        .spyOn(ValidateAPI, 'validateInventory')
+        .mockImplementationOnce(() => {
+          throw new Error();
+        });
+
+      const response = await updateMedicationStock(
+        {
+          id: 12,
+        },
+        800
       );
 
-      await updateMedicationStock({ id: 'NaN' }, 100);
-      expect(errorSpy).toHaveBeenCalledWith(
-        new Error('Inventory id must be a positive number')
-      );
-
-      await updateMedicationStock({ id: 0 }, 100);
-      expect(errorSpy).toHaveBeenCalledWith(
-        new Error('Inventory id must be a positive number')
-      );
-
-      expect(errorSpy).toHaveBeenCalledTimes(3);
-    });
-
-    it('should throw if updatedQuantity is not a number >= 0', async () => {
-      await updateMedicationStock({ id: 123456 });
-      expect(errorSpy).toHaveBeenCalledWith(
-        new Error('Updated quantity must be a non-negative number')
-      );
-
-      await updateMedicationStock({ id: 123456 }, null);
-      expect(errorSpy).toHaveBeenCalledWith(
-        new Error('Updated quantity must be a non-negative number')
-      );
-
-      await updateMedicationStock({ id: 123456 }, 'gdsfg');
-      expect(errorSpy).toHaveBeenCalledWith(
-        new Error('Updated quantity must be a non-negative number')
-      );
-
-      await updateMedicationStock({ id: 123456 }, -15);
-      expect(errorSpy).toHaveBeenCalledWith(
-        new Error('Updated quantity must be a non-negative number')
-      );
-
-      expect(errorSpy).toHaveBeenCalledTimes(4);
-    });
-
-    it('should throw if inventory provided is undefined or null', async () => {
-      let response;
-
-      response = await updateMedicationStock();
-      expect(errorSpy).toHaveBeenCalledWith(new Error('No inventory provided'));
+      expect(errorSpy).toHaveBeenCalledTimes(1);
       expect(response.status).toBe(400);
-
-      response = await updateMedicationStock(null);
-      expect(errorSpy).toHaveBeenCalledWith(
-        new Error('Provided inventory is null')
-      );
-      expect(response.status).toBe(400);
-      expect(errorSpy).toHaveBeenCalledTimes(2);
     });
   });
 });
