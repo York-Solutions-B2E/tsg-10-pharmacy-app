@@ -1,15 +1,17 @@
-import { Autocomplete, Box } from '@mui/material';
+import { Autocomplete, Box, FormControl, FormHelperText } from '@mui/material';
 import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import ButtonWithText from '../buttons/ButtonWithText';
 import NumberInput from './NumberInput';
 
 const containerStyling = {
   display: 'flex',
   border: '1px solid rgb(204, 204, 204)',
-  width: 'fit-content',
+  width: '500px',
   margin: '0 auto 100px',
   flexDirection: 'column',
   alignItems: 'center',
@@ -20,18 +22,16 @@ const containerStyling = {
 const OrderForm = ({ inventoryList }) => {
   const [selectedMedicine, setSelectedMedicine] = useState(null);
   const [quantity, setQuantity] = useState(null);
-  const [deliveryDate, setDeliveryDate] = useState('');
+  const [deliveryDate, setDeliveryDate] = useState(null);
 
   const [inputValue, setInputValue] = useState('');
   const [minQuantity, setMinQuantity] = useState(1);
-  const [quantityMessage, setQuantityMessage] = useState('');
+  const [quantityMessage, setQuantityMessage] = useState(
+    'Quantity must be at least 1'
+  );
   const [numberError, setNumberError] = useState(false);
   const [medicineErrorMessage, setMedicineErrorMessage] = useState('');
-
-  useEffect(() => {
-    // Set the default delivery date to 3 days from today
-    setDeliveryDate(dayjs().add(3, 'day'));
-  }, []);
+  const [deliveryDateErrorMessage, setDeliveryDateErrorMessage] = useState('');
 
   // Format the options based on inventory for the Autocomplete component
   const formatOptions = inventoryList.map((item) => ({
@@ -63,18 +63,14 @@ const OrderForm = ({ inventoryList }) => {
       setQuantity(1);
     }
 
-    // If the selected medicine is cleared, reset the quantity and minQuantity
-    if (newValue === null) {
-      setMinQuantity(1);
-      setQuantity(null);
-      setQuantityMessage('');
-    }
-
     // Set the minQuantity and quantity message based on the selected medicine
     if (newValue?.minQuantity) {
       setMinQuantity(newValue?.minQuantity);
-      setQuantity(newValue?.minQuantity);
       setQuantityMessage(`Quantity must be at least ${newValue?.minQuantity}`);
+      if (quantity < newValue?.minQuantity) {
+        setQuantity(newValue?.minQuantity);
+      }
+      // setQuantity(newValue?.minQuantity);
     }
   };
 
@@ -82,11 +78,11 @@ const OrderForm = ({ inventoryList }) => {
   const handleChangeQuantity = (newQuantity) => {
     setQuantity(newQuantity);
     setNumberError(false);
+  };
 
-    // Check if the quantity is less than the minQuantity
-    if (newQuantity < minQuantity) {
-      setNumberError(true);
-    }
+  const handleChangeDate = (newDate) => {
+    setDeliveryDate(newDate);
+    setDeliveryDateErrorMessage('');
   };
 
   // *** Form submission ***
@@ -109,6 +105,7 @@ const OrderForm = ({ inventoryList }) => {
 
     if (!deliveryDate) {
       console.log('No delivery date selected');
+      setDeliveryDateErrorMessage('No delivery date selected');
       // TODO: Throw error message
       isValid = false;
     }
@@ -145,7 +142,11 @@ const OrderForm = ({ inventoryList }) => {
     // Reset the form on successful submission
     setSelectedMedicine(null);
     setQuantity(null);
-    setQuantityMessage('');
+    setDeliveryDate(null);
+    setMinQuantity(1);
+    setQuantityMessage('Quantity must be at least 1');
+    setDeliveryDateErrorMessage('');
+    setMedicineErrorMessage('');
   };
 
   return (
@@ -153,7 +154,7 @@ const OrderForm = ({ inventoryList }) => {
       <h3>Order Form</h3>
       <Autocomplete
         id="controllable-states-demo"
-        sx={{ width: 300 }}
+        sx={{ width: '100%' }}
         value={selectedMedicine}
         onChange={(event, newValue) => {
           handleChangeSelection(event, newValue);
@@ -179,18 +180,44 @@ const OrderForm = ({ inventoryList }) => {
           )
         }
       />
-      <NumberInput
-        placeholder="Select Quantity"
-        value={quantity}
-        onChange={(event, val) => handleChangeQuantity(val)}
-        min={minQuantity}
-        helperText={quantityMessage}
-        error={numberError}
-      />
-      <Typography sx={{ textAlign: 'center' }}>
-        Expected delivery date: <br />{' '}
-        {dayjs(deliveryDate).format('MMM DD, YYYY')}
-      </Typography>
+      <Box
+        sx={{
+          margin: '20px 0 12px',
+          display: 'flex',
+          flexDirection: 'row',
+          WebkitBoxAlign: 'center',
+          alignItems: 'flex-start',
+          width: '100%',
+          justifyContent: 'space-evenly',
+        }}
+      >
+        <NumberInput
+          placeholder="Select Quantity"
+          value={quantity}
+          onChange={(event, val) => handleChangeQuantity(val)}
+          min={minQuantity}
+          helperText={quantityMessage}
+          error={numberError}
+        />
+
+        <FormControl error={deliveryDateErrorMessage}>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker
+              label="Delivery Date"
+              disablePast={true}
+              minDate={dayjs().add(1, 'day')} // disable today
+              value={deliveryDate}
+              onChange={(newValue) => handleChangeDate(newValue)}
+            />
+            <FormHelperText
+              error={deliveryDateErrorMessage}
+              id="my-helper-text"
+            >
+              {deliveryDateErrorMessage}
+            </FormHelperText>
+          </LocalizationProvider>
+        </FormControl>
+      </Box>
       <ButtonWithText onClick={handleOrderSubmit} buttonText="Place Order" />
     </Box>
   );
