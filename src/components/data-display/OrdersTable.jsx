@@ -4,8 +4,11 @@ import dayjs from 'dayjs';
 import ButtonWithText from '../buttons/ButtonWithText';
 import StatusChip from './StatusChip';
 import { markOrderReceived } from '../../API/OrdersAPI';
+import { getAllOrders } from '../../API/OrdersAPI';
+import { useAppContext } from '../../HOC/AppContext';
 
 const OrdersTable = ({ ordersList }) => {
+  const { updateOrders } = useAppContext();
   // const navigate = useNavigate();
 
   // ******** Click Handlers
@@ -26,7 +29,10 @@ const OrdersTable = ({ ordersList }) => {
 
     if (response.status === 200) {
       // TODO: Refresh the orders list
-      console.log('Order Received:', response);
+      console.log('Order Marked Received:', response);
+      const refreshOrdersList = await getAllOrders();
+      console.log('Refresh Orders List:', refreshOrdersList);
+      updateOrders(refreshOrdersList.body);
     }
 
     if (response.status !== 200) {

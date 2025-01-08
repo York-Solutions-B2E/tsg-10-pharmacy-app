@@ -5,7 +5,8 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
 import { useState } from 'react';
-import { placeOrder } from '../../API/OrdersAPI';
+import { getAllOrders, placeOrder } from '../../API/OrdersAPI';
+import { useAppContext } from '../../HOC/AppContext';
 import ButtonWithText from '../buttons/ButtonWithText';
 import NumberInput from './NumberInput';
 
@@ -21,6 +22,8 @@ const containerStyling = {
 };
 
 const OrderForm = ({ inventoryList }) => {
+  const { updateOrders } = useAppContext();
+
   const [selectedMedicine, setSelectedMedicine] = useState(null);
   const [quantity, setQuantity] = useState(null);
   const [deliveryDate, setDeliveryDate] = useState(null);
@@ -145,6 +148,10 @@ const OrderForm = ({ inventoryList }) => {
       console.log('Order placed successfully');
       // TODO: trigger success message
       // alert('Order placed successfully');
+
+      const refreshOrdersList = await getAllOrders();
+      console.log('Refresh Orders List:', refreshOrdersList);
+      updateOrders(refreshOrdersList.body);
 
       // Reset the form on successful submission
       setSelectedMedicine(null);

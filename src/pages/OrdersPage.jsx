@@ -1,18 +1,44 @@
 import { Box } from '@mui/material';
-import inventoryList from '../../dummy-data/inventory-list.json';
-import ordersList from '../../dummy-data/order-list.json';
+import { useEffect } from 'react';
+import { getAllMedications } from '../API/MedicationAPI';
+import { getAllOrders } from '../API/OrdersAPI';
 import OrdersTable from '../components/data-display/OrdersTable';
 import OrderForm from '../components/forms/OrderForm';
+import { useAppContext } from '../HOC/AppContext';
 
 const OrdersPage = () => {
-  const appointmentPageStyling = {
+  const { ordersList, medicationsList, updateOrders, updateMedications } =
+    useAppContext();
+
+  useEffect(() => {
+    getAllOrders()
+      .then((orders) => {
+        updateOrders(orders.body);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
+    getAllMedications()
+      .then((medications) => {
+        updateMedications(medications.body);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
+    console.log('OrdersList:', ordersList);
+    console.log('MedicationsList:', medicationsList);
+  }, []);
+
+  const orderPageStyling = {
     padding: '30px 30px',
   };
 
   return (
-    <Box sx={appointmentPageStyling} data-testid="orders-page">
+    <Box sx={orderPageStyling} data-testid="orders-page">
       <h1>OrdersPage</h1>
-      <OrderForm inventoryList={inventoryList} />
+      <OrderForm inventoryList={medicationsList} />
       <OrdersTable ordersList={ordersList} />
     </Box>
   );
