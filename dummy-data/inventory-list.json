@@ -10,7 +10,7 @@
     },
     "stockQuantity": 100,
     "sufficientStock": true,
-    "minimumOrderCount": null,
+    "minimumOrderCount": 0,
     "deliveryDate": "2025-01-11"
   },
   {
@@ -38,7 +38,7 @@
     },
     "stockQuantity": 150,
     "sufficientStock": true,
-    "minimumOrderCount": null,
+    "minimumOrderCount": 0,
     "deliveryDate": "2025-01-13"
   },
   {
@@ -52,7 +52,7 @@
     },
     "stockQuantity": 180,
     "sufficientStock": true,
-    "minimumOrderCount": null,
+    "minimumOrderCount": 0,
     "deliveryDate": "2025-01-09"
   },
   {
@@ -66,7 +66,7 @@
     },
     "stockQuantity": 90,
     "sufficientStock": true,
-    "minimumOrderCount": null,
+    "minimumOrderCount": 0,
     "deliveryDate": "2025-01-26"
   },
   {
@@ -80,7 +80,7 @@
     },
     "stockQuantity": 120,
     "sufficientStock": true,
-    "minimumOrderCount": null,
+    "minimumOrderCount": 0,
     "deliveryDate": null
   },
   {
@@ -94,7 +94,7 @@
     },
     "stockQuantity": 140,
     "sufficientStock": true,
-    "minimumOrderCount": null,
+    "minimumOrderCount": 0,
     "deliveryDate": null
   },
   {
@@ -108,7 +108,7 @@
     },
     "stockQuantity": 160,
     "sufficientStock": true,
-    "minimumOrderCount": null,
+    "minimumOrderCount": 0,
     "deliveryDate": null
   },
   {
@@ -122,7 +122,7 @@
     },
     "stockQuantity": 110,
     "sufficientStock": true,
-    "minimumOrderCount": null,
+    "minimumOrderCount": 0,
     "deliveryDate": null
   },
   {
@@ -136,7 +136,7 @@
     },
     "stockQuantity": 130,
     "sufficientStock": true,
-    "minimumOrderCount": null,
+    "minimumOrderCount": 0,
     "deliveryDate": null
   }
 ]
