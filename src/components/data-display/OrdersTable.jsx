@@ -1,16 +1,38 @@
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
+import dayjs from 'dayjs';
 import ButtonWithText from '../buttons/ButtonWithText';
 import StatusChip from './StatusChip';
+import { markOrderReceived } from '../../API/OrdersAPI';
 
 const OrdersTable = ({ ordersList }) => {
   // const navigate = useNavigate();
 
   // ******** Click Handlers
+  const handleClickOrderReceived = async (order) => {
+    console.log('Order:', order);
 
-  const handleClickOrderReceived = (order) => {
-    console.log('Order Received, id is:', order.id);
+    const orderRequest = {
+      id: order.id,
+      inventoryId: order.inventory.id,
+      quantity: order.quantity,
+      deliveryDate: dayjs(order.deliveryDate),
+      status: order.status,
+    };
+    console.log('Order Request:', orderRequest);
+
     // TODO: Implement the order received api call, api function takes full order object
+    const response = await markOrderReceived(orderRequest);
+
+    if (response.status === 200) {
+      // TODO: Refresh the orders list
+      console.log('Order Received:', response);
+    }
+
+    if (response.status !== 200) {
+      // TODO: Show error message
+      console.log('Error in marking order received');
+    }
   };
   // END ******** click handlers
 
@@ -46,7 +68,7 @@ const OrdersTable = ({ ordersList }) => {
       flex: 1,
       width: 100,
       renderCell: (params) => {
-        return new Date(params.row.deliveryDate).toLocaleDateString('en-US');
+        return dayjs(params.row.deliveryDate).format('MMM DD, YYYY');
       },
     },
     {
@@ -101,7 +123,6 @@ const OrdersTable = ({ ordersList }) => {
         }}
         pageSizeOptions={[15, 30]}
         disableRowSelectionOnClick
-        // slots={{ noRowsOverlay: CustomNoRowsOverlay }}
       />
     </Box>
   );
