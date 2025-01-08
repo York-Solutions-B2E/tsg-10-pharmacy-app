@@ -5,6 +5,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
 import { useState } from 'react';
+import { placeOrder } from '../../API/OrdersAPI';
 import ButtonWithText from '../buttons/ButtonWithText';
 import NumberInput from './NumberInput';
 
@@ -70,7 +71,6 @@ const OrderForm = ({ inventoryList }) => {
       if (quantity < newValue?.minQuantity) {
         setQuantity(newValue?.minQuantity);
       }
-      // setQuantity(newValue?.minQuantity);
     }
   };
 
@@ -86,8 +86,7 @@ const OrderForm = ({ inventoryList }) => {
   };
 
   // *** Form submission ***
-  const handleOrderSubmit = async () => {
-    console.log('Clicked on Order Submit');
+  const formValidation = () => {
     let isValid = true;
 
     // validation
@@ -96,7 +95,7 @@ const OrderForm = ({ inventoryList }) => {
       isValid = false;
     }
 
-    if (quantity < minQuantity || quantity === null) {
+    if (quantity < minQuantity) {
       console.log('Quantity less than min');
       setNumberError(true);
       setQuantityMessage(`Quantity must be at least ${minQuantity}`);
@@ -115,38 +114,47 @@ const OrderForm = ({ inventoryList }) => {
       // TODO: Throw error message?
       isValid = false;
     }
+    return isValid;
+  };
 
-    if (!isValid) {
-      // TODO: Throw error message?
+  const handleOrderSubmit = async () => {
+    console.log('Clicked on Order Submit');
+
+    if (!formValidation()) {
+      console.log('Form validation failed');
       return;
     }
 
     // Prepare order data
     const orderData = {
-      medicineId: selectedMedicine?.medicineId,
       inventoryId: selectedMedicine?.inventoryId,
       quantity,
       deliveryDate,
     };
 
     console.log('Order Submitted. OrderData:', orderData);
-    // TODO: Send order data to the server
-    // const response = await placeOrder(orderData);
-    // if (response.status !== 201) {}
-    // TODO: trigger error message
+    const response = await placeOrder(orderData);
 
-    // ? is success it 201?
-    // TODO: trigger success message
-    // if (response.status === 201) {}
+    if (response.status !== 201) {
+      console.log('Error in placing order');
+      // TODO: trigger error message
+      alert('Error in placing order');
+    }
 
-    // Reset the form on successful submission
-    setSelectedMedicine(null);
-    setQuantity(null);
-    setDeliveryDate(null);
-    setMinQuantity(1);
-    setQuantityMessage('Quantity must be at least 1');
-    setDeliveryDateErrorMessage('');
-    setMedicineErrorMessage('');
+    if (response.status === 201) {
+      console.log('Order placed successfully');
+      // TODO: trigger success message
+      // alert('Order placed successfully');
+
+      // Reset the form on successful submission
+      setSelectedMedicine(null);
+      setQuantity(null);
+      setDeliveryDate(null);
+      setMinQuantity(1);
+      setQuantityMessage('Quantity must be at least 1');
+      setDeliveryDateErrorMessage('');
+      setMedicineErrorMessage('');
+    }
   };
 
   return (
