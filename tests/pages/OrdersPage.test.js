@@ -1,18 +1,28 @@
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import MedicationAPI from '../../src/API/MedicationAPI';
 import OrdersAPI from '../../src/API/OrdersAPI';
-import { AppContext } from '../../src/HOC/AppContext';
+import * as appContext from '../../src/HOC/AppContext';
 import OrdersPage from '../../src/pages/OrdersPage';
 import mockMedicationsList from '../__mocks__/mockMedicationsList';
 import mockOrdersList from '../__mocks__/mockOrdersList';
-console.log('AppContext in test:', AppContext);
 
 jest.mock('../../src/API/OrdersAPI');
 jest.mock('../../src/API/MedicationAPI');
 
+const mockContextValues = {
+  ordersList: [],
+  medicationsList: [],
+  updateMedications: jest.fn(),
+  updateOrders: jest.fn(),
+};
+
 describe('OrdersPage', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+
+    jest
+      .spyOn(appContext, 'useAppContext')
+      .mockImplementation(() => mockContextValues);
 
     OrdersAPI.getAllOrders.mockResolvedValue({
       status: 200,
@@ -27,55 +37,38 @@ describe('OrdersPage', () => {
 
   afterEach(() => {
     cleanup();
+    appContext.useAppContext.mockReset();
   });
 
-  it('renders OrdersPage with initial state', async () => {
-    render(
-      <AppContext.Provider
-        value={{
-          ordersList: [],
-          updateOrders: jest.fn(),
-          medicationsList: [],
-          updateMedications: jest.fn(),
-          prescriptionsList: [],
-          updatePrescriptions: jest.fn(),
-          navigate: jest.fn(),
-        }}
-      >
-        <OrdersPage />
-      </AppContext.Provider>
-    );
+  afterAll(() => {
+    appContext.useAppContext.mockRestore();
+  });
+
+  it('should render OrdersPage', async () => {
+    render(<OrdersPage />);
 
     expect(screen.getByTestId('orders-page')).toBeInTheDocument();
   });
 
-  // test('renders OrdersTable', () => {
-  //   renderWithProviders(<OrdersPage />);
+  it('should fetch orders and medications on mount', async () => {
+    render(<OrdersPage />);
 
-  //   const ordersPage = screen.getByTestId('orders-page');
+    waitFor(() => {
+      expect(OrdersAPI.getAllOrders).toHaveBeenCalledTimes(1);
+      expect(MedicationAPI.getAllMedications).toHaveBeenCalledTimes(1);
+    });
+  });
 
-  //   expect(ordersPage).toBeInTheDocument();
-  // });
+  it('should update the App context state with fetched data', async () => {
+    render(<OrdersPage />);
 
-  // it('fetches orders and medications on mount', async () => {
-  //   renderWithProviders(<OrdersPage />);
-
-  //   await waitFor(() => {
-  //     expect(ordersApi.getAllOrders).toHaveBeenCalledTimes(1);
-  //     expect(medicationsApi.getAllMedications).toHaveBeenCalledTimes(1);
-  //   });
-  // });
-
-  // it('updates context with fetched data', async () => {
-  //   renderWithProviders(<OrdersPage />);
-
-  //   await waitFor(() => {
-  //     expect(mockContextValues.updateOrders).toHaveBeenCalledWith(
-  //       mockOrdersList
-  //     );
-  //     expect(mockContextValues.updateMedications).toHaveBeenCalledWith(
-  //       mockMedicationsList
-  //     );
-  //   });
-  // });
+    await waitFor(() => {
+      expect(mockContextValues.updateOrders).toHaveBeenCalledWith(
+        mockOrdersList
+      );
+      expect(mockContextValues.updateMedications).toHaveBeenCalledWith(
+        mockMedicationsList
+      );
+    });
+  });
 });
