@@ -45,12 +45,12 @@ const mockOrdersList = [
   },
 ];
 
-// import { markOrderReceived, getAllOrders } from '../api/orders';
+import { markOrderReceived, getAllOrders } from '../../../src/API/OrdersAPI';
 // import { throwErrorMessage } from '../api/error-handling';
-// jest.mock('../api/orders', () => ({
-//   markOrderReceived: jest.fn(),
-//   getAllOrders: jest.fn(),
-// }));
+jest.mock('../api/orders', () => ({
+  markOrderReceived: jest.fn(),
+  getAllOrders: jest.fn(),
+}));
 
 // jest.mock('../api/error-handling', () => ({
 //   throwErrorMessage: jest.fn(),
