@@ -1,58 +1,52 @@
-import { render, screen, within } from '@testing-library/react';
+import { cleanup, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import dayjs from 'dayjs';
-import { getAllOrders, markOrderReceived } from '../../../src/API/OrdersAPI';
 import OrdersTable from '../../../src/components/data-display/OrdersTable';
 
-const mockOrdersList = [
-  {
-    id: 1,
-    inventory: {
-      id: 1,
-      medicine: {
-        id: 1,
-        name: 'ChocoRelief',
-        code: 'CRX-001',
-        createdAt: '2025-01-06T16:39:13.726428Z',
-        updatedAt: '2025-01-06T16:39:13.726428Z',
-      },
-      stockQuantity: 100,
-      sufficientStock: true,
-    },
-    quantity: 100,
-    deliveryDate: '2025-01-11',
-    status: 'ORDERED',
-    createdAt: '2025-01-06T16:39:13.918578Z',
-    updatedAt: '2025-01-06T16:39:13.918578Z',
-  },
-  {
-    id: 2,
-    inventory: {
-      id: 2,
-      medicine: {
-        id: 2,
-        name: 'MintyCure',
-        code: 'MCX-002',
-        createdAt: '2025-01-06T16:39:13.793217Z',
-        updatedAt: '2025-01-06T16:39:13.793217Z',
-      },
-      stockQuantity: 200,
-      sufficientStock: true,
-    },
-    quantity: 200,
-    deliveryDate: '2025-01-16',
-    status: 'RECEIVED',
-    createdAt: '2025-01-06T16:39:13.925269Z',
-    updatedAt: '2025-01-06T16:39:13.925269Z',
-  },
-];
+import MedicationAPI from '../../../src/API/MedicationAPI';
+import OrdersAPI from '../../../src/API/OrdersAPI';
+import * as appContext from '../../../src/HOC/AppContext';
+import mockMedicationsList from '../../__mocks__/mockMedicationsList';
+import mockOrdersList from '../../__mocks__/mockOrdersList';
 
-jest.mock('../../../src/API/OrdersAPI', () => ({
-  markOrderReceived: jest.fn(),
-  getAllOrders: jest.fn(),
-}));
+jest.mock('../../../src/API/OrdersAPI');
+jest.mock('../../../src/API/MedicationAPI');
+
+const mockContextValues = {
+  ordersList: [],
+  medicationsList: [],
+  updateMedications: jest.fn(),
+  updateOrders: jest.fn(),
+};
 
 describe('Test OrdersTable Component Data Display', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+
+    jest
+      .spyOn(appContext, 'useAppContext')
+      .mockImplementation(() => mockContextValues);
+
+    OrdersAPI.getAllOrders.mockResolvedValue({
+      status: 200,
+      body: mockOrdersList,
+    });
+
+    MedicationAPI.getAllMedications.mockResolvedValue({
+      status: 200,
+      body: mockMedicationsList,
+    });
+  });
+
+  afterEach(() => {
+    cleanup();
+    appContext.useAppContext.mockReset();
+  });
+
+  afterAll(() => {
+    appContext.useAppContext.mockRestore();
+  });
+
   // TEST TABLE RENDERING
   it('should render OrdersTable Component', () => {
     render(<OrdersTable ordersList={mockOrdersList} />);
@@ -104,7 +98,8 @@ describe('Test OrdersTable Component Data Display', () => {
 
   // TEST BUTTON CLICKS
   it('should call handleClickMarkReceived when Mark Received button is clicked', async () => {
-    markOrderReceived.mockResolvedValue({ status: 201 });
+    OrdersAPI.markOrderReceived.mockResolvedValue({ status: 201 });
+
     render(<OrdersTable ordersList={mockOrdersList} />);
 
     const orderRow = screen.getByText('Ordered').closest('.MuiDataGrid-row');
@@ -121,13 +116,12 @@ describe('Test OrdersTable Component Data Display', () => {
       status: mockOrdersList[0].status,
     };
 
-    expect(markOrderReceived).toHaveBeenCalledTimes(1); // ? called with order id or order object?
-    expect(markOrderReceived).toHaveBeenCalledWith(mockOrder);
+    expect(OrdersAPI.markOrderReceived).toHaveBeenCalledTimes(1); // ? called with order id or order object?
+    expect(OrdersAPI.markOrderReceived).toHaveBeenCalledWith(mockOrder);
   });
 
-  it.skip('should call handleClickMarkReceived and refresh the state when return status is 200', async () => {
-    markOrderReceived.mockResolvedValue({ status: 201 });
-    getAllOrders.mockResolvedValue(mockOrdersList[0]);
+  it('should call handleClickMarkReceived and refresh the state when return status is 200', async () => {
+    OrdersAPI.markOrderReceived.mockResolvedValue({ status: 200 });
     render(<OrdersTable ordersList={mockOrdersList} />);
 
     const orderRow = screen.getByText('Ordered').closest('.MuiDataGrid-row');
@@ -136,13 +130,12 @@ describe('Test OrdersTable Component Data Display', () => {
     const markReceivedButton = getByText('Mark Received');
     await userEvent.click(markReceivedButton);
 
-    expect(markOrderReceived).toHaveBeenCalledTimes(1); // ? called with order id or order object?
-    expect(getAllOrders).toHaveBeenCalledTimes(1);
+    expect(OrdersAPI.markOrderReceived).toHaveBeenCalledTimes(1); // ? called with order id or order object?
+    expect(OrdersAPI.getAllOrders).toHaveBeenCalledTimes(1);
   });
 
-  it.skip('should call handleClickMarkReceived and throw an error when return status is NOT 200', async () => {
-    markOrderReceived.mockResolvedValue({ status: 400 });
-    throwErrorMessage.mockResolvedValue('Error Status 400');
+  it('should call handleClickMarkReceived and throw an error when return status is NOT 200', async () => {
+    OrdersAPI.markOrderReceived.mockResolvedValue({ status: 400 });
 
     render(<OrdersTable ordersList={mockOrdersList} />);
 
@@ -152,7 +145,9 @@ describe('Test OrdersTable Component Data Display', () => {
     const markReceivedButton = getByText('Mark Received');
     await userEvent.click(markReceivedButton);
 
-    expect(markOrderReceived).toHaveBeenCalledWith(1); // ? called with order id or order object?
-    expect(throwErrorMessage).toHaveBeenCalledTimes(1);
+    expect(OrdersAPI.markOrderReceived).toHaveBeenCalledTimes(1); // ? called with order id or order object?
+    expect(OrdersAPI.getAllOrders).toHaveBeenCalledTimes(0);
+    // TODO: add test for error handler
+    // expect(throwErrorMessage).toHaveBeenCalledTimes(1);
   });
 });
