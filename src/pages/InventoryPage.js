@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import CustomModal from '../components/CustomModal';
 import { TextField } from '@mui/material';
 import Tooltip from '@mui/material/Tooltip';
+import MedicationAPI from '../API/MedicationAPI';
 
 const InventoryPage = () => {
   const [medications, setMedications] = useState([]);
@@ -17,6 +18,16 @@ const InventoryPage = () => {
     console.log(medication);
     setCurrentMedication(medication);
     setOpen(true);
+  };
+
+  const handleSubmit = () => {
+    // TODO: Set id to inventory ID
+    MedicationAPI.updateMedicationStock(
+      { id: currentMedication.id },
+      currentMedication.count
+    ).then((response) => {
+      handleClose();
+    });
   };
 
   const handleClose = () => {
