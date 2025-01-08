@@ -26,9 +26,6 @@ const OrdersPage = () => {
       .catch((error) => {
         console.error(error);
       });
-
-    console.log('OrdersList:', ordersList);
-    console.log('MedicationsList:', medicationsList);
   }, []);
 
   const orderPageStyling = {
