@@ -31,7 +31,7 @@ describe('Test PrescriptionsTable Component Data Display', () => {
       .spyOn(appContext, 'useAppContext')
       .mockImplementation(() => mockContextValues);
 
-    PrescriptionAPI.getAllPrescriptions.mockResolvedValue({
+    PrescriptionAPI.getAllActivePrescriptions.mockResolvedValue({
       status: 200,
       body: mockPrescriptionsList,
     });
@@ -161,6 +161,8 @@ describe('Test PrescriptionsTable Component Data Display', () => {
       status: 200,
     });
 
+
+
     render(<PrescriptionsTable prescriptionsList={mockPrescriptionsList} />);
 
     // Select the first row with status NEW
@@ -175,10 +177,9 @@ describe('Test PrescriptionsTable Component Data Display', () => {
 
     await waitFor(() => {
       expect(PrescriptionAPI.fillPrescription).toHaveBeenCalledTimes(1);
-      expect(PrescriptionAPI.fillPrescription).toHaveBeenCalledWith({
-        id: 1,
-        status: 'FILLED',
-      });
+      expect(PrescriptionAPI.fillPrescription).toHaveBeenCalledWith(
+        mockPrescriptionsList[0]
+      );
     });
   });
 
@@ -201,14 +202,14 @@ describe('Test PrescriptionsTable Component Data Display', () => {
 
     await waitFor(() => {
       expect(PrescriptionAPI.fillPrescription).toHaveBeenCalledTimes(1);
-      expect(PrescriptionAPI.getAllPrescriptions).toHaveBeenCalledTimes(1);
+      expect(PrescriptionAPI.getAllActivePrescriptions).toHaveBeenCalledTimes(1);
       expect(mockContextValues.updatePrescriptions).toHaveBeenCalledWith(
         mockPrescriptionsList
       );
     });
   });
 
-  it.skip('should call handleClickFillPrescription and call an ERROR if the status is NOT 200', async () => {
+  it('should call handleClickFillPrescription and call an ERROR if the status is NOT 200', async () => {
     PrescriptionAPI.fillPrescription.mockResolvedValue({
       status: 400,
     });
@@ -304,7 +305,7 @@ describe('Test PrescriptionsTable Component Data Display', () => {
     });
   });
 
-  it('should call markPickedUp and refresh the state if the status is 200', async () => {
+  it('should call markPickedUp and throw an error if the status is NOT 200', async () => {
     PrescriptionAPI.markPickedUp.mockResolvedValue({
       status: 400,
     });
@@ -323,9 +324,8 @@ describe('Test PrescriptionsTable Component Data Display', () => {
     await waitFor(() => {
       expect(PrescriptionAPI.markPickedUp).toHaveBeenCalledTimes(1);
       expect(PrescriptionAPI.getAllPrescriptions).toHaveBeenCalledTimes(1);
-      expect(mockContextValues.updatePrescriptions).toHaveBeenCalledWith(
-        mockPrescriptionsList
-      );
+      expect(mockContextValues.updatePrescriptions).toHaveBeenCalledTimes(0);
+      // TODO: error handling
     });
   });
 });
