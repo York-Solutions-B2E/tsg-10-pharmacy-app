@@ -161,8 +161,6 @@ describe('Test PrescriptionsTable Component Data Display', () => {
       status: 200,
     });
 
-
-
     render(<PrescriptionsTable prescriptionsList={mockPrescriptionsList} />);
 
     // Select the first row with status NEW
@@ -202,7 +200,9 @@ describe('Test PrescriptionsTable Component Data Display', () => {
 
     await waitFor(() => {
       expect(PrescriptionAPI.fillPrescription).toHaveBeenCalledTimes(1);
-      expect(PrescriptionAPI.getAllActivePrescriptions).toHaveBeenCalledTimes(1);
+      expect(PrescriptionAPI.getAllActivePrescriptions).toHaveBeenCalledTimes(
+        1
+      );
       expect(mockContextValues.updatePrescriptions).toHaveBeenCalledWith(
         mockPrescriptionsList
       );
@@ -248,7 +248,9 @@ describe('Test PrescriptionsTable Component Data Display', () => {
     // TODO: replace with navigation function being called
 
     await waitFor(() => {
-      expect(mockContextValues.navigate).toHaveBeenCalledWith('/orders', {state: mockPrescriptionsList[1].medicine});
+      expect(mockContextValues.navigate).toHaveBeenCalledWith('/orders', {
+        state: mockPrescriptionsList[1].medicine,
+      });
     });
   });
 
@@ -270,10 +272,9 @@ describe('Test PrescriptionsTable Component Data Display', () => {
 
     await waitFor(() => {
       expect(PrescriptionAPI.markPickedUp).toHaveBeenCalledTimes(1);
-      expect(PrescriptionAPI.markPickedUp).toHaveBeenCalledWith({
-        id: 5,
-        status: 'PICKED_UP',
-      });
+      expect(PrescriptionAPI.markPickedUp).toHaveBeenCalledWith(
+        mockPrescriptionsList[4]
+      );
     });
   });
 
@@ -295,7 +296,9 @@ describe('Test PrescriptionsTable Component Data Display', () => {
 
     await waitFor(() => {
       expect(PrescriptionAPI.markPickedUp).toHaveBeenCalledTimes(1);
-      expect(PrescriptionAPI.getAllPrescriptions).toHaveBeenCalledTimes(1);
+      expect(PrescriptionAPI.getAllActivePrescriptions).toHaveBeenCalledTimes(
+        1
+      );
       expect(mockContextValues.updatePrescriptions).toHaveBeenCalledWith(
         mockPrescriptionsList
       );
@@ -320,7 +323,9 @@ describe('Test PrescriptionsTable Component Data Display', () => {
 
     await waitFor(() => {
       expect(PrescriptionAPI.markPickedUp).toHaveBeenCalledTimes(1);
-      expect(PrescriptionAPI.getAllPrescriptions).toHaveBeenCalledTimes(1);
+      expect(PrescriptionAPI.getAllActivePrescriptions).toHaveBeenCalledTimes(
+        0
+      );
       expect(mockContextValues.updatePrescriptions).toHaveBeenCalledTimes(0);
       // TODO: error handling
     });
