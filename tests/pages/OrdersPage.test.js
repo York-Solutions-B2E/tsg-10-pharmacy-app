@@ -50,25 +50,40 @@ describe('OrdersPage', () => {
     expect(screen.getByTestId('orders-page')).toBeInTheDocument();
   });
 
-  it('should fetch orders and medications on mount', async () => {
+  it('should fetch orders and update orders and medication state on mount mount', async () => {
     render(<OrdersPage />);
 
     waitFor(() => {
       expect(OrdersAPI.getAllOrders).toHaveBeenCalledTimes(1);
       expect(MedicationAPI.getAllMedications).toHaveBeenCalledTimes(1);
-    });
-  });
-
-  it('should update the App context state with fetched data', async () => {
-    render(<OrdersPage />);
-
-    await waitFor(() => {
       expect(mockContextValues.updateOrders).toHaveBeenCalledWith(
         mockOrdersList
       );
       expect(mockContextValues.updateMedications).toHaveBeenCalledWith(
         mockMedicationsList
       );
+    });
+  });
+
+  it('should catch an error if getAllOrders or getAllMedications fails', async () => {
+    jest.clearAllMocks();
+
+    OrdersAPI.getAllOrders.mockRejectedValue({
+      status: 400,
+    });
+
+    MedicationAPI.getAllMedications.mockRejectedValue({
+      status: 400,
+    });
+
+    render(<OrdersPage />);
+
+    await waitFor(() => {
+      expect(OrdersAPI.getAllOrders).toHaveBeenCalledTimes(1);
+      expect(mockContextValues.updateOrders).toHaveBeenCalledTimes(0);
+
+      expect(MedicationAPI.getAllMedications).toHaveBeenCalledTimes(1);
+      expect(mockContextValues.updateMedications).toHaveBeenCalledTimes(0);
     });
   });
 });
