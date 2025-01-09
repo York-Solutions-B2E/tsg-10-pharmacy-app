@@ -1,5 +1,6 @@
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
+import { useState } from 'react';
 import {
   fillPrescription,
   getAllActivePrescriptions,
@@ -7,34 +8,18 @@ import {
 } from '../../API/PrescriptionAPI';
 import { useAppContext } from '../../HOC/AppContext';
 import ButtonWithText from '../buttons/ButtonWithText';
+import ConfirmActionModal from '../ConfirmActionModal';
 import StatusChip from './StatusChip';
 
 const PrescriptionsTable = ({ prescriptionsList }) => {
   const { updatePrescriptions, navigate } = useAppContext();
+  const [openModal, setOpenModal] = useState(false);
+  const [outOfStockPrescription, setOutOfStockPrescription] =
+    useState(prescriptionsList);
 
   // ******** Click Handlers
   const handleClickFillPrescription = async (prescription) => {
     const fillPrescriptionResponse = await fillPrescription(prescription);
-
-    // If the fill prescription call is successful, refresh the prescriptions list
-    if (fillPrescriptionResponse.status === 200) {
-      const refreshStateResponse = await getAllActivePrescriptions();
-
-      console.log('Refresh State Response:', refreshStateResponse);
-
-      // If the refresh call is successful, update the prescriptions list
-      if (refreshStateResponse?.status === 200) {
-        updatePrescriptions(refreshStateResponse.body);
-      }
-
-      // If the refresh call is not successful, log the error
-      if (refreshStateResponse?.status !== 200) {
-        console.error(
-          'Error refreshing prescriptions list:',
-          refreshStateResponse.body?.message
-        );
-      }
-    }
 
     // If the fill prescription call is not successful, log the error
     if (fillPrescriptionResponse.status !== 200) {
@@ -43,6 +28,27 @@ const PrescriptionsTable = ({ prescriptionsList }) => {
         fillPrescriptionResponse.body?.message
       );
     }
+
+    if (
+      fillPrescriptionResponse.body?.message === 'Cannot reduce stock below 0'
+    ) {
+      setOpenModal(true);
+      setOutOfStockPrescription(prescription);
+    }
+
+    // If the fill prescription call is successful, refresh the prescriptions list
+    const refreshStateResponse = await getAllActivePrescriptions();
+
+    // If the refresh call is not successful, log the error
+    if (refreshStateResponse?.status !== 200) {
+      console.error(
+        'Error refreshing prescriptions list:',
+        refreshStateResponse.body?.message
+      );
+    }
+
+    // If the refresh call is successful, update the prescriptions list
+    updatePrescriptions(refreshStateResponse.body);
   };
 
   const handleClickOrderMore = (prescription) => {
@@ -73,6 +79,14 @@ const PrescriptionsTable = ({ prescriptionsList }) => {
     if (pickedUpResponse.status !== 200) {
       console.error('Marked Pickup failed!', pickedUpResponse.body?.message);
     }
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
+
+  const handleConfirmModal = () => {
+    handleClickOrderMore(outOfStockPrescription);
   };
   // END ******** click handlers
 
@@ -229,6 +243,17 @@ const PrescriptionsTable = ({ prescriptionsList }) => {
   // ******** RETURN
   return (
     <Box sx={{ height: 700, width: '100%' }}>
+      <ConfirmActionModal
+        color={'primary'}
+        title={'Low Stock!'}
+        message={
+          'The stock for this medicine is below the minimum required. Would you like to order more?'
+        }
+        open={openModal}
+        onDismiss={handleCloseModal}
+        onConfirmAction={handleConfirmModal}
+        confirmButtonText={'Order More'}
+      />
       <DataGrid
         rows={prescriptionsList}
         columns={columns}
