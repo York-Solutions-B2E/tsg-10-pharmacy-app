@@ -1,20 +1,16 @@
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
 import dayjs from 'dayjs';
+import { getAllOrders, markOrderReceived } from '../../API/OrdersAPI';
+import { useAppContext } from '../../HOC/AppContext';
 import ButtonWithText from '../buttons/ButtonWithText';
 import StatusChip from './StatusChip';
-import { markOrderReceived } from '../../API/OrdersAPI';
-import { getAllOrders } from '../../API/OrdersAPI';
-import { useAppContext } from '../../HOC/AppContext';
 
 const OrdersTable = ({ ordersList }) => {
   const { updateOrders } = useAppContext();
-  // const navigate = useNavigate();
 
   // ******** Click Handlers
   const handleClickOrderReceived = async (order) => {
-    console.log('Order:', order);
-
     const orderRequest = {
       id: order.id,
       inventoryId: order.inventory.id,
@@ -22,23 +18,32 @@ const OrdersTable = ({ ordersList }) => {
       deliveryDate: dayjs(order.deliveryDate),
       status: order.status,
     };
-    console.log('Order Request:', orderRequest);
 
-    // TODO: Implement the order received api call, api function takes full order object
-    const response = await markOrderReceived(orderRequest);
+    const markOrderReceivedResult = await markOrderReceived(orderRequest);
 
-    if (response.status === 200) {
-      // TODO: Refresh the orders list
-      console.log('Order Marked Received:', response);
-      const refreshOrdersList = await getAllOrders();
-      console.log('Refresh Orders List:', refreshOrdersList);
-      updateOrders(refreshOrdersList.body);
-    }
-
-    if (response.status !== 200) {
+    // If the response is not 200, log the error
+    if (markOrderReceivedResult.status !== 200) {
       // TODO: Show error message
-      console.log('Error in marking order received');
+      console.error(
+        'Error in marking order received:',
+        markOrderReceivedResult.body?.message
+      );
+      return;
     }
+
+    // If the response is 200, refresh the orders list
+    const refreshOrdersList = await getAllOrders();
+
+    // catch any errors in getting the orders list
+    if (refreshOrdersList.status !== 200) {
+      console.error(
+        'Error in getting orders list:',
+        refreshOrdersList.body.message
+      );
+      return;
+    }
+
+    updateOrders(refreshOrdersList.body);
   };
   // END ******** click handlers
 

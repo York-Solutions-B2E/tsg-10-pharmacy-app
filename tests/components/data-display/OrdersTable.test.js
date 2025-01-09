@@ -1,10 +1,9 @@
 import { cleanup, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import dayjs from 'dayjs';
-import OrdersTable from '../../../src/components/data-display/OrdersTable';
-
 import MedicationAPI from '../../../src/API/MedicationAPI';
 import OrdersAPI from '../../../src/API/OrdersAPI';
+import OrdersTable from '../../../src/components/data-display/OrdersTable';
 import * as appContext from '../../../src/HOC/AppContext';
 import mockMedicationsList from '../../__mocks__/mockMedicationsList';
 import mockOrdersList from '../../__mocks__/mockOrdersList';
@@ -135,7 +134,14 @@ describe('Test OrdersTable Component Data Display', () => {
   });
 
   it('should call handleClickMarkReceived and throw an error when return status is NOT 200', async () => {
-    OrdersAPI.markOrderReceived.mockResolvedValue({ status: 400 });
+    const consoleErrorMock = jest
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
+    OrdersAPI.markOrderReceived.mockResolvedValue({
+      status: 400,
+      body: { message: 'Test Error' },
+    });
 
     render(<OrdersTable ordersList={mockOrdersList} />);
 
@@ -147,7 +153,43 @@ describe('Test OrdersTable Component Data Display', () => {
 
     expect(OrdersAPI.markOrderReceived).toHaveBeenCalledTimes(1); // ? called with order id or order object?
     expect(OrdersAPI.getAllOrders).toHaveBeenCalledTimes(0);
-    // TODO: add test for error handler
-    // expect(throwErrorMessage).toHaveBeenCalledTimes(1);
+    expect(consoleErrorMock).toHaveBeenCalledWith(
+      'Error in marking order received:',
+      'Test Error'
+    );
+    consoleErrorMock.mockRestore();
+  });
+
+  it('should call handleClickMarkReceived and throw an error when return status is NOT 200', async () => {
+    jest.clearAllMocks();
+
+    OrdersAPI.getAllOrders.mockResolvedValue({
+      status: 400,
+      body: { message: 'Test Error getAllOrders' },
+    });
+
+    OrdersAPI.markOrderReceived.mockResolvedValue({
+      status: 200,
+    });
+
+    const consoleErrorMock = jest
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
+    render(<OrdersTable ordersList={mockOrdersList} />);
+
+    const orderRow = screen.getByText('Ordered').closest('.MuiDataGrid-row');
+
+    const { getByText } = within(orderRow);
+    const markReceivedButton = getByText('Mark Received');
+    await userEvent.click(markReceivedButton);
+
+    expect(OrdersAPI.markOrderReceived).toHaveBeenCalledTimes(1); // ? called with order id or order object?
+    expect(OrdersAPI.getAllOrders).toHaveBeenCalledTimes(1);
+    expect(consoleErrorMock).toHaveBeenCalledWith(
+      'Error in getting orders list:',
+      'Test Error getAllOrders'
+    );
+    consoleErrorMock.mockRestore();
   });
 });
