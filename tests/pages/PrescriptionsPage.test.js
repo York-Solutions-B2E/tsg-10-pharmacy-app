@@ -45,21 +45,30 @@ describe('PrescriptionsPage Tests', () => {
     expect(prescriptionsPage).toBeInTheDocument();
   });
 
-  it('should call getAllPrescriptions on mount', async () => {
+  it('should call getAllPrescriptions and update AppContext state on mount', async () => {
     render(<PrescriptionsPage />);
 
     await waitFor(() => {
       expect(PrescriptionAPI.getAllPrescriptions).toHaveBeenCalledTimes(1);
-    });
-  });
-
-  it('should update the App context state with fetched data', async () => {
-    render(<PrescriptionsPage />);
-
-    await waitFor(() => {
       expect(mockContextValues.updatePrescriptions).toHaveBeenCalledWith(
         mockPrescriptionsList
       );
+    });
+  });
+
+  it('should catch any errors if getAllPrescriptions fails', async () => {
+    jest.clearAllMocks();
+
+    PrescriptionAPI.getAllPrescriptions.mockResolvedValue({
+      status: 400,
+      body: mockPrescriptionsList,
+    });
+    render(<PrescriptionsPage />);
+
+    await waitFor(() => {
+      expect(PrescriptionAPI.getAllPrescriptions).toHaveBeenCalledTimes(1);
+      expect(mockContextValues.updatePrescriptions).not.toHaveBeenCalled();
+      // TODO: Error handling
     });
   });
 });
