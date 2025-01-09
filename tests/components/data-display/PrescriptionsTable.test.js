@@ -1,4 +1,10 @@
-import { cleanup, render, screen, waitFor, within } from '@testing-library/react';
+import {
+  cleanup,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import PrescriptionAPI from '../../../src/API/PrescriptionAPI';
 import * as appContext from '../../../src/HOC/AppContext';
@@ -150,20 +156,83 @@ describe('Test PrescriptionsTable Component Data Display', () => {
 
   // TEST BUTTON CLICKS
   it('should call handleClickFillPrescription when Fill button is clicked', async () => {
+    PrescriptionAPI.fillPrescription.mockResolvedValue({
+      status: 200,
+      body: mockPrescriptionsList,
+    });
+
     render(<PrescriptionsTable prescriptionsList={mockPrescriptionsList} />);
+
+    // Select the first row with status NEW
     const newStatusRow = screen.getByText('New').closest('.MuiDataGrid-row');
 
     const { getByText } = within(newStatusRow);
     const fillButton = getByText('Fill');
 
-    // TODO: replace with api function being called
-    const consoleSpy = jest.spyOn(console, 'log');
-
+    // Click the Fill button
     expect(fillButton.disabled).toBe(false);
     await userEvent.click(fillButton);
-    expect(consoleSpy).toHaveBeenCalledWith('Fill Prescription, id is:', '1');
 
-    consoleSpy.mockRestore();
+    await waitFor(() => {
+      expect(PrescriptionAPI.fillPrescription).toHaveBeenCalledTimes(1);
+      expect(PrescriptionAPI.fillPrescription).toHaveBeenCalledWith({
+        id: 1,
+        status: 'FILLED',
+      });
+    });
+  });
+
+  it('should call handleClickFillPrescription and refresh the state if the status is 200', async () => {
+    PrescriptionAPI.fillPrescription.mockResolvedValue({
+      status: 200,
+      body: mockPrescriptionsList,
+    });
+
+    render(<PrescriptionsTable prescriptionsList={mockPrescriptionsList} />);
+
+    // Select the first row with status NEW
+    const newStatusRow = screen.getByText('New').closest('.MuiDataGrid-row');
+
+    const { getByText } = within(newStatusRow);
+    const fillButton = getByText('Fill');
+
+    // Click the Fill button
+    expect(fillButton.disabled).toBe(false);
+    await userEvent.click(fillButton);
+
+    await waitFor(() => {
+      expect(PrescriptionAPI.fillPrescription).toHaveBeenCalledTimes(1);
+      expect(mockContextValues.updatePrescriptions).toHaveBeenCalledWith(
+        mockPrescriptionsList
+      );
+    });
+  });
+
+  it.skip('should call handleClickFillPrescription and call an Error if the status is NOT 200', async () => {
+    PrescriptionAPI.fillPrescription.mockResolvedValue({
+      status: 400,
+      body: mockPrescriptionsList,
+    });
+
+    render(<PrescriptionsTable prescriptionsList={mockPrescriptionsList} />);
+
+    // Select the first row with status NEW
+    const newStatusRow = screen.getByText('New').closest('.MuiDataGrid-row');
+
+    const { getByText } = within(newStatusRow);
+    const fillButton = getByText('Fill');
+
+    // Click the Fill button
+    expect(fillButton.disabled).toBe(false);
+    await userEvent.click(fillButton);
+
+    await waitFor(() => {
+      expect(PrescriptionAPI.fillPrescription).toHaveBeenCalledTimes(1);
+      expect(mockContextValues.updatePrescriptions).not.toHaveBeenCalledWith(
+        mockPrescriptionsList
+      );
+      // TODO: replace with error message being displayed
+    });
   });
 
   it('should call handleClickOrderMore when Order More button is clicked', async () => {
