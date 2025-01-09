@@ -7,6 +7,8 @@ WORKDIR /app
 # Copy for dependency installation
 COPY package.json package-lock.json ./
 
+ENV NODE_OPTIONS="--max-old-space-size=1024"
+
 # Install dependencies. NPM has an issue with parcel, so we use yarn
 RUN yarn install
 
