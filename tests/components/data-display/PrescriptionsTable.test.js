@@ -69,68 +69,6 @@ describe('Test PrescriptionsTable Component Data Display', () => {
     expect(outOfStockRow).toHaveClass('row-out-of-stock');
   });
 
-  // TEST BUTTON CLICKS
-  it('should call handleClickFillPrescription when Fill button is clicked', async () => {
-    render(<PrescriptionsTable prescriptionsList={mockPrescriptionsList} />);
-    const newStatusRow = screen.getByText('New').closest('.MuiDataGrid-row');
-
-    const { getByText } = within(newStatusRow);
-    const fillButton = getByText('Fill');
-
-    // TODO: replace with api function being called
-    const consoleSpy = jest.spyOn(console, 'log');
-
-    expect(fillButton.disabled).toBe(false);
-    await userEvent.click(fillButton);
-    expect(consoleSpy).toHaveBeenCalledWith('Fill Prescription, id is:', '1');
-
-    consoleSpy.mockRestore();
-  });
-
-  it('should call handleClickOrderMore when Order More button is clicked', async () => {
-    render(<PrescriptionsTable prescriptionsList={mockPrescriptionsList} />);
-    const outOfStockStatusRow = screen
-      .getByText('Out of Stock')
-      .closest('.MuiDataGrid-row');
-
-    const { getByText } = within(outOfStockStatusRow);
-    const orderMoreButton = getByText('Order More');
-
-    // TODO: replace with navigation function being called
-    const consoleSpy = jest.spyOn(console, 'log');
-
-    expect(orderMoreButton.disabled).toBe(false);
-    await userEvent.click(orderMoreButton);
-    expect(consoleSpy).toHaveBeenCalledWith(
-      'Order More Medicine, medicine id is:',
-      '1'
-    );
-
-    consoleSpy.mockRestore();
-  });
-
-  it('should call handleClickMarkPickedUp when Mark Picked Up button is clicked', async () => {
-    render(<PrescriptionsTable prescriptionsList={mockPrescriptionsList} />);
-    const fillStatusRow = screen
-      .getByText('Filled')
-      .closest('.MuiDataGrid-row');
-
-    const { getByText } = within(fillStatusRow);
-    const markPickedUpButton = getByText('Mark Picked Up');
-
-    // TODO: replace with api function being called
-    const consoleSpy = jest.spyOn(console, 'log');
-
-    expect(markPickedUpButton.disabled).toBe(false);
-    await userEvent.click(markPickedUpButton);
-    expect(consoleSpy).toHaveBeenCalledWith(
-      'Prescription Picked up, id is:',
-      '5'
-    );
-
-    consoleSpy.mockRestore();
-  });
-
   // TEST BUTTON RENDERING
   it('should have an enabled Fill and Order More Button if the status is NEW', () => {
     render(<PrescriptionsTable prescriptionsList={mockPrescriptionsList} />);
@@ -208,5 +146,67 @@ describe('Test PrescriptionsTable Component Data Display', () => {
     const button = queryByRole('button');
 
     expect(button).toBeNull();
+  });
+
+  // TEST BUTTON CLICKS
+  it('should call handleClickFillPrescription when Fill button is clicked', async () => {
+    render(<PrescriptionsTable prescriptionsList={mockPrescriptionsList} />);
+    const newStatusRow = screen.getByText('New').closest('.MuiDataGrid-row');
+
+    const { getByText } = within(newStatusRow);
+    const fillButton = getByText('Fill');
+
+    // TODO: replace with api function being called
+    const consoleSpy = jest.spyOn(console, 'log');
+
+    expect(fillButton.disabled).toBe(false);
+    await userEvent.click(fillButton);
+    expect(consoleSpy).toHaveBeenCalledWith('Fill Prescription, id is:', '1');
+
+    consoleSpy.mockRestore();
+  });
+
+  it('should call handleClickOrderMore when Order More button is clicked', async () => {
+    render(<PrescriptionsTable prescriptionsList={mockPrescriptionsList} />);
+    const outOfStockStatusRow = screen
+      .getByText('Out of Stock')
+      .closest('.MuiDataGrid-row');
+
+    const { getByText } = within(outOfStockStatusRow);
+    const orderMoreButton = getByText('Order More');
+
+    // TODO: replace with navigation function being called
+    const consoleSpy = jest.spyOn(console, 'log');
+
+    expect(orderMoreButton.disabled).toBe(false);
+    await userEvent.click(orderMoreButton);
+    expect(consoleSpy).toHaveBeenCalledWith(
+      'Order More Medicine, medicine id is:',
+      '1'
+    );
+
+    consoleSpy.mockRestore();
+  });
+
+  it('should call handleClickMarkPickedUp when Mark Picked Up button is clicked', async () => {
+    render(<PrescriptionsTable prescriptionsList={mockPrescriptionsList} />);
+    const fillStatusRow = screen
+      .getByText('Filled')
+      .closest('.MuiDataGrid-row');
+
+    const { getByText } = within(fillStatusRow);
+    const markPickedUpButton = getByText('Mark Picked Up');
+
+    // TODO: replace with api function being called
+    const consoleSpy = jest.spyOn(console, 'log');
+
+    expect(markPickedUpButton.disabled).toBe(false);
+    await userEvent.click(markPickedUpButton);
+    expect(consoleSpy).toHaveBeenCalledWith(
+      'Prescription Picked up, id is:',
+      '5'
+    );
+
+    consoleSpy.mockRestore();
   });
 });
