@@ -1,5 +1,5 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
-import InventoryPage from './pages/MedicationsPage';
+import InventoryPage from './pages/InventoryPage';
 import OrdersPage from './pages/OrdersPage';
 import PrescriptionsPage from './pages/PrescriptionsPage';
 
