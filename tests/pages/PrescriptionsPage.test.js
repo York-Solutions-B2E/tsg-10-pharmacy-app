@@ -59,8 +59,9 @@ describe('PrescriptionsPage Tests', () => {
   it('should catch any errors if getAllActivePrescriptions fails', async () => {
     jest.clearAllMocks();
 
-    PrescriptionAPI.getAllActivePrescriptions.mockRejectedValue({
+    PrescriptionAPI.getAllActivePrescriptions.mockResolvedValue({
       status: 400,
+      body: { message: 'Error fetching prescriptions' },
     });
     render(<PrescriptionsPage />);
 
