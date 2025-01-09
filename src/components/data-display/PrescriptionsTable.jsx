@@ -3,6 +3,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import {
   fillPrescription,
   getAllActivePrescriptions,
+  markPickedUp,
 } from '../../API/PrescriptionAPI';
 import { useAppContext } from '../../HOC/AppContext';
 import ButtonWithText from '../buttons/ButtonWithText';
@@ -20,7 +21,7 @@ const PrescriptionsTable = ({ prescriptionsList }) => {
       const refreshStateResponse = await getAllActivePrescriptions();
 
       console.log('Refresh State Response:', refreshStateResponse);
-      
+
       // If the refresh call is successful, update the prescriptions list
       if (refreshStateResponse?.status === 200) {
         updatePrescriptions(refreshStateResponse.body);
@@ -45,18 +46,33 @@ const PrescriptionsTable = ({ prescriptionsList }) => {
   };
 
   const handleClickOrderMore = (prescription) => {
-    console.log(
-      'Order More Medicine, medicine id is:',
-      prescription.medicine.id
-    );
-
     navigate('/orders', { state: prescription.medicine });
-    // TODO: Navigate to the order more page with the medicine id
   };
 
-  const handleClickMarkPickedUp = (prescription) => {
-    console.log('Prescription Picked up, id is:', prescription.id);
-    // TODO: Implement the picked up api call, api function takes full prescription object
+  const handleClickMarkPickedUp = async (prescription) => {
+    // Call the API to mark the prescription as picked up
+    const pickedUpResponse = await markPickedUp(prescription);
+
+    // If the call is successful, refresh the prescriptions list
+    if (pickedUpResponse.status === 200) {
+      const refreshStateResponse = await getAllActivePrescriptions();
+
+      if (refreshStateResponse?.status === 200) {
+        updatePrescriptions(refreshStateResponse.body);
+      }
+
+      if (refreshStateResponse?.status !== 200) {
+        console.error(
+          'Error refreshing prescriptions list:',
+          refreshStateResponse.body?.message
+        );
+      }
+    }
+
+    // If the call is not successful, log the error
+    if (pickedUpResponse.status !== 200) {
+      console.error('Marked Pickup failed!', pickedUpResponse.body?.message);
+    }
   };
   // END ******** click handlers
 
