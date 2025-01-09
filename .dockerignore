@@ -1,0 +1,7 @@
+.gitignore
+.prettierignore
+.prettierrc
+jest.setup.js
+README.md
+.git
+Dockerfile
