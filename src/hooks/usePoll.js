@@ -26,5 +26,5 @@ export const usePoll = (pollRequest, timeout) => {
     };
   }, []);
 
-  return { data };
+  return data;
 };
