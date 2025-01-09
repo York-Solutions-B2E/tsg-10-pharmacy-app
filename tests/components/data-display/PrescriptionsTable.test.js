@@ -20,6 +20,7 @@ const mockContextValues = {
   updateMedications: jest.fn(),
   updateOrders: jest.fn(),
   updatePrescriptions: jest.fn(),
+  navigate: jest.fn(),
 };
 
 describe('Test PrescriptionsTable Component Data Display', () => {
@@ -158,7 +159,6 @@ describe('Test PrescriptionsTable Component Data Display', () => {
   it('should call handleClickFillPrescription when Fill button is clicked', async () => {
     PrescriptionAPI.fillPrescription.mockResolvedValue({
       status: 200,
-      body: mockPrescriptionsList,
     });
 
     render(<PrescriptionsTable prescriptionsList={mockPrescriptionsList} />);
@@ -185,7 +185,6 @@ describe('Test PrescriptionsTable Component Data Display', () => {
   it('should call handleClickFillPrescription and refresh the state if the status is 200', async () => {
     PrescriptionAPI.fillPrescription.mockResolvedValue({
       status: 200,
-      body: mockPrescriptionsList,
     });
 
     render(<PrescriptionsTable prescriptionsList={mockPrescriptionsList} />);
@@ -202,16 +201,16 @@ describe('Test PrescriptionsTable Component Data Display', () => {
 
     await waitFor(() => {
       expect(PrescriptionAPI.fillPrescription).toHaveBeenCalledTimes(1);
+      expect(PrescriptionAPI.getAllPrescriptions).toHaveBeenCalledTimes(1);
       expect(mockContextValues.updatePrescriptions).toHaveBeenCalledWith(
         mockPrescriptionsList
       );
     });
   });
 
-  it.skip('should call handleClickFillPrescription and call an Error if the status is NOT 200', async () => {
+  it.skip('should call handleClickFillPrescription and call an ERROR if the status is NOT 200', async () => {
     PrescriptionAPI.fillPrescription.mockResolvedValue({
       status: 400,
-      body: mockPrescriptionsList,
     });
 
     render(<PrescriptionsTable prescriptionsList={mockPrescriptionsList} />);
@@ -228,14 +227,12 @@ describe('Test PrescriptionsTable Component Data Display', () => {
 
     await waitFor(() => {
       expect(PrescriptionAPI.fillPrescription).toHaveBeenCalledTimes(1);
-      expect(mockContextValues.updatePrescriptions).not.toHaveBeenCalledWith(
-        mockPrescriptionsList
-      );
+      expect(mockContextValues.updatePrescriptions).toHaveBeenCalledTimes(0);
       // TODO: replace with error message being displayed
     });
   });
 
-  it('should call handleClickOrderMore when Order More button is clicked', async () => {
+  it('should navigate to the OrdersPage with the selected medicine state when Order More button is clicked', async () => {
     render(<PrescriptionsTable prescriptionsList={mockPrescriptionsList} />);
     const outOfStockStatusRow = screen
       .getByText('Out of Stock')
@@ -244,20 +241,24 @@ describe('Test PrescriptionsTable Component Data Display', () => {
     const { getByText } = within(outOfStockStatusRow);
     const orderMoreButton = getByText('Order More');
 
-    // TODO: replace with navigation function being called
-    const consoleSpy = jest.spyOn(console, 'log');
-
     expect(orderMoreButton.disabled).toBe(false);
     await userEvent.click(orderMoreButton);
-    expect(consoleSpy).toHaveBeenCalledWith(
-      'Order More Medicine, medicine id is:',
-      '1'
-    );
 
-    consoleSpy.mockRestore();
+    // TODO: replace with navigation function being called
+
+    await waitFor(() => {
+      expect(mockContextValues.navigate).toHaveBeenCalledWith('/orders');
+      expect(navigator.state).toEqual({
+        medicine: mockPrescriptionsList[1].medicine,
+      }); // ? is this how I grab navigation state?
+    });
   });
 
   it('should call handleClickMarkPickedUp when Mark Picked Up button is clicked', async () => {
+    PrescriptionAPI.markPickedUp.mockResolvedValue({
+      status: 200,
+    });
+
     render(<PrescriptionsTable prescriptionsList={mockPrescriptionsList} />);
     const fillStatusRow = screen
       .getByText('Filled')
@@ -266,16 +267,65 @@ describe('Test PrescriptionsTable Component Data Display', () => {
     const { getByText } = within(fillStatusRow);
     const markPickedUpButton = getByText('Mark Picked Up');
 
-    // TODO: replace with api function being called
-    const consoleSpy = jest.spyOn(console, 'log');
+    expect(markPickedUpButton.disabled).toBe(false);
+    await userEvent.click(markPickedUpButton);
+
+    await waitFor(() => {
+      expect(PrescriptionAPI.markPickedUp).toHaveBeenCalledTimes(1);
+      expect(PrescriptionAPI.markPickedUp).toHaveBeenCalledWith({
+        id: 5,
+        status: 'PICKED_UP',
+      });
+    });
+  });
+
+  it('should call markPickedUp and refresh the state if the status is 200', async () => {
+    PrescriptionAPI.markPickedUp.mockResolvedValue({
+      status: 200,
+    });
+
+    render(<PrescriptionsTable prescriptionsList={mockPrescriptionsList} />);
+    const fillStatusRow = screen
+      .getByText('Filled')
+      .closest('.MuiDataGrid-row');
+
+    const { getByText } = within(fillStatusRow);
+    const markPickedUpButton = getByText('Mark Picked Up');
 
     expect(markPickedUpButton.disabled).toBe(false);
     await userEvent.click(markPickedUpButton);
-    expect(consoleSpy).toHaveBeenCalledWith(
-      'Prescription Picked up, id is:',
-      '5'
-    );
 
-    consoleSpy.mockRestore();
+    await waitFor(() => {
+      expect(PrescriptionAPI.markPickedUp).toHaveBeenCalledTimes(1);
+      expect(PrescriptionAPI.getAllPrescriptions).toHaveBeenCalledTimes(1);
+      expect(mockContextValues.updatePrescriptions).toHaveBeenCalledWith(
+        mockPrescriptionsList
+      );
+    });
+  });
+
+  it('should call markPickedUp and refresh the state if the status is 200', async () => {
+    PrescriptionAPI.markPickedUp.mockResolvedValue({
+      status: 400,
+    });
+
+    render(<PrescriptionsTable prescriptionsList={mockPrescriptionsList} />);
+    const fillStatusRow = screen
+      .getByText('Filled')
+      .closest('.MuiDataGrid-row');
+
+    const { getByText } = within(fillStatusRow);
+    const markPickedUpButton = getByText('Mark Picked Up');
+
+    expect(markPickedUpButton.disabled).toBe(false);
+    await userEvent.click(markPickedUpButton);
+
+    await waitFor(() => {
+      expect(PrescriptionAPI.markPickedUp).toHaveBeenCalledTimes(1);
+      expect(PrescriptionAPI.getAllPrescriptions).toHaveBeenCalledTimes(1);
+      expect(mockContextValues.updatePrescriptions).toHaveBeenCalledWith(
+        mockPrescriptionsList
+      );
+    });
   });
 });
