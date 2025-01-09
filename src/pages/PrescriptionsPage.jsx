@@ -7,6 +7,9 @@ import { useAppContext } from '../HOC/AppContext';
 const PrescriptionsPage = () => {
   const { prescriptionsList, updatePrescriptions } = useAppContext();
 
+  console.log(prescriptionsList);
+  
+
   useEffect(() => {
     getAllActivePrescriptions()
       .then((response) => {
