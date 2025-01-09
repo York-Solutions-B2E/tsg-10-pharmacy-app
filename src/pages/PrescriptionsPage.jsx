@@ -20,21 +20,6 @@ const PrescriptionsPage = () => {
     }
   }, []);
 
-  const getPrescriptionsListOnMount = async () => {
-    const response = await getAllActivePrescriptions();
-
-    if (response.status !== 200) {
-      console.error('Error fetching prescriptions:', response.body?.message);
-      return;
-    }
-
-    updatePrescriptions(response.body);
-  };
-
-  useEffect(() => {
-    getPrescriptionsListOnMount();
-  }, []);
-
   return (
     <Box sx={{ padding: '30px 30px' }} data-testid="prescriptions-page">
       <h1>PrescriptionsPage</h1>
