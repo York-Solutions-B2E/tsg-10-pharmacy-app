@@ -1,15 +1,47 @@
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
+import {
+  fillPrescription,
+  getAllActivePrescriptions,
+} from '../../API/PrescriptionAPI';
+import { useAppContext } from '../../HOC/AppContext';
 import ButtonWithText from '../buttons/ButtonWithText';
 import StatusChip from './StatusChip';
 
 const PrescriptionsTable = ({ prescriptionsList }) => {
-  // const navigate = useNavigate();
+  const { updatePrescriptions, navigate } = useAppContext();
 
   // ******** Click Handlers
-  const handleClickFillPrescription = (prescription) => {
-    console.log('Fill Prescription, id is:', prescription.id);
-    // TODO: Implement the fill prescription api call, api function takes full prescription object
+  const handleClickFillPrescription = async (prescription) => {
+    const fillPrescriptionResponse = await fillPrescription(prescription);
+
+    // If the fill prescription call is successful, refresh the prescriptions list
+    if (fillPrescriptionResponse.status === 200) {
+      const refreshStateResponse = await getAllActivePrescriptions();
+
+      console.log('Refresh State Response:', refreshStateResponse);
+      
+      // If the refresh call is successful, update the prescriptions list
+      if (refreshStateResponse?.status === 200) {
+        updatePrescriptions(refreshStateResponse.body);
+      }
+
+      // If the refresh call is not successful, log the error
+      if (refreshStateResponse?.status !== 200) {
+        console.error(
+          'Error refreshing prescriptions list:',
+          refreshStateResponse.body?.message
+        );
+      }
+    }
+
+    // If the fill prescription call is not successful, log the error
+    if (fillPrescriptionResponse.status !== 200) {
+      console.error(
+        'Fill Prescription error:',
+        fillPrescriptionResponse.body?.message
+      );
+    }
   };
 
   const handleClickOrderMore = (prescription) => {
@@ -18,7 +50,7 @@ const PrescriptionsTable = ({ prescriptionsList }) => {
       prescription.medicine.id
     );
 
-    // navigate('/orders', { state: prescription.medicine });
+    navigate('/orders', { state: prescription.medicine });
     // TODO: Navigate to the order more page with the medicine id
   };
 
@@ -100,8 +132,7 @@ const PrescriptionsTable = ({ prescriptionsList }) => {
       FillPrescriptionButton(prescription),
       OrderMoreButton(prescription),
     ];
-  };
-  // END ******** GridActionButtons
+  }; // END ******** GridActionButtons
 
   // ******** Columns headers and GridColDef
   const columns = [
@@ -167,10 +198,9 @@ const PrescriptionsTable = ({ prescriptionsList }) => {
         return renderActionButtonsForPrescriptions(prescription);
       },
     },
-  ];
-  // END ******** Columns headers and data
+  ]; // END ******** Columns headers and data
 
-  // Row Styling
+  // Error Row Styling
   const getRowClassName = (params) => {
     switch (params.row.status) {
       case 'OUT_OF_STOCK':
