@@ -40,7 +40,7 @@ export const updateMedicationStock = async (inventory, updatedQuantity) => {
     );
   } catch (error) {
     console.error(error);
-    return { ok: false, status: 400, body: null };
+    return { ok: false, status: 400, body: { message: error.message } };
   }
 };
 
