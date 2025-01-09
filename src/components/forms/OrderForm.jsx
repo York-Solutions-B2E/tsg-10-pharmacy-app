@@ -58,7 +58,7 @@ const OrderForm = ({ inventoryList }) => {
     // clear the quantity and error message first
     setSelectedMedicine(newValue);
     setMinQuantity(1);
-    setQuantityMessage(`Quantity must be at least ${1}`);
+    setQuantityMessage('Quantity must be at least 1');
     setNumberError(false);
     setMedicineErrorMessage('');
 
@@ -99,21 +99,20 @@ const OrderForm = ({ inventoryList }) => {
     }
 
     if (quantity < minQuantity) {
-      console.log('Quantity less than min');
       setNumberError(true);
       setQuantityMessage(`Quantity must be at least ${minQuantity}`);
       isValid = false;
     }
 
     if (!deliveryDate) {
-      console.log('No delivery date selected');
       setDeliveryDateErrorMessage('No delivery date selected');
+      console.error('No delivery date selected');
       // TODO: Throw error message
       isValid = false;
     }
 
     if (deliveryDate < dayjs()) {
-      console.log('Delivery date is in the past');
+      console.error('Delivery date is in the past');
       // TODO: Throw error message?
       isValid = false;
     }
@@ -121,10 +120,8 @@ const OrderForm = ({ inventoryList }) => {
   };
 
   const handleOrderSubmit = async () => {
-    console.log('Clicked on Order Submit');
-
     if (!formValidation()) {
-      console.log('Form validation failed');
+      console.error('Form validation failed');
       return;
     }
 
@@ -135,33 +132,37 @@ const OrderForm = ({ inventoryList }) => {
       deliveryDate,
     };
 
-    console.log('Order Submitted. OrderData:', orderData);
     const response = await placeOrder(orderData);
 
     if (response.status !== 201) {
-      console.log('Error in placing order');
+      console.error('Error in placing order');
       // TODO: trigger error message
       alert('Error in placing order');
+      return;
     }
 
-    if (response.status === 201) {
-      console.log('Order placed successfully');
-      // TODO: trigger success message
-      // alert('Order placed successfully');
+    // TODO: trigger success message
 
-      const refreshOrdersList = await getAllOrders();
-      console.log('Refresh Orders List:', refreshOrdersList);
-      updateOrders(refreshOrdersList.body);
+    const refreshOrdersList = await getAllOrders();
 
-      // Reset the form on successful submission
-      setSelectedMedicine(null);
-      setQuantity(null);
-      setDeliveryDate(null);
-      setMinQuantity(1);
-      setQuantityMessage('Quantity must be at least 1');
-      setDeliveryDateErrorMessage('');
-      setMedicineErrorMessage('');
+    if (refreshOrdersList.status !== 200) {
+      console.error(
+        'Error in fetching orders:',
+        refreshOrdersList.body?.message
+      );
+      return;
     }
+
+    updateOrders(refreshOrdersList.body);
+
+    // Reset the form on successful submission
+    setSelectedMedicine(null);
+    setQuantity(null);
+    setDeliveryDate(null);
+    setMinQuantity(1);
+    setQuantityMessage('Quantity must be at least 1');
+    setDeliveryDateErrorMessage('');
+    setMedicineErrorMessage('');
   };
 
   return (
