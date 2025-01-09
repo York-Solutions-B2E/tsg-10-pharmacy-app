@@ -1,21 +1,19 @@
-import React, { useState } from 'react';
-import MedicationsTable from '../components/MedicationsTable';
-import { Box, Typography } from '@mui/material';
-import { useEffect } from 'react';
-import CustomModal from '../components/CustomModal';
-import { TextField } from '@mui/material';
+import { Box, TextField, Typography } from '@mui/material';
 import Tooltip from '@mui/material/Tooltip';
+import React, { useEffect, useState } from 'react';
 import MedicationAPI from '../API/MedicationAPI';
+import CustomModal from '../components/CustomModal';
+import MedicationsTable from '../components/MedicationsTable';
 import { useAppContext } from '../HOC/AppContext';
-import { useNavigate } from 'react-router-dom';
 
 const InventoryPage = () => {
+  const { medicationsList, updateMedications, navigate } = useAppContext();
   const [medications, setMedications] = useState([]);
 
   const [open, setOpen] = useState(false);
   const [currentMedication, setCurrentMedication] = useState(null);
 
-  const { navigate } = useNavigate();
+  // const { navigate } = useNavigate();
 
   const handleOpen = (medication) => {
     console.log('Opening modal');
@@ -35,7 +33,8 @@ const InventoryPage = () => {
       })
       .then((response) => {
         if (response.ok) {
-          navigate('/orders', { state: currentMedication.id });
+          // navigate('/orders', { state: currentMedication.id });
+          setOpen(false);
         } else {
           console.error(
             'Error updating medication stock:',
@@ -54,11 +53,29 @@ const InventoryPage = () => {
     handleOpen(medication);
   };
 
-  const orderMoreMedication = (id) => {
-    setMedications(medications.filter((med) => med.id !== id));
+  const orderMoreMedication = (medication) => {
+    navigate('/orders', { state: medication });
+    // setMedications(medications.filter((med) => med.id !== id));
+  };
+
+  const loadMedicationsOnMount = async () => {
+    const medicationsResponse = await MedicationAPI.getAllMedications();
+    console.log('Medications response:', medicationsResponse.body[0]);
+
+    if (medicationsResponse.status !== 200) {
+      console.error(
+        'Error fetching medications:',
+        medicationsResponse.body.message
+      );
+      return;
+    }
+
+    updateMedications(medicationsResponse.body);
   };
 
   useEffect(() => {
+    loadMedicationsOnMount();
+
     const initialMedication = [
       {
         id: 1,
@@ -136,7 +153,7 @@ const InventoryPage = () => {
         <h1>Medications</h1>
         <h5>These are all of the medications that we provide.</h5>
         <MedicationsTable
-          medications={medications}
+          medications={medicationsList}
           orderMore={orderMoreMedication}
           editMedicine={editMedication}
         />

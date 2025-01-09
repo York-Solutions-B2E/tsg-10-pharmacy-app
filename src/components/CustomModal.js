@@ -1,15 +1,8 @@
-import React from 'react';
-import ButtonWithText from './buttons/ButtonWithText';
-import { Box, DialogActions, DialogContent } from '@mui/material';
+import { DialogActions, DialogContent } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
-
-// Try to set the app element for accessibility, catch and ignore any exceptions
-try {
-  Modal.setAppElement('#root');
-} catch (error) {
-  console.warn('Failed to set app element for react-modal:', error);
-}
+import React from 'react';
+import ButtonWithText from './buttons/ButtonWithText';
 
 const CustomModal = ({
   isOpen,
