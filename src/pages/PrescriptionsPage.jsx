@@ -8,17 +8,20 @@ const PrescriptionsPage = () => {
   const { prescriptionsList, updatePrescriptions } = useAppContext();
 
   console.log(prescriptionsList);
-  
+
+  const getPrescriptionsListOnMount = async () => {
+    const response = await getAllActivePrescriptions();
+
+    if (response.status !== 200) {
+      console.error('Error fetching prescriptions:', response.body?.message);
+      return;
+    }
+
+    updatePrescriptions(response.body);
+  };
 
   useEffect(() => {
-    getAllActivePrescriptions()
-      .then((response) => {
-        updatePrescriptions(response.body);
-        console.log(response);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    getPrescriptionsListOnMount();
   }, []);
 
   return (
