@@ -6,12 +6,16 @@ import CustomModal from '../components/CustomModal';
 import { TextField } from '@mui/material';
 import Tooltip from '@mui/material/Tooltip';
 import MedicationAPI from '../API/MedicationAPI';
+import { useAppContext } from '../HOC/AppContext';
+import { useNavigate } from 'react-router-dom';
 
 const InventoryPage = () => {
   const [medications, setMedications] = useState([]);
 
   const [open, setOpen] = useState(false);
   const [currentMedication, setCurrentMedication] = useState(null);
+
+  const { navigate } = useNavigate();
 
   const handleOpen = (medication) => {
     console.log('Opening modal');
@@ -25,9 +29,20 @@ const InventoryPage = () => {
     MedicationAPI.updateMedicationStock(
       { id: currentMedication.id },
       currentMedication.count
-    ).then((response) => {
-      handleClose();
-    });
+    )
+      .catch((error) => {
+        console.error('Error updating medication stock:', error);
+      })
+      .then((response) => {
+        if (response.ok) {
+          navigate('/orders', { state: currentMedication.id });
+        } else {
+          console.error(
+            'Error updating medication stock:',
+            response.body.message
+          );
+        }
+      });
   };
 
   const handleClose = () => {
@@ -78,14 +93,19 @@ const InventoryPage = () => {
       <CustomModal
         isOpen={open}
         onRequestClose={handleClose}
-        onRequestConfirm={handleClose}
-        contentLabel="Medication Modal"
+        onRequestConfirm={handleSubmit}
+        contentLabel="Edit Inventory"
       >
-        {/* Modal content goes here */}
-        <h2>Edit Inventory</h2>
-        <Box display="flex" justifyContent="space-between" alignItems="center">
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          width="100%"
+        >
           <Typography variant="h6">
             {currentMedication ? currentMedication.name : ''}
+          </Typography>
+          <Typography>
             {currentMedication ? currentMedication.code : ''}
           </Typography>
         </Box>

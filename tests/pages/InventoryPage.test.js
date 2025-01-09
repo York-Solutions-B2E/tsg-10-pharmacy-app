@@ -1,20 +1,22 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import React from 'react';
 import InventoryPage from '../../src/pages/InventoryPage';
-import Modal from 'react-modal';
+import { MemoryRouter } from 'react-router-dom';
 import { cleanup } from '@testing-library/react';
 
 describe('InventoryPage', () => {
-  beforeEach(() => {
-    Modal.setAppElement(document.body);
-  });
+  beforeEach(() => {});
 
   afterEach(() => {
     cleanup();
   });
 
   test('renders MedicationsTable', () => {
-    render(<InventoryPage />);
+    render(
+      <MemoryRouter>
+        <InventoryPage />
+      </MemoryRouter>
+    );
     const tableElement = screen.getByRole('grid');
 
     expect(tableElement).toBeInTheDocument();
@@ -22,7 +24,11 @@ describe('InventoryPage', () => {
 
   describe('Edit Medication Modal', () => {
     test('clicking add stock brings up the modal', async () => {
-      render(<InventoryPage />);
+      render(
+        <MemoryRouter>
+          <InventoryPage />
+        </MemoryRouter>
+      );
 
       const clickResult = fireEvent.click(
         screen.getAllByText(/Edit Stock/i)[0]
@@ -35,7 +41,11 @@ describe('InventoryPage', () => {
     });
 
     test('count field is present when modal opens', async () => {
-      render(<InventoryPage />);
+      render(
+        <MemoryRouter>
+          <InventoryPage />
+        </MemoryRouter>
+      );
       fireEvent.click(screen.getAllByText(/Edit Stock/i)[0]);
       let inputComponent;
       await waitFor(() => {
@@ -52,7 +62,11 @@ describe('InventoryPage', () => {
     });
 
     test('clicking edit stock button and inputting data into the text field', async () => {
-      render(<InventoryPage />);
+      render(
+        <MemoryRouter>
+          <InventoryPage />
+        </MemoryRouter>
+      );
       fireEvent.click(screen.getAllByText(/Edit Stock/i)[0]);
 
       await waitFor(() => {

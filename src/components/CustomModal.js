@@ -1,7 +1,8 @@
 import React from 'react';
-import Modal from 'react-modal';
 import ButtonWithText from './buttons/ButtonWithText';
-import { Box } from '@mui/material';
+import { Box, DialogActions, DialogContent } from '@mui/material';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
 
 // Try to set the app element for accessibility, catch and ignore any exceptions
 try {
@@ -18,10 +19,10 @@ const CustomModal = ({
   children,
 }) => {
   return (
-    <Modal
-      isOpen={isOpen}
-      onRequestClose={onRequestClose}
-      contentLabel={contentLabel}
+    <Dialog
+      open={isOpen}
+      onClose={onRequestClose}
+      title={contentLabel}
       style={{
         overlay: {
           backgroundColor: 'rgba(0, 0, 0, 0.75)',
@@ -36,9 +37,12 @@ const CustomModal = ({
         },
       }}
     >
-      {children}
+      <DialogContent>
+        <DialogTitle>{contentLabel}</DialogTitle>
+        {children}
+      </DialogContent>
 
-      <Box display="flex" justifyContent="flex-end" marginTop={2}>
+      <DialogActions>
         <ButtonWithText
           buttonText="Close"
           onClick={onRequestClose}
@@ -49,8 +53,8 @@ const CustomModal = ({
           buttonText="Confirm"
           onClick={onRequestConfirm}
         />
-      </Box>
-    </Modal>
+      </DialogActions>
+    </Dialog>
   );
 };
 

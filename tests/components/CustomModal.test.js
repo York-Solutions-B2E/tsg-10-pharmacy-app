@@ -1,7 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import CustomModal from '../../src/components/CustomModal';
-import Modal from 'react-modal';
 
 describe('CustomModal', () => {
   let rootElement;
@@ -11,8 +10,6 @@ describe('CustomModal', () => {
     rootElement = document.createElement('div');
     rootElement.setAttribute('id', 'root');
     document.body.appendChild(rootElement);
-
-    Modal.setAppElement(rootElement);
   });
 
   afterAll(() => {
@@ -84,23 +81,5 @@ describe('CustomModal', () => {
 
     fireEvent.click(screen.getByText('Confirm'));
     expect(onRequestConfirm).toHaveBeenCalledTimes(1);
-  });
-
-  test('applies custom styles to the modal', () => {
-    render(
-      <CustomModal
-        isOpen={true}
-        onRequestClose={() => {}}
-        contentLabel="Test Modal"
-      >
-        <div>Modal Content</div>
-      </CustomModal>,
-      { container: rootElement }
-    );
-
-    const modalContent = document.querySelector('.ReactModal__Content');
-    expect(modalContent).toHaveStyle('top: 50%');
-    expect(modalContent).toHaveStyle('left: 50%');
-    expect(modalContent).toHaveStyle('transform: translate(-50%, -50%)');
   });
 });

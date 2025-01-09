@@ -1,6 +1,7 @@
 import React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { Box } from '@mui/material';
+import dayjs from 'dayjs';
 
 const MedicationsTable = ({ medications, editMedicine, orderMore }) => {
   const columns = [
@@ -11,7 +12,7 @@ const MedicationsTable = ({ medications, editMedicine, orderMore }) => {
       field: 'nextDelivery',
       headerName: 'Next Delivery',
       width: 150,
-      valueFormatter: (param) => new Date(param).toLocaleDateString(),
+      valueFormatter: (param) => dayjs(param).format('MMM DD, YYYY'),
     },
     {
       field: 'sufficiency',
