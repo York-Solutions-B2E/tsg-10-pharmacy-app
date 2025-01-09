@@ -24,7 +24,7 @@ const PrescriptionsPage = () => {
   return (
     <Box sx={{ padding: '30px 30px' }} data-testid="prescriptions-page">
       <h1>PrescriptionsPage</h1>
-      <PrescriptionsTable prescriptionsList={[]} />
+      <PrescriptionsTable prescriptionsList={prescriptionsList} />
     </Box>
   );
 };
