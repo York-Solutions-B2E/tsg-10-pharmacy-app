@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 
 export const usePoll = (pollRequest, timeout) => {
   const [data, setData] = useState(null);
