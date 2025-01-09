@@ -12,7 +12,7 @@ export const getAllOrders = async () => {
 
 /**
  * Sends a POST request to the server to create a new order
- * @Param {Object} order: {medicineId: {Integer}, quantity: {Integer}, deliveryDate: {dayjs}, }
+ * @Param {Object} order: {inventorId: {Integer}, quantity: {Integer}, deliveryDate: {dayjs}, }
  * @Returns {Object} HTTP response: {ok: {Boolean}, status: {Integer}, body: {Object}}
  * */
 export const placeOrder = async (order) => {
@@ -34,7 +34,7 @@ export const placeOrder = async (order) => {
 
 /**
  * Sends a PUT request to the server to update an existing order to 'RECEIVED' status
- * @Param {Object} order: {id: {Integer}, medicineId: {Integer}, quantity: {Integer}, deliveryDate: {dayjs}, status: 'ORDERED'}
+ * @Param {Object} order: {id: {Integer}, inventorId: {Integer}, quantity: {Integer}, deliveryDate: {dayjs}, status: 'ORDERED'}
  * @Returns {Object} HTTP response: {ok: {Boolean}, status: {Integer}, body: {Object}}
  * */
 export const markOrderReceived = async (order) => {
