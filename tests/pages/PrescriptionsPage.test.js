@@ -59,15 +59,14 @@ describe('PrescriptionsPage Tests', () => {
   it('should catch any errors if getAllPrescriptions fails', async () => {
     jest.clearAllMocks();
 
-    PrescriptionAPI.getAllPrescriptions.mockResolvedValue({
+    PrescriptionAPI.getAllPrescriptions.mockRejectedValue({
       status: 400,
-      body: mockPrescriptionsList,
     });
     render(<PrescriptionsPage />);
 
     await waitFor(() => {
       expect(PrescriptionAPI.getAllPrescriptions).toHaveBeenCalledTimes(1);
-      expect(mockContextValues.updatePrescriptions).not.toHaveBeenCalled();
+      expect(mockContextValues.updatePrescriptions).toHaveBeenCalledTimes(0);
       // TODO: Error handling
     });
   });
