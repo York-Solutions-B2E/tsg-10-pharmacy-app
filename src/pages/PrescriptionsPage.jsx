@@ -18,7 +18,7 @@ const PrescriptionsPage = () => {
 
       updatePrescriptions(pollResult.body);
     }
-  }, []);
+  }, [pollResult]);
 
   return (
     <Box sx={{ padding: '30px 30px' }} data-testid="prescriptions-page">
