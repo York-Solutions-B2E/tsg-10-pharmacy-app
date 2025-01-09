@@ -156,6 +156,8 @@ describe('Test PrescriptionsTable Component Data Display', () => {
   });
 
   // TEST BUTTON CLICKS
+
+  // Filling a prescription
   it('should call handleClickFillPrescription when Fill button is clicked', async () => {
     PrescriptionAPI.fillPrescription.mockResolvedValue({
       status: 200,
@@ -212,7 +214,12 @@ describe('Test PrescriptionsTable Component Data Display', () => {
   it('should call handleClickFillPrescription and call an ERROR if the status is NOT 200', async () => {
     PrescriptionAPI.fillPrescription.mockResolvedValue({
       status: 400,
+      body: { message: 'Test fillPrescription Error' },
     });
+
+    const consoleErrorMock = jest
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
 
     render(<PrescriptionsTable prescriptionsList={mockPrescriptionsList} />);
 
@@ -229,10 +236,57 @@ describe('Test PrescriptionsTable Component Data Display', () => {
     await waitFor(() => {
       expect(PrescriptionAPI.fillPrescription).toHaveBeenCalledTimes(1);
       expect(mockContextValues.updatePrescriptions).toHaveBeenCalledTimes(0);
-      // TODO: replace with error message being displayed
+      expect(consoleErrorMock).toHaveBeenCalledWith(
+        'Fill Prescription error:',
+        'Test fillPrescription Error'
+      );
     });
+
+    consoleErrorMock.mockRestore();
   });
 
+  it('should call an ERROR if refreshing the state fails after filling a prescription ', async () => {
+    PrescriptionAPI.fillPrescription.mockResolvedValue({
+      status: 200,
+    });
+
+    PrescriptionAPI.getAllActivePrescriptions.mockResolvedValue({
+      status: 400,
+      body: { message: 'Test prescriptionsList Error' },
+    });
+
+    const consoleErrorMock = jest
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
+    render(<PrescriptionsTable prescriptionsList={mockPrescriptionsList} />);
+
+    // Select the first row with status NEW
+    const newStatusRow = screen.getByText('New').closest('.MuiDataGrid-row');
+
+    const { getByText } = within(newStatusRow);
+    const fillButton = getByText('Fill');
+
+    // Click the Fill button
+    expect(fillButton.disabled).toBe(false);
+    await userEvent.click(fillButton);
+
+    await waitFor(() => {
+      expect(PrescriptionAPI.fillPrescription).toHaveBeenCalledTimes(1);
+      expect(PrescriptionAPI.getAllActivePrescriptions).toHaveBeenCalledTimes(
+        1
+      );
+      expect(mockContextValues.updatePrescriptions).toHaveBeenCalledTimes(0);
+      expect(consoleErrorMock).toHaveBeenCalledWith(
+        'Error refreshing prescriptions list:',
+        'Test prescriptionsList Error'
+      );
+    });
+
+    consoleErrorMock.mockRestore();
+  });
+
+  // Ordering more medicine
   it('should navigate to the OrdersPage with the selected medicine state when Order More button is clicked', async () => {
     render(<PrescriptionsTable prescriptionsList={mockPrescriptionsList} />);
     const outOfStockStatusRow = screen
@@ -254,6 +308,7 @@ describe('Test PrescriptionsTable Component Data Display', () => {
     });
   });
 
+  // Marking a prescription as picked up
   it('should call handleClickMarkPickedUp when Mark Picked Up button is clicked', async () => {
     PrescriptionAPI.markPickedUp.mockResolvedValue({
       status: 200,
@@ -308,7 +363,12 @@ describe('Test PrescriptionsTable Component Data Display', () => {
   it('should call markPickedUp and throw an error if the status is NOT 200', async () => {
     PrescriptionAPI.markPickedUp.mockResolvedValue({
       status: 400,
+      body: { message: 'Test prescriptionsList Error' },
     });
+
+    const consoleErrorMock = jest
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
 
     render(<PrescriptionsTable prescriptionsList={mockPrescriptionsList} />);
     const fillStatusRow = screen
@@ -327,7 +387,52 @@ describe('Test PrescriptionsTable Component Data Display', () => {
         0
       );
       expect(mockContextValues.updatePrescriptions).toHaveBeenCalledTimes(0);
-      // TODO: error handling
+      expect(consoleErrorMock).toHaveBeenCalledWith(
+        'Marked Pickup failed!',
+        'Test prescriptionsList Error'
+      );
     });
+    consoleErrorMock.mockRestore();
   });
-});
+
+  it('should call an ERROR if refreshing the state fails after marking pickedUp ', async () => {
+    PrescriptionAPI.markPickedUp.mockResolvedValue({
+      status: 200,
+    });
+
+    PrescriptionAPI.getAllActivePrescriptions.mockResolvedValue({
+      status: 400,
+      body: { message: 'Test prescriptionsList Error' },
+    });
+
+    const consoleErrorMock = jest
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
+    render(<PrescriptionsTable prescriptionsList={mockPrescriptionsList} />);
+
+    // Select the first row with status FILLED
+    const fillStatusRow = screen
+      .getByText('Filled')
+      .closest('.MuiDataGrid-row');
+
+    const { getByText } = within(fillStatusRow);
+    const markPickedUpButton = getByText('Mark Picked Up');
+
+    expect(markPickedUpButton.disabled).toBe(false);
+    await userEvent.click(markPickedUpButton);
+
+    await waitFor(() => {
+      expect(PrescriptionAPI.markPickedUp).toHaveBeenCalledTimes(1);
+      expect(PrescriptionAPI.getAllActivePrescriptions).toHaveBeenCalledTimes(
+        1
+      );
+      expect(mockContextValues.updatePrescriptions).toHaveBeenCalledTimes(0);
+      expect(consoleErrorMock).toHaveBeenCalledWith(
+        'Error refreshing prescriptions list:',
+        'Test prescriptionsList Error'
+      );
+    });
+    consoleErrorMock.mockRestore();
+  });
+}); // END describe statement
