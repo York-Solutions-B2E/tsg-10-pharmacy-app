@@ -3,11 +3,22 @@ import { useEffect } from 'react';
 import { getAllActivePrescriptions } from '../API/PrescriptionAPI';
 import PrescriptionsTable from '../components/data-display/PrescriptionsTable';
 import { useAppContext } from '../HOC/AppContext';
+import { usePoll } from '../hooks/usePoll';
 
 const PrescriptionsPage = () => {
   const { prescriptionsList, updatePrescriptions } = useAppContext();
 
-  console.log(prescriptionsList);
+  const pollResult = usePoll(getAllActivePrescriptions);
+
+  useEffect(() => {
+    console.log('pollResult:', pollResult);
+
+    if (pollResult && pollResult.ok) {
+      console.log('pollResult.body:', pollResult.body);
+
+      updatePrescriptions(pollResult.body);
+    }
+  }, []);
 
   const getPrescriptionsListOnMount = async () => {
     const response = await getAllActivePrescriptions();
