@@ -8,59 +8,12 @@ import { useAppContext } from '../HOC/AppContext';
 
 const InventoryPage = () => {
   const { medicationsList, updateMedications, navigate } = useAppContext();
-  const [medications, setMedications] = useState([]);
 
   const [open, setOpen] = useState(false);
   const [currentMedication, setCurrentMedication] = useState(null);
 
-  // const { navigate } = useNavigate();
-
-  const handleOpen = (medication) => {
-    console.log('Opening modal');
-    console.log(medication);
-    setCurrentMedication(medication);
-    setOpen(true);
-  };
-
-  const handleSubmit = () => {
-    // TODO: Set id to inventory ID
-    MedicationAPI.updateMedicationStock(
-      { id: currentMedication.id },
-      currentMedication.count
-    )
-      .catch((error) => {
-        console.error('Error updating medication stock:', error);
-      })
-      .then((response) => {
-        if (response.ok) {
-          // navigate('/orders', { state: currentMedication.id });
-          setOpen(false);
-        } else {
-          console.error(
-            'Error updating medication stock:',
-            response.body.message
-          );
-        }
-      });
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-    setCurrentMedication(null);
-  };
-
-  const editMedication = (medication) => {
-    handleOpen(medication);
-  };
-
-  const orderMoreMedication = (medication) => {
-    navigate('/orders', { state: medication });
-    // setMedications(medications.filter((med) => med.id !== id));
-  };
-
-  const loadMedicationsOnMount = async () => {
+  const refreshInventoryList = async () => {
     const medicationsResponse = await MedicationAPI.getAllMedications();
-    console.log('Medications response:', medicationsResponse.body[0]);
 
     if (medicationsResponse.status !== 200) {
       console.error(
@@ -73,36 +26,47 @@ const InventoryPage = () => {
     updateMedications(medicationsResponse.body);
   };
 
-  useEffect(() => {
-    loadMedicationsOnMount();
+  const handleOpen = (medication) => {
+    console.log('Opening modal');
+    console.log(medication);
+    setCurrentMedication(medication);
+    setOpen(true);
+  };
 
-    const initialMedication = [
-      {
-        id: 1,
-        nextDelivery: '2022-12-31',
-        code: '12345',
-        count: 30,
-        sufficiency: 'In Stock',
-        name: 'Medication 1',
-      },
-      {
-        id: 2,
-        nextDelivery: '2022-12-31',
-        code: '67890',
-        count: 0,
-        sufficiency: 'Insufficient Stock',
-        name: 'Medication 2',
-      },
-      {
-        id: 3,
-        nextDelivery: '2022-12-31',
-        code: '54321',
-        count: 0,
-        sufficiency: 'On Order',
-        name: 'Medication 3',
-      },
-    ];
-    setMedications(initialMedication);
+  const handleSubmit = async () => {
+    const updateStockResult = await MedicationAPI.updateMedicationStock(
+      { id: currentMedication.id },
+      currentMedication.stockQuantity
+    );
+
+    if (updateStockResult.status !== 200) {
+      console.error(
+        'Error updating medication stock:',
+        updateStockResult.body.message
+      );
+      return;
+    }
+
+    setOpen(false);
+    refreshInventoryList();
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setCurrentMedication(null);
+  };
+
+  const editMedication = (medication) => {
+    handleOpen(medication);
+  };
+
+  const orderMoreMedication = (medication) => {
+    console.log('Ordering more of:', medication);
+    navigate('/orders', { state: { id: medication.medicineId } });
+  };
+
+  useEffect(() => {
+    refreshInventoryList();
   }, []);
 
   return (
@@ -135,11 +99,11 @@ const InventoryPage = () => {
             type="number"
             id="totalStockInput"
             label=""
-            value={currentMedication ? currentMedication.count : 0}
+            value={currentMedication ? currentMedication.stockQuantity : 0}
             onChange={(e) => {
               const updatedMedication = {
                 ...currentMedication,
-                count: e.target.value,
+                stockQuantity: e.target.value,
               };
               setCurrentMedication(updatedMedication);
             }}
