@@ -5,6 +5,7 @@ import { getAllOrders } from '../API/OrdersAPI';
 import OrdersTable from '../components/data-display/OrdersTable';
 import OrderForm from '../components/forms/OrderForm';
 import { useAppContext } from '../HOC/AppContext';
+import Typography from '@mui/material/Typography';
 
 const OrdersPage = () => {
   const { ordersList, medicationsList, updateOrders, updateMedications } =
@@ -40,12 +41,12 @@ const OrdersPage = () => {
   }, []);
 
   const orderPageStyling = {
-    padding: '30px 30px',
+    padding: '30px',
   };
 
   return (
     <Box sx={orderPageStyling} data-testid="orders-page">
-      <h1>OrdersPage</h1>
+      <Typography variant='h4' sx={{textAlign: 'center', marginBottom: '40px'}}>Medication Orders</Typography>
       <OrderForm inventoryList={medicationsList} />
       <OrdersTable ordersList={ordersList} />
     </Box>

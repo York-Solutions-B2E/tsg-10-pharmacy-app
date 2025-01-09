@@ -4,6 +4,7 @@ import { getAllActivePrescriptions } from '../API/PrescriptionAPI';
 import PrescriptionsTable from '../components/data-display/PrescriptionsTable';
 import { useAppContext } from '../HOC/AppContext';
 import { usePoll } from '../hooks/usePoll';
+import Typography from '@mui/material/Typography';
 
 const PrescriptionsPage = () => {
   const { prescriptionsList, updatePrescriptions } = useAppContext();
@@ -22,7 +23,7 @@ const PrescriptionsPage = () => {
 
   return (
     <Box sx={{ padding: '30px 30px' }} data-testid="prescriptions-page">
-      <h1>PrescriptionsPage</h1>
+      <Typography variant='h4' sx={{textAlign: 'center', marginBottom: '40px'}}>Active Prescriptions</Typography>
       <PrescriptionsTable prescriptionsList={prescriptionsList} />
     </Box>
   );

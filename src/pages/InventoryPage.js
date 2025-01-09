@@ -113,9 +113,18 @@ const InventoryPage = () => {
           />
         </Tooltip>
       </CustomModal>
-      <Box width={'80%'} alignContent={'center'} margin={'auto'}>
-        <h1>Medications</h1>
-        <h5>These are all of the medications that we provide.</h5>
+      <Box
+        // width={'80%'}
+        alignContent={'center'}
+        margin={'auto'}
+        padding={'30px'}
+      >
+        <Typography
+          variant="h4"
+          sx={{ textAlign: 'center', marginBottom: '40px' }}
+        >
+          Medication Inventory
+        </Typography>
         <MedicationsTable
           medications={medicationsList}
           orderMore={orderMoreMedication}
