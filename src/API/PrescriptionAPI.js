@@ -49,7 +49,7 @@ export const fillPrescription = async (prescription) => {
 		);
 	} catch (error) {
 		console.error(error);
-		return { ok: false, status: 400, body: null };
+		return { ok: false, status: 400, body: { message: error.message } };
 	}
 };
 
@@ -79,7 +79,7 @@ export const markPickedUp = async (prescription) => {
 		);
 	} catch (error) {
 		console.error(error);
-		return { ok: false, status: 400, body: null };
+		return { ok: false, status: 400, body: { message: error.message } };
 	}
 };
 
