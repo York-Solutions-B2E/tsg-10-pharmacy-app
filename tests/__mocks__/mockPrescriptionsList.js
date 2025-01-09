@@ -4,7 +4,7 @@ const mockPrescriptionsList = [
     prescriptionNumber: 123456,
     patientId: 32567548,
     medicine: {
-      id: '2',
+      id: '1',
       name: 'ChocoRelief',
       code: 'CRX-001',
       createdAt: '2025-01-06T16:39:13.726428Z',
@@ -19,7 +19,7 @@ const mockPrescriptionsList = [
     prescriptionNumber: 123457,
     patientId: 32567549,
     medicine: {
-      id: '1',
+      id: '2',
       name: 'MintyCure',
       code: 'MCX-002',
       createdAt: '2025-01-06T16:39:13.726428Z',

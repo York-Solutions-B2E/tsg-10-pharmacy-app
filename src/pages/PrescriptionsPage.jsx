@@ -1,15 +1,29 @@
 import { Box } from '@mui/material';
+import { useEffect } from 'react';
+import { getAllActivePrescriptions } from '../API/PrescriptionAPI';
 import PrescriptionsTable from '../components/data-display/PrescriptionsTable';
+import { useAppContext } from '../HOC/AppContext';
+import { usePoll } from '../hooks/usePoll';
 
 const PrescriptionsPage = () => {
-  const appointmentPageStyling = {
-    padding: '30px 30px',
-  };
+  const { prescriptionsList, updatePrescriptions } = useAppContext();
+
+  const pollResult = usePoll(getAllActivePrescriptions);
+
+  useEffect(() => {
+    console.log('pollResult:', pollResult);
+
+    if (pollResult && pollResult.ok) {
+      console.log('pollResult.body:', pollResult.body);
+
+      updatePrescriptions(pollResult.body);
+    }
+  }, [pollResult]);
 
   return (
-    <Box sx={appointmentPageStyling} data-testid="prescriptions-page">
+    <Box sx={{ padding: '30px 30px' }} data-testid="prescriptions-page">
       <h1>PrescriptionsPage</h1>
-      <PrescriptionsTable prescriptionsList={[]} />
+      <PrescriptionsTable prescriptionsList={prescriptionsList} />
     </Box>
   );
 };

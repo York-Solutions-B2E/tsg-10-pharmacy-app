@@ -1,30 +1,92 @@
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
+import { useState } from 'react';
+import {
+  fillPrescription,
+  getAllActivePrescriptions,
+  markPickedUp,
+} from '../../API/PrescriptionAPI';
+import { useAppContext } from '../../HOC/AppContext';
 import ButtonWithText from '../buttons/ButtonWithText';
+import ConfirmActionModal from '../ConfirmActionModal';
 import StatusChip from './StatusChip';
 
 const PrescriptionsTable = ({ prescriptionsList }) => {
-  // const navigate = useNavigate();
+  const { updatePrescriptions, navigate } = useAppContext();
+  const [openModal, setOpenModal] = useState(false);
+  const [outOfStockPrescription, setOutOfStockPrescription] =
+    useState(prescriptionsList);
 
   // ******** Click Handlers
-  const handleClickFillPrescription = (prescription) => {
-    console.log('Fill Prescription, id is:', prescription.id);
-    // TODO: Implement the fill prescription api call, api function takes full prescription object
+  const handleClickFillPrescription = async (prescription) => {
+    const fillPrescriptionResponse = await fillPrescription(prescription);
+
+    // If the fill prescription call is not successful, log the error
+    if (fillPrescriptionResponse.status !== 200) {
+      console.error(
+        'Fill Prescription error:',
+        fillPrescriptionResponse.body?.message
+      );
+    }
+
+    if (
+      fillPrescriptionResponse.body?.message === 'Cannot reduce stock below 0'
+    ) {
+      setOpenModal(true);
+      setOutOfStockPrescription(prescription);
+    }
+
+    // If the fill prescription call is successful, refresh the prescriptions list
+    const refreshStateResponse = await getAllActivePrescriptions();
+
+    // If the refresh call is not successful, log the error
+    if (refreshStateResponse?.status !== 200) {
+      console.error(
+        'Error refreshing prescriptions list:',
+        refreshStateResponse.body?.message
+      );
+    }
+
+    // If the refresh call is successful, update the prescriptions list
+    updatePrescriptions(refreshStateResponse.body);
   };
 
   const handleClickOrderMore = (prescription) => {
-    console.log(
-      'Order More Medicine, medicine id is:',
-      prescription.medicine.id
-    );
-
-    // navigate('/orders', { state: prescription.medicine });
-    // TODO: Navigate to the order more page with the medicine id
+    navigate('/orders', { state: prescription.medicine });
   };
 
-  const handleClickMarkPickedUp = (prescription) => {
-    console.log('Prescription Picked up, id is:', prescription.id);
-    // TODO: Implement the picked up api call, api function takes full prescription object
+  const handleClickMarkPickedUp = async (prescription) => {
+    // Call the API to mark the prescription as picked up
+    const pickedUpResponse = await markPickedUp(prescription);
+
+    // If the call is successful, refresh the prescriptions list
+    if (pickedUpResponse.status === 200) {
+      const refreshStateResponse = await getAllActivePrescriptions();
+
+      if (refreshStateResponse?.status === 200) {
+        updatePrescriptions(refreshStateResponse.body);
+      }
+
+      if (refreshStateResponse?.status !== 200) {
+        console.error(
+          'Error refreshing prescriptions list:',
+          refreshStateResponse.body?.message
+        );
+      }
+    }
+
+    // If the call is not successful, log the error
+    if (pickedUpResponse.status !== 200) {
+      console.error('Marked Pickup failed!', pickedUpResponse.body?.message);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
+
+  const handleConfirmModal = () => {
+    handleClickOrderMore(outOfStockPrescription);
   };
   // END ******** click handlers
 
@@ -100,8 +162,7 @@ const PrescriptionsTable = ({ prescriptionsList }) => {
       FillPrescriptionButton(prescription),
       OrderMoreButton(prescription),
     ];
-  };
-  // END ******** GridActionButtons
+  }; // END ******** GridActionButtons
 
   // ******** Columns headers and GridColDef
   const columns = [
@@ -167,10 +228,9 @@ const PrescriptionsTable = ({ prescriptionsList }) => {
         return renderActionButtonsForPrescriptions(prescription);
       },
     },
-  ];
-  // END ******** Columns headers and data
+  ]; // END ******** Columns headers and data
 
-  // Row Styling
+  // Error Row Styling
   const getRowClassName = (params) => {
     switch (params.row.status) {
       case 'OUT_OF_STOCK':
@@ -183,6 +243,17 @@ const PrescriptionsTable = ({ prescriptionsList }) => {
   // ******** RETURN
   return (
     <Box sx={{ height: 700, width: '100%' }}>
+      <ConfirmActionModal
+        color={'primary'}
+        title={'Low Stock!'}
+        message={
+          'The stock for this medicine is below the minimum required. Would you like to order more?'
+        }
+        open={openModal}
+        onDismiss={handleCloseModal}
+        onConfirmAction={handleConfirmModal}
+        confirmButtonText={'Order More'}
+      />
       <DataGrid
         rows={prescriptionsList}
         columns={columns}

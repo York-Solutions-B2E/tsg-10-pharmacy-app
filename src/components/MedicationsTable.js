@@ -1,53 +1,26 @@
-import React from "react";
+import React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { Box } from '@mui/material';
+import dayjs from 'dayjs';
+import StatusChip from './data-display/StatusChip';
 
 const MedicationsTable = ({ medications, editMedicine, orderMore }) => {
   const columns = [
     { field: 'name', headerName: 'Medication', width: 150 },
     { field: 'code', headerName: 'Code', width: 100 },
     { field: 'count', headerName: 'Count', width: 100 },
-    { field: 'nextDelivery', headerName: 'Next Delivery', width: 150,
-      valueFormatter: (param) => new Date(param).toLocaleDateString()
+    {
+      field: 'nextDelivery',
+      headerName: 'Next Delivery',
+      width: 150,
+      valueFormatter: (param) => dayjs(param).format('MMM DD, YYYY'),
     },
-    { 
-      field: 'sufficiency', 
-      headerName: 'Sufficiency', 
+    {
+      field: 'sufficiency',
+      headerName: 'Sufficiency',
       width: 150,
       renderCell: (params) => {
-        let backgroundColor;
-        let textColor;
-        switch (params.value) {
-          case 'In Stock':
-            backgroundColor = 'lightgreen';
-            textColor = 'darkgreen';
-            break;
-          case 'Insufficient Stock':
-            backgroundColor = '#ffcccb'; // light red
-            textColor = 'darkred';
-            break;
-          case 'On Order':
-            backgroundColor = '#ffdab9'; // light orange
-            textColor = 'darkorange';
-            break;
-          default:
-            backgroundColor = 'grey';
-        }
-        return (
-          <Box
-            sx={{
-              display: 'inline-block',
-              padding: '2px 8px',
-              borderRadius: '12px',
-              backgroundColor: backgroundColor,
-              color: textColor,
-              textAlign: 'center',
-              lineHeight: '2',
-            }}
-          >
-            {params.value}
-          </Box>
-        );
+        return <StatusChip status={params.row.sufficiency} />;
       },
     },
     {
@@ -59,7 +32,7 @@ const MedicationsTable = ({ medications, editMedicine, orderMore }) => {
       renderCell: (params) => (
         <Box>
           <button
-            onClick={() => editMedicine(params.id)}
+            onClick={() => editMedicine(params.row)}
             style={{
               background: 'linear-gradient(to right, #1e3c72, #2a5298)',
               color: 'white',
@@ -69,7 +42,7 @@ const MedicationsTable = ({ medications, editMedicine, orderMore }) => {
               cursor: 'pointer',
             }}
           >
-            + Add Stock
+            + Edit Stock
           </button>
           &nbsp;&nbsp;
           <button

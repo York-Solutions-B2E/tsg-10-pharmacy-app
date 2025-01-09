@@ -53,7 +53,7 @@ describe('OrdersPage', () => {
   it('should fetch orders and update orders and medication state on mount mount', async () => {
     render(<OrdersPage />);
 
-    waitFor(() => {
+    await waitFor(() => {
       expect(OrdersAPI.getAllOrders).toHaveBeenCalledTimes(1);
       expect(MedicationAPI.getAllMedications).toHaveBeenCalledTimes(1);
       expect(mockContextValues.updateOrders).toHaveBeenCalledWith(

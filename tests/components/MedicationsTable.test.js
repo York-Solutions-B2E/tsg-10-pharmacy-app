@@ -41,7 +41,13 @@ const orderMoreFunc = jest.fn();
 
 describe('MedicationsTable', () => {
   test('renders the table with medications', () => {
-    render(<MedicationsTable medications={mockMedications} orderMore={orderMoreFunc} editMedicine={orderMoreFunc} />);
+    render(
+      <MedicationsTable
+        medications={mockMedications}
+        orderMore={orderMoreFunc}
+        editMedicine={orderMoreFunc}
+      />
+    );
 
     // Check if the medication names are rendered
     expect(screen.getByText('Medication 1')).toBeInTheDocument();
@@ -49,14 +55,26 @@ describe('MedicationsTable', () => {
     expect(screen.getByText('Medication 3')).toBeInTheDocument();
 
     // Check if the sufficiency pills are rendered with correct colors
-    expect(screen.getByText('In Stock')).toHaveStyle('background-color: lightgreen');
-    expect(screen.getByText('Insufficient Stock')).toHaveStyle('background-color: #ffcccb');
-    expect(screen.getByText('On Order')).toHaveStyle('background-color: #ffdab9');
+    expect(screen.getByText('In Stock')).toHaveStyle(
+      'background-color: lightgreen'
+    );
+    expect(screen.getByText('Insufficient Stock')).toHaveStyle(
+      'background-color: #ffcccb'
+    );
+    expect(screen.getByText('On Order')).toHaveStyle(
+      'background-color: #ffdab9'
+    );
     expect(screen.getByText('Invalid')).toHaveStyle('background-color: grey');
   });
 
   test('calls orderMore when the "Order More" button is clicked', () => {
-    render(<MedicationsTable medications={mockMedications} orderMore={orderMoreFunc} editMedicine={ () => {} } />);
+    render(
+      <MedicationsTable
+        medications={mockMedications}
+        orderMore={orderMoreFunc}
+        editMedicine={() => {}}
+      />
+    );
 
     // Click the "Order More" button for the first medication
     fireEvent.click(screen.getAllByText('Order More')[0]);
@@ -67,14 +85,18 @@ describe('MedicationsTable', () => {
 
   test('editMedicine is called when the "Add Stock" button is clicked', () => {
     const editMedicineFunc = jest.fn();
-    render(<MedicationsTable medications={mockMedications} orderMore={ () => {} } editMedicine={editMedicineFunc} />);
+    render(
+      <MedicationsTable
+        medications={mockMedications}
+        orderMore={() => {}}
+        editMedicine={editMedicineFunc}
+      />
+    );
 
     // Click the button for the first medication
-    fireEvent.click(screen.getAllByText(/Add Stock/i)[0]);
+    fireEvent.click(screen.getAllByText(/Edit Stock/i)[0]);
 
     // Check if the function was called with the correct id
-    expect(editMedicineFunc).toHaveBeenCalledWith(1);
+    expect(editMedicineFunc).toHaveBeenCalledWith(mockMedications[0]);
   });
-
-  
 });
