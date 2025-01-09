@@ -131,6 +131,9 @@ const OrdersTable = ({ ordersList }) => {
               pageSize: 15,
             },
           },
+          sorting: {
+            sortModel: [{ field: 'status', sort: 'asc' }, { field: 'deliveryDate', sort: 'desc' }],
+          },
         }}
         pageSizeOptions={[15, 30]}
         disableRowSelectionOnClick

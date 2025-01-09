@@ -4,7 +4,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getAllOrders, placeOrder } from '../../API/OrdersAPI';
 import { useAppContext } from '../../HOC/AppContext';
 import ButtonWithText from '../buttons/ButtonWithText';
@@ -22,7 +22,7 @@ const containerStyling = {
 };
 
 const OrderForm = ({ inventoryList }) => {
-  const { updateOrders } = useAppContext();
+  const { updateOrders, location } = useAppContext();
 
   const [selectedMedicine, setSelectedMedicine] = useState(null);
   const [quantity, setQuantity] = useState(null);
@@ -46,6 +46,26 @@ const OrderForm = ({ inventoryList }) => {
     medicine: item.medicine.name,
     minQuantity: item.minimumOrderCount,
   }));
+
+  useEffect(() => {
+    if (location.state !== null) {
+      console.log('location state:', location.state);
+
+      const medicineId = location.state.id;
+  
+      const medicineToSelect = formatOptions.find(
+        (item) => item.medicineId === medicineId 
+      )
+
+      console.log('medicineToSelect:', medicineToSelect);
+
+      // null because the event is null
+      handleChangeSelection(null, medicineToSelect);
+      
+
+    }
+
+  }, []);
 
   // *** Click handlers ***
   // Handles the text change in the Autocomplete field
