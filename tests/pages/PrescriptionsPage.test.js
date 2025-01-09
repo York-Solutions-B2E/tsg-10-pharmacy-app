@@ -23,7 +23,7 @@ describe('PrescriptionsPage Tests', () => {
       .spyOn(appContext, 'useAppContext')
       .mockImplementation(() => mockContextValues);
 
-    PrescriptionAPI.getAllPrescriptions.mockResolvedValue({
+    PrescriptionAPI.getAllActivePrescriptions.mockResolvedValue({
       status: 200,
       body: mockPrescriptionsList,
     });
@@ -45,27 +45,27 @@ describe('PrescriptionsPage Tests', () => {
     expect(prescriptionsPage).toBeInTheDocument();
   });
 
-  it('should call getAllPrescriptions and update AppContext state on mount', async () => {
+  it('should call getAllActivePrescriptions and update AppContext state on mount', async () => {
     render(<PrescriptionsPage />);
 
     await waitFor(() => {
-      expect(PrescriptionAPI.getAllPrescriptions).toHaveBeenCalledTimes(1);
+      expect(PrescriptionAPI.getAllActivePrescriptions).toHaveBeenCalledTimes(1);
       expect(mockContextValues.updatePrescriptions).toHaveBeenCalledWith(
         mockPrescriptionsList
       );
     });
   });
 
-  it('should catch any errors if getAllPrescriptions fails', async () => {
+  it('should catch any errors if getAllActivePrescriptions fails', async () => {
     jest.clearAllMocks();
 
-    PrescriptionAPI.getAllPrescriptions.mockRejectedValue({
+    PrescriptionAPI.getAllActivePrescriptions.mockRejectedValue({
       status: 400,
     });
     render(<PrescriptionsPage />);
 
     await waitFor(() => {
-      expect(PrescriptionAPI.getAllPrescriptions).toHaveBeenCalledTimes(1);
+      expect(PrescriptionAPI.getAllActivePrescriptions).toHaveBeenCalledTimes(1);
       expect(mockContextValues.updatePrescriptions).toHaveBeenCalledTimes(0);
       // TODO: Error handling
     });

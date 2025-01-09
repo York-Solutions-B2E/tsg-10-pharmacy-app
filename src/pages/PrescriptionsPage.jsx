@@ -1,18 +1,17 @@
 import { Box } from '@mui/material';
 import { useEffect } from 'react';
+import { getAllActivePrescriptions } from '../API/PrescriptionAPI';
 import PrescriptionsTable from '../components/data-display/PrescriptionsTable';
 import { useAppContext } from '../HOC/AppContext';
-import { getAllPrescriptions } from '../API/PrescriptionAPI';
 
 const PrescriptionsPage = () => {
   const { prescriptionsList, updatePrescriptions } = useAppContext();
 
   useEffect(() => {
-    getAllPrescriptions()
+    getAllActivePrescriptions()
       .then((response) => {
         updatePrescriptions(response.body);
         console.log(response);
-        
       })
       .catch((error) => {
         console.error(error);
