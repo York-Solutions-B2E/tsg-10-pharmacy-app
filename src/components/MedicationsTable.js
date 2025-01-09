@@ -9,8 +9,6 @@ const MedicationsTable = ({
   editMedicine,
   orderMore,
 }) => {
-  console.log('medications:', medicationsList);
-
   const columns = [
     { field: 'name', headerName: 'Medication', width: 150 },
     { field: 'code', headerName: 'Code', width: 100 },
@@ -47,7 +45,6 @@ const MedicationsTable = ({
       sortable: false,
       filterable: false,
       renderCell: (params) => (
-        // console.log(params.row),
         <Box>
           <button
             onClick={() => editMedicine(params.row)}
@@ -64,7 +61,7 @@ const MedicationsTable = ({
           </button>
           &nbsp;&nbsp;
           <button
-            onClick={() => orderMore(params.row.medicine)}
+            onClick={() => orderMore(params.row)}
             style={{
               background: 'linear-gradient(to right, #1e3c72, #2a5298)',
               color: 'white',
