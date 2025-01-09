@@ -248,10 +248,7 @@ describe('Test PrescriptionsTable Component Data Display', () => {
     // TODO: replace with navigation function being called
 
     await waitFor(() => {
-      expect(mockContextValues.navigate).toHaveBeenCalledWith('/orders');
-      expect(navigator.state).toEqual({
-        medicine: mockPrescriptionsList[1].medicine,
-      }); // ? is this how I grab navigation state?
+      expect(mockContextValues.navigate).toHaveBeenCalledWith('/orders', {state: mockPrescriptionsList[1].medicine});
     });
   });
 
