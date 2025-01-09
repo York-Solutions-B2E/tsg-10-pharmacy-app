@@ -138,6 +138,7 @@ describe('Test OrdersTable Component Data Display', () => {
       .spyOn(console, 'error')
       .mockImplementation(() => {});
 
+    // uses the mockResolvedValueOnce method to simulate a RETURNED failed API call
     OrdersAPI.markOrderReceived.mockResolvedValue({
       status: 400,
       body: { message: 'Test Error' },
@@ -163,6 +164,7 @@ describe('Test OrdersTable Component Data Display', () => {
   it('should call handleClickMarkReceived and throw an error when return status is NOT 200', async () => {
     jest.clearAllMocks();
 
+    // uses the mockResolvedValueOnce method to simulate a RETURNED failed API call
     OrdersAPI.getAllOrders.mockResolvedValue({
       status: 400,
       body: { message: 'Test Error getAllOrders' },

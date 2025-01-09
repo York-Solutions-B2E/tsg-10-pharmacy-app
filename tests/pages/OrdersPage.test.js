@@ -68,12 +68,15 @@ describe('OrdersPage', () => {
   it('should catch an error if getAllOrders or getAllMedications fails', async () => {
     jest.clearAllMocks();
 
-    OrdersAPI.getAllOrders.mockRejectedValue({
+    // uses the mockResolvedValueOnce method to simulate a RETURNED failed API call
+    OrdersAPI.getAllOrders.mockResolvedValue({
       status: 400,
+      body: { message: 'Test orders list Error' },
     });
 
-    MedicationAPI.getAllMedications.mockRejectedValue({
+    MedicationAPI.getAllMedications.mockResolvedValue({
       status: 400,
+      body: { message: 'Test medications list Error' },
     });
 
     render(<OrdersPage />);
