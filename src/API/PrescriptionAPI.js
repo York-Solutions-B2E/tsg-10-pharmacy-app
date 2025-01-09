@@ -83,5 +83,10 @@ export const markPickedUp = async (prescription) => {
 	}
 };
 
-const PrescriptionAPI = { getAllActivePrescriptions, getAllPrescriptions, fillPrescription, markPickedUp };
+const PrescriptionAPI = {
+	getAllPrescriptions,
+	getAllActivePrescriptions,
+	fillPrescription,
+	markPickedUp,
+};
 export default PrescriptionAPI;

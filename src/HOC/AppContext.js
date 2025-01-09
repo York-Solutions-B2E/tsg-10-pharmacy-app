@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export const AppContext = createContext();
 
@@ -9,6 +9,8 @@ export const useAppContext = () => {
 
 const AppProvider = ({ children }) => {
   const navigate = useNavigate();
+  const location = useLocation();
+
   const [ordersList, setOrdersList] = useState([]);
   const [medicationsList, setMedicationsList] = useState([]);
   const [prescriptionsList, setPrescriptionsList] = useState([]);
@@ -27,6 +29,7 @@ const AppProvider = ({ children }) => {
 
   const contextValue = {
     navigate,
+    location,
     ordersList,
     medicationsList,
     prescriptionsList,
