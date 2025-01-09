@@ -1,26 +1,41 @@
-import React from 'react';
-import { DataGrid } from '@mui/x-data-grid';
 import { Box } from '@mui/material';
+import { DataGrid } from '@mui/x-data-grid';
 import dayjs from 'dayjs';
+import React from 'react';
 import StatusChip from './data-display/StatusChip';
 
-const MedicationsTable = ({ medications, editMedicine, orderMore }) => {
+const MedicationsTable = ({
+  medications: medicationsList,
+  editMedicine,
+  orderMore,
+}) => {
   const columns = [
     { field: 'name', headerName: 'Medication', width: 150 },
     { field: 'code', headerName: 'Code', width: 100 },
-    { field: 'count', headerName: 'Count', width: 100 },
+    { field: 'stockQuantity', headerName: 'Count', width: 100 },
     {
       field: 'nextDelivery',
       headerName: 'Next Delivery',
       width: 150,
-      valueFormatter: (param) => dayjs(param).format('MMM DD, YYYY'),
+      valueFormatter: (param) =>
+        param ? dayjs(param).format('MMM DD, YYYY') : '',
     },
     {
-      field: 'sufficiency',
+      field: 'sufficientStock',
       headerName: 'Sufficiency',
       width: 150,
       renderCell: (params) => {
-        return <StatusChip status={params.row.sufficiency} />;
+        if (params.row.sufficientStock) {
+          return <StatusChip status={'In Stock'} color="success" />;
+        }
+
+        if (!params.row.sufficientStock && !params.row.nextDelivery) {
+          return <StatusChip status={'OUT_OF_STOCK'} />;
+        }
+
+        if (!params.row.sufficientStock && params.row.nextDelivery) {
+          return <StatusChip status={'ORDERED'} />;
+        }
       },
     },
     {
@@ -46,7 +61,7 @@ const MedicationsTable = ({ medications, editMedicine, orderMore }) => {
           </button>
           &nbsp;&nbsp;
           <button
-            onClick={() => orderMore(params.id)}
+            onClick={() => orderMore(params.row)}
             style={{
               background: 'linear-gradient(to right, #1e3c72, #2a5298)',
               color: 'white',
@@ -63,17 +78,18 @@ const MedicationsTable = ({ medications, editMedicine, orderMore }) => {
     },
   ];
 
-  const rows = medications.map((medication) => ({
-    id: medication.id,
-    name: medication.name,
-    code: medication.code,
-    count: medication.count,
-    nextDelivery: medication.nextDelivery,
-    sufficiency: medication.sufficiency,
+  const rows = medicationsList.map((inventoryItem) => ({
+    id: inventoryItem.id,
+    medicineId: inventoryItem.medicine.id,
+    name: inventoryItem.medicine.name,
+    code: inventoryItem.medicine.code,
+    stockQuantity: inventoryItem.stockQuantity,
+    nextDelivery: inventoryItem.deliveryDate,
+    sufficientStock: inventoryItem.sufficientStock,
   }));
 
   return (
-    <div style={{ height: 400, width: '100%' }}>
+    <div style={{ height: 650, width: '100%' }}>
       <DataGrid rows={rows} columns={columns} pageSize={5} />
     </div>
   );
