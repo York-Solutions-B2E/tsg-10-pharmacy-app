@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-export const usePoll = (pollRequest, timeout) => {
+export const usePoll = (pollRequest, timeout = 2000) => {
   const [data, setData] = useState(null);
 
   useEffect(() => {
@@ -14,10 +14,7 @@ export const usePoll = (pollRequest, timeout) => {
 
     poll(ignorePoll);
 
-    const timer = setInterval(
-      () => poll(ignoreTimer),
-      timeout ? timeout : 2000
-    );
+    const timer = setInterval(() => poll(ignoreTimer), timeout);
 
     return () => {
       ignorePoll = true;
