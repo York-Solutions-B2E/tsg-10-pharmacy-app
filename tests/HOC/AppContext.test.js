@@ -1,9 +1,16 @@
-import { render, screen, cleanup } from '@testing-library/react';
-import { toBeInTheDocument, toBeVisible } from '@testing-library/jest-dom';
-import { useContext } from 'react';
+import { render, screen } from '@testing-library/react';
+import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import { AppContext, useAppContext } from '../../src/HOC/AppContext';
-import AppProvider from '../../src/HOC/AppContext';
+import AppProvider, {
+  AppContext,
+  useAppContext,
+} from '../../src/HOC/AppContext';
+
+const mockContextValues = {
+  updateMedications: jest.fn(),
+  updateOrders: jest.fn(),
+  updatePrescriptions: jest.fn(),
+};
 
 beforeAll(() => {
   jest.spyOn(console, 'warn').mockImplementation();
@@ -53,5 +60,61 @@ describe('useAppContext', () => {
     );
 
     expect(screen.getByTestId(/context-provider-test/i)).toBeInTheDocument();
+  });
+});
+
+describe('AppContext update functions', () => {
+  it('should update orders list', () => {
+    const TestChild = () => {
+      const { updateOrders } = useAppContext();
+      updateOrders('new-orders-list');
+      return <div />;
+    };
+
+    render(
+      <AppContext.Provider value={mockContextValues}>
+        <TestChild />
+      </AppContext.Provider>
+    );
+
+    expect(mockContextValues.updateOrders).toHaveBeenCalledWith(
+      'new-orders-list'
+    );
+  });
+
+  it('should update medications list', () => {
+    const TestChild = () => {
+      const { updateMedications } = useAppContext();
+      updateMedications('new-medications-list');
+      return <div />;
+    };
+
+    render(
+      <AppContext.Provider value={mockContextValues}>
+        <TestChild />
+      </AppContext.Provider>
+    );
+
+    expect(mockContextValues.updateMedications).toHaveBeenCalledWith(
+      'new-medications-list'
+    );
+  });
+
+  it('should update prescriptions list', () => {
+    const TestChild = () => {
+      const { updatePrescriptions } = useAppContext();
+      updatePrescriptions('new-prescriptions-list');
+      return <div />;
+    };
+
+    render(
+      <AppContext.Provider value={mockContextValues}>
+        <TestChild />
+      </AppContext.Provider>
+    );
+
+    expect(mockContextValues.updatePrescriptions).toHaveBeenCalledWith(
+      'new-prescriptions-list'
+    );
   });
 });
