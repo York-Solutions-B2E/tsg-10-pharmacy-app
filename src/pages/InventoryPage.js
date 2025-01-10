@@ -5,6 +5,7 @@ import MedicationAPI from '../API/MedicationAPI';
 import CustomModal from '../components/CustomModal';
 import MedicationsTable from '../components/MedicationsTable';
 import { useAppContext } from '../HOC/AppContext';
+import { usePoll } from '../hooks/usePoll';
 
 const InventoryPage = () => {
   const { medicationsList, updateMedications, navigate } = useAppContext();
@@ -12,19 +13,14 @@ const InventoryPage = () => {
   const [open, setOpen] = useState(false);
   const [currentMedication, setCurrentMedication] = useState(null);
 
-  const refreshInventoryList = async () => {
-    const medicationsResponse = await MedicationAPI.getAllMedications();
+  const pollResult = usePoll(MedicationAPI.getAllMedications);
 
-    if (medicationsResponse.status !== 200) {
-      console.error(
-        'Error fetching medications:',
-        medicationsResponse.body.message
-      );
-      return;
+  // refetch the state every 2 seconds
+  useEffect(() => {
+    if (pollResult && pollResult.ok) {
+      updateMedications(pollResult.body);
     }
-
-    updateMedications(medicationsResponse.body);
-  };
+  }, [pollResult]);
 
   const handleOpen = (medication) => {
     console.log('Opening modal');
@@ -48,7 +44,17 @@ const InventoryPage = () => {
     }
 
     setOpen(false);
-    refreshInventoryList();
+    const medicationsResponse = await MedicationAPI.getAllMedications();
+
+    if (medicationsResponse.status !== 200) {
+      console.error(
+        'Error fetching medications:',
+        medicationsResponse.body.message
+      );
+      return;
+    }
+
+    updateMedications(medicationsResponse.body);
   };
 
   const handleClose = () => {
@@ -64,10 +70,6 @@ const InventoryPage = () => {
     console.log('Ordering more of:', medication);
     navigate('/orders', { state: { id: medication.medicineId } });
   };
-
-  useEffect(() => {
-    refreshInventoryList();
-  }, []);
 
   return (
     <div>
