@@ -3,7 +3,6 @@ import { DataGrid } from '@mui/x-data-grid';
 import dayjs from 'dayjs';
 import React from 'react';
 import StatusChip from './data-display/StatusChip';
-import { Box } from '@mui/material';
 
 const MedicationsTable = ({
   medications: medicationsList,
@@ -13,7 +12,12 @@ const MedicationsTable = ({
   const columns = [
     { field: 'name', headerName: 'Medication', minWidth: 140, flex: 1 },
     { field: 'code', headerName: 'Code', minWidth: 120, flex: 1 },
-    { field: 'stockQuantity', headerName: 'Stock Count', minWidth: 80, flex: 1 },
+    {
+      field: 'stockQuantity',
+      headerName: 'Stock Count',
+      minWidth: 80,
+      flex: 1,
+    },
     {
       field: 'nextDelivery',
       headerName: 'Next Delivery',
