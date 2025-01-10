@@ -17,6 +17,7 @@ const InventoryPage = () => {
 
   // refetch the state every 2 seconds
   useEffect(() => {
+    console.log("refresh useEffect triggered. Poll result: ", pollResult);
     if (pollResult && pollResult.ok) {
       updateMedications(pollResult.body);
     }
