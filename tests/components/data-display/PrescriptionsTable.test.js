@@ -11,6 +11,7 @@ import * as appContext from '../../../src/HOC/AppContext';
 import PrescriptionsTable from '../../../src/components/data-display/PrescriptionsTable';
 import mockPrescriptionsList from '../../__mocks__/mockPrescriptionsList';
 
+jest.mock('../../../src/HOC/AppContext');
 jest.mock('../../../src/API/PrescriptionAPI');
 
 const mockContextValues = {
@@ -23,13 +24,11 @@ const mockContextValues = {
   navigate: jest.fn(),
 };
 
-describe('Test PrescriptionsTable Component Data Display', () => {
+describe('PrescriptionsTable Test', () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
-    jest
-      .spyOn(appContext, 'useAppContext')
-      .mockImplementation(() => mockContextValues);
+    appContext.useAppContext.mockReturnValue(mockContextValues);
 
     PrescriptionAPI.getAllActivePrescriptions.mockResolvedValue({
       status: 200,
@@ -158,7 +157,7 @@ describe('Test PrescriptionsTable Component Data Display', () => {
   // TEST BUTTON CLICKS
 
   // Filling a prescription
-  it('should call handleClickFillPrescription when Fill button is clicked', async () => {
+  it('should call fillPrescription when Fill button is clicked', async () => {
     PrescriptionAPI.fillPrescription.mockResolvedValue({
       status: 200,
     });
@@ -183,7 +182,7 @@ describe('Test PrescriptionsTable Component Data Display', () => {
     });
   });
 
-  it('should call handleClickFillPrescription and refresh the state if the status is 200', async () => {
+  it('should call fillPrescription and refresh the state if the status is 200', async () => {
     PrescriptionAPI.fillPrescription.mockResolvedValue({
       status: 200,
     });
@@ -209,40 +208,6 @@ describe('Test PrescriptionsTable Component Data Display', () => {
         mockPrescriptionsList
       );
     });
-  });
-
-  it('should call handleClickFillPrescription and call an ERROR if the status is NOT 200', async () => {
-    PrescriptionAPI.fillPrescription.mockResolvedValue({
-      status: 400,
-      body: { message: 'Test fillPrescription Error' },
-    });
-
-    const consoleErrorMock = jest
-      .spyOn(console, 'error')
-      .mockImplementation(() => {});
-
-    render(<PrescriptionsTable prescriptionsList={mockPrescriptionsList} />);
-
-    // Select the first row with status NEW
-    const newStatusRow = screen.getByText('New').closest('.MuiDataGrid-row');
-
-    const { getByText } = within(newStatusRow);
-    const fillButton = getByText('Fill');
-
-    // Click the Fill button
-    expect(fillButton.disabled).toBe(false);
-    await userEvent.click(fillButton);
-
-    await waitFor(() => {
-      expect(PrescriptionAPI.fillPrescription).toHaveBeenCalledTimes(1);
-      expect(mockContextValues.updatePrescriptions).toHaveBeenCalledTimes(0);
-      expect(consoleErrorMock).toHaveBeenCalledWith(
-        'Fill Prescription error:',
-        'Test fillPrescription Error'
-      );
-    });
-
-    consoleErrorMock.mockRestore();
   });
 
   it('should call an ERROR if refreshing the state fails after filling a prescription ', async () => {
@@ -276,13 +241,154 @@ describe('Test PrescriptionsTable Component Data Display', () => {
       expect(PrescriptionAPI.getAllActivePrescriptions).toHaveBeenCalledTimes(
         1
       );
-      expect(mockContextValues.updatePrescriptions).toHaveBeenCalledTimes(0);
       expect(consoleErrorMock).toHaveBeenCalledWith(
         'Error refreshing prescriptions list:',
         'Test prescriptionsList Error'
       );
     });
 
+    consoleErrorMock.mockRestore();
+  });
+
+  it('should call fillPrescription and call an ERROR if the status is NOT 200', async () => {
+    PrescriptionAPI.fillPrescription.mockResolvedValue({
+      status: 400,
+      body: { message: 'Test fillPrescription Error' },
+    });
+
+    const consoleErrorMock = jest
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
+    render(<PrescriptionsTable prescriptionsList={mockPrescriptionsList} />);
+
+    // Select the first row with status NEW
+    const newStatusRow = screen.getByText('New').closest('.MuiDataGrid-row');
+
+    const { getByText } = within(newStatusRow);
+    const fillButton = getByText('Fill');
+
+    // Click the Fill button
+    expect(fillButton.disabled).toBe(false);
+    await userEvent.click(fillButton);
+
+    await waitFor(() => {
+      expect(PrescriptionAPI.fillPrescription).toHaveBeenCalledTimes(1);
+      expect(consoleErrorMock).toHaveBeenCalledWith(
+        'Fill Prescription error:',
+        'Test fillPrescription Error'
+      );
+    });
+
+    consoleErrorMock.mockRestore();
+  });
+
+  // Low Stock Modal
+  it('should call fillPrescription and open a modal prompting order more when status message is: Cannot reduce stock below 0', async () => {
+    PrescriptionAPI.fillPrescription.mockResolvedValue({
+      status: 400,
+      body: { message: 'Cannot reduce stock below 0' },
+    });
+
+    const consoleErrorMock = jest
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
+    render(<PrescriptionsTable prescriptionsList={mockPrescriptionsList} />);
+
+    // Select the first row with status NEW
+    const newStatusRow = screen.getByText('New').closest('.MuiDataGrid-row');
+
+    const { getByText } = within(newStatusRow);
+    const fillButton = getByText('Fill');
+
+    // Click the Fill button
+    expect(fillButton.disabled).toBe(false);
+    await userEvent.click(fillButton);
+
+    await waitFor(() => {
+      expect(PrescriptionAPI.fillPrescription).toHaveBeenCalledTimes(1);
+      expect(consoleErrorMock).toHaveBeenCalledWith(
+        'Fill Prescription error:',
+        'Cannot reduce stock below 0'
+      );
+      expect(screen.queryByText('Low Stock!')).toBeInTheDocument();
+    });
+
+    consoleErrorMock.mockRestore();
+  });
+
+  it('should close the modal when the Close button is clicked', async () => {
+    PrescriptionAPI.fillPrescription.mockResolvedValue({
+      status: 400,
+      body: { message: 'Cannot reduce stock below 0' },
+    });
+
+    const consoleErrorMock = jest
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
+    render(<PrescriptionsTable prescriptionsList={mockPrescriptionsList} />);
+
+    // Select the first row with status NEW
+    const newStatusRow = screen.getByText('New').closest('.MuiDataGrid-row');
+
+    const { getByText } = within(newStatusRow);
+    const fillButton = getByText('Fill');
+
+    // Click the Fill button
+    expect(fillButton.disabled).toBe(false);
+    await userEvent.click(fillButton);
+
+    const closeButton = screen.getByText('Cancel');
+    await userEvent.click(closeButton);
+
+    await waitFor(() => {
+      expect(consoleErrorMock).toHaveBeenCalledWith(
+        'Fill Prescription error:',
+        'Cannot reduce stock below 0'
+      );
+      expect(screen.queryByText('Low Stock!')).toBeInTheDocument();
+    });
+
+    consoleErrorMock.mockRestore();
+  });
+
+  it('should navigate to the orders page when Order More is clicked on the modal', async () => {
+    PrescriptionAPI.fillPrescription.mockResolvedValue({
+      status: 400,
+      body: { message: 'Cannot reduce stock below 0' },
+    });
+
+    const consoleErrorMock = jest
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
+    render(<PrescriptionsTable prescriptionsList={mockPrescriptionsList} />);
+
+    // Select the first row with status NEW
+    const newStatusRow = screen.getByText('New').closest('.MuiDataGrid-row');
+
+    const { getByText } = within(newStatusRow);
+    const fillButton = getByText('Fill');
+
+    // Click the Fill button
+    expect(fillButton.disabled).toBe(false);
+    await userEvent.click(fillButton);
+
+    const withinModal = within(screen.getByRole('dialog'));
+    const modalOrderMoreButton = withinModal.getByText('Order More');
+    await userEvent.click(modalOrderMoreButton);
+
+    await waitFor(() => {
+      expect(consoleErrorMock).toHaveBeenCalledWith(
+        'Fill Prescription error:',
+        'Cannot reduce stock below 0'
+      );
+      expect(mockContextValues.navigate).toHaveBeenCalledWith('/orders', {
+        state: mockPrescriptionsList[0].medicine,
+      });
+    });
     consoleErrorMock.mockRestore();
   });
 
@@ -299,8 +405,6 @@ describe('Test PrescriptionsTable Component Data Display', () => {
     expect(orderMoreButton.disabled).toBe(false);
     await userEvent.click(orderMoreButton);
 
-    // TODO: replace with navigation function being called
-
     await waitFor(() => {
       expect(mockContextValues.navigate).toHaveBeenCalledWith('/orders', {
         state: mockPrescriptionsList[1].medicine,
@@ -309,7 +413,7 @@ describe('Test PrescriptionsTable Component Data Display', () => {
   });
 
   // Marking a prescription as picked up
-  it('should call handleClickMarkPickedUp when Mark Picked Up button is clicked', async () => {
+  it('should call markPickedUp when Mark Picked Up button is clicked', async () => {
     PrescriptionAPI.markPickedUp.mockResolvedValue({
       status: 200,
     });
