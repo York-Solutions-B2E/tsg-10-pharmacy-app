@@ -90,7 +90,16 @@ const MedicationsTable = ({
 
   return (
     <div style={{ height: 650, width: '100%' }}>
-      <DataGrid rows={rows} columns={columns} pageSize={5} />
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        pageSize={5}
+        initialState={{
+          sorting: {
+            sortModel: [{ field: 'name', sort: 'asc' }],
+          },
+        }}
+      />
     </div>
   );
 };
