@@ -4,11 +4,7 @@ import dayjs from 'dayjs';
 import React from 'react';
 import StatusChip from './data-display/StatusChip';
 
-const MedicationsTable = ({
-  medications: medicationsList,
-  editMedicine,
-  orderMore,
-}) => {
+const MedicationsTable = ({ medicationsList, editMedicine, orderMore }) => {
   const columns = [
     { field: 'name', headerName: 'Medication', minWidth: 140, flex: 1 },
     { field: 'code', headerName: 'Code', minWidth: 120, flex: 1 },

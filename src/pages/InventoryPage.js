@@ -129,7 +129,7 @@ const InventoryPage = () => {
           Medication Inventory
         </Typography>
         <MedicationsTable
-          medications={medicationsList}
+          medicationsList={medicationsList}
           orderMore={orderMoreMedication}
           editMedicine={editMedication}
         />
