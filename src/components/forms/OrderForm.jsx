@@ -48,23 +48,20 @@ const OrderForm = ({ inventoryList }) => {
   }));
 
   useEffect(() => {
-    if (location.state !== null) {
+    if (location?.state) {
       console.log('location state:', location.state);
 
       const medicineId = location.state.id;
-  
+
       const medicineToSelect = formatOptions.find(
-        (item) => item.medicineId === medicineId 
-      )
+        (item) => item.medicineId === medicineId
+      );
 
       console.log('medicineToSelect:', medicineToSelect);
 
       // null because the event is null
       handleChangeSelection(null, medicineToSelect);
-      
-
     }
-
   }, []);
 
   // *** Click handlers ***
