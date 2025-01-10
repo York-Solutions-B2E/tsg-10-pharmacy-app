@@ -240,8 +240,6 @@ const PrescriptionsTable = ({ prescriptionsList }) => {
     switch (params.row.status) {
       case 'OUT_OF_STOCK':
         return 'row-out-of-stock';
-      // case 'AWAITING_SHIPMENT':
-      //   return 'row-awaiting-shipment';
     }
   };
 
