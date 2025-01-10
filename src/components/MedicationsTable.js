@@ -3,12 +3,22 @@ import { DataGrid } from '@mui/x-data-grid';
 import dayjs from 'dayjs';
 import React from 'react';
 import StatusChip from './data-display/StatusChip';
+import { makeStyles } from '@mui/styles';
+
+const useStyles = makeStyles({
+  rowSufficientStock: {},
+  rowInsufficientStock: {
+    backgroundColor: '#f0d0d0', // Light red for insufficient stock
+  },
+});
 
 const MedicationsTable = ({
   medications: medicationsList,
   editMedicine,
   orderMore,
 }) => {
+  const classes = useStyles();
+
   const columns = [
     { field: 'name', headerName: 'Medication', minWidth: 140, flex: 1 },
     { field: 'code', headerName: 'Code', minWidth: 120, flex: 1 },
@@ -95,12 +105,19 @@ const MedicationsTable = ({
     sufficientStock: inventoryItem.sufficientStock,
   }));
 
+  const getRowClassName = (params) => {
+    return params.row.sufficientStock
+      ? classes.rowSufficientStock
+      : classes.rowInsufficientStock;
+  };
+
   return (
     <Box sx={{ height: 650, maxWidth: '60%', margin: 'auto' }}>
       <DataGrid
         rows={rows}
         columns={columns}
         pageSize={5}
+        getRowClassName={getRowClassName}
         initialState={{
           sorting: {
             sortModel: [{ field: 'name', sort: 'asc' }],
