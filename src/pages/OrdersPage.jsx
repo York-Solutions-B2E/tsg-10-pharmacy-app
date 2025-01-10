@@ -1,11 +1,11 @@
 import { Box } from '@mui/material';
+import Typography from '@mui/material/Typography';
 import { useEffect } from 'react';
 import { getAllMedications } from '../API/MedicationAPI';
 import { getAllOrders } from '../API/OrdersAPI';
 import OrdersTable from '../components/data-display/OrdersTable';
 import OrderForm from '../components/forms/OrderForm';
 import { useAppContext } from '../HOC/AppContext';
-import Typography from '@mui/material/Typography';
 
 const OrdersPage = () => {
   const { ordersList, medicationsList, updateOrders, updateMedications } =
@@ -46,7 +46,12 @@ const OrdersPage = () => {
 
   return (
     <Box sx={orderPageStyling} data-testid="orders-page">
-      <Typography variant='h4' sx={{textAlign: 'center', marginBottom: '40px'}}>Medication Orders</Typography>
+      <Typography
+        variant="h4"
+        sx={{ textAlign: 'center', marginBottom: '40px' }}
+      >
+        Medication Orders
+      </Typography>
       <OrderForm inventoryList={medicationsList} />
       <OrdersTable ordersList={ordersList} />
     </Box>

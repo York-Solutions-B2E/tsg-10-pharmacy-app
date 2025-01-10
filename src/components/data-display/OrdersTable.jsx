@@ -121,7 +121,7 @@ const OrdersTable = ({ ordersList }) => {
 
   // ******** RETURN
   return (
-    <Box sx={{ height: 700, margin: 'auto', maxWidth: '800px' }}>
+    <Box sx={{ height: 700, margin: 'auto', maxWidth: '900px' }}>
       <DataGrid
         rows={ordersList}
         columns={columns}

@@ -170,19 +170,22 @@ const PrescriptionsTable = ({ prescriptionsList }) => {
       field: 'prescriptionNumber',
       headerName: 'Prescription',
       type: 'string',
-      width: 110,
+      flex: 0.75,
+      minWidth: 140,
       align: 'left',
       headerAlign: 'left',
     },
     {
       field: 'patientId',
       headerName: 'Patient ID',
-      width: 110,
+      minWidth: 140,
+      flex: 0.75,
     },
     {
       field: 'medicine.name',
       headerName: 'Medicine',
-      width: 140,
+      minWidth: 140,
+      flex: 0.75,
       renderCell: (params) => {
         return params.row.medicine.name;
       },
@@ -190,7 +193,8 @@ const PrescriptionsTable = ({ prescriptionsList }) => {
     {
       field: 'medicine.code',
       headerName: 'Med Code',
-      width: 100,
+      minWidth: 120,
+      flex: 0.75,
       renderCell: (params) => {
         return params.row.medicine.code;
       },
@@ -198,18 +202,18 @@ const PrescriptionsTable = ({ prescriptionsList }) => {
     {
       field: 'quantity',
       headerName: 'Quantity',
-      width: 100,
+      minWidth: 80,
     },
     {
       field: 'instructions',
       flex: 1,
+      width: 140,
       headerName: 'Instructions',
     },
     {
       field: 'status',
       headerName: 'Status',
-      flex: 0.75,
-      width: 100,
+      flex: 1,
       minWidth: 150,
       renderCell: (params) => {
         return <StatusChip status={params.row.status} />;
@@ -220,8 +224,8 @@ const PrescriptionsTable = ({ prescriptionsList }) => {
       type: 'actions',
       headerName: 'Actions',
       flex: 1,
-      maxWidth: 240,
-      minWidth: 220,
+      maxWidth: 270,
+      minWidth: 240,
       cellClassName: 'actions',
       getActions: (params) => {
         const prescription = params.row;
@@ -242,7 +246,7 @@ const PrescriptionsTable = ({ prescriptionsList }) => {
 
   // ******** RETURN
   return (
-    <Box sx={{ height: 700, width: '100%' }}>
+    <Box sx={{ height: 700, maxWidth: '80%', margin: 'auto' }}>
       <ConfirmActionModal
         color={'primary'}
         title={'Low Stock!'}

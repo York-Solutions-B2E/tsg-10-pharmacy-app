@@ -3,6 +3,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import dayjs from 'dayjs';
 import React from 'react';
 import StatusChip from './data-display/StatusChip';
+import { Box } from '@mui/material';
 
 const MedicationsTable = ({
   medications: medicationsList,
@@ -10,20 +11,21 @@ const MedicationsTable = ({
   orderMore,
 }) => {
   const columns = [
-    { field: 'name', headerName: 'Medication', width: 150 },
-    { field: 'code', headerName: 'Code', width: 100 },
-    { field: 'stockQuantity', headerName: 'Count', width: 100 },
+    { field: 'name', headerName: 'Medication', minWidth: 140, flex: 1 },
+    { field: 'code', headerName: 'Code', minWidth: 120, flex: 1 },
+    { field: 'stockQuantity', headerName: 'Stock Count', minWidth: 80, flex: 1 },
     {
       field: 'nextDelivery',
       headerName: 'Next Delivery',
-      width: 150,
+      minWidth: 150,
+      flex: 1,
       valueFormatter: (param) =>
         param ? dayjs(param).format('MMM DD, YYYY') : '',
     },
     {
       field: 'sufficientStock',
       headerName: 'Sufficiency',
-      width: 150,
+      minWidth: 150,
       renderCell: (params) => {
         if (params.row.sufficientStock) {
           return <StatusChip status={'In Stock'} color="success" />;
@@ -41,7 +43,8 @@ const MedicationsTable = ({
     {
       field: 'actions',
       headerName: 'Actions',
-      width: 250,
+      maxWidth: 270,
+      minWidth: 240,
       sortable: false,
       filterable: false,
       renderCell: (params) => (
@@ -89,7 +92,7 @@ const MedicationsTable = ({
   }));
 
   return (
-    <div style={{ height: 650, width: '100%' }}>
+    <Box sx={{ height: 650, maxWidth: '60%', margin: 'auto' }}>
       <DataGrid
         rows={rows}
         columns={columns}
@@ -100,7 +103,7 @@ const MedicationsTable = ({
           },
         }}
       />
-    </div>
+    </Box>
   );
 };
 
