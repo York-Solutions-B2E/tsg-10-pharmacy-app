@@ -2,6 +2,7 @@ import { Box } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import dayjs from 'dayjs';
 import React from 'react';
+import ButtonWithText from '../components/buttons/ButtonWithText';
 import StatusChip from './data-display/StatusChip';
 import { makeStyles } from '@mui/styles';
 
@@ -12,12 +13,9 @@ const useStyles = makeStyles({
   },
 });
 
-const MedicationsTable = ({
-  medications: medicationsList,
-  editMedicine,
-  orderMore,
-}) => {
-  const classes = useStyles();
+
+const MedicationsTable = ({ medicationsList, editMedicine, orderMore }) => {
+    const classes = useStyles();
 
   const columns = [
     { field: 'name', headerName: 'Medication', minWidth: 140, flex: 1 },
@@ -57,39 +55,29 @@ const MedicationsTable = ({
     {
       field: 'actions',
       headerName: 'Actions',
-      maxWidth: 270,
-      minWidth: 240,
+
+      maxWidth: 330,
+      minWidth: 290,
       sortable: false,
       filterable: false,
       renderCell: (params) => (
-        <Box>
-          <button
-            onClick={() => editMedicine(params.row)}
-            style={{
-              background: 'linear-gradient(to right, #1e3c72, #2a5298)',
-              color: 'white',
-              borderRadius: '12px',
-              padding: '8px 16px',
-              border: 'none',
-              cursor: 'pointer',
+        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+          <ButtonWithText
+            onClick={() => {
+              editMedicine(params.row);
             }}
-          >
-            + Edit Stock
-          </button>
+            toolTipMessage="update stock count"
+            color={'primary'}
+            buttonText={'Edit Stock'}
+          />
           &nbsp;&nbsp;
-          <button
-            onClick={() => orderMore(params.row)}
-            style={{
-              background: 'linear-gradient(to right, #1e3c72, #2a5298)',
-              color: 'white',
-              borderRadius: '12px',
-              padding: '8px 16px',
-              border: 'none',
-              cursor: 'pointer',
+          <ButtonWithText
+            onClick={() => {
+              orderMore(params.row);
             }}
-          >
-            Order More
-          </button>
+            color={'primary'}
+            buttonText={'Order More'}
+          />
         </Box>
       ),
     },
@@ -112,7 +100,7 @@ const MedicationsTable = ({
   };
 
   return (
-    <Box sx={{ height: 650, maxWidth: '60%', margin: 'auto' }}>
+    <Box sx={{ height: 650, maxWidth: '75%', margin: 'auto' }}>
       <DataGrid
         rows={rows}
         columns={columns}

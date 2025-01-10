@@ -71,7 +71,8 @@
       "package.json",
       "package-lock.json",
       "jest.setup.js",
-      "index.js"
+      "index.js",
+      "@mui/material"
     ],
     "transform": {
       "^.+\\.(js|jsx|ts|tsx)$": [

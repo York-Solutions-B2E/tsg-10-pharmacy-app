@@ -27,13 +27,14 @@ const PrescriptionsTable = ({ prescriptionsList }) => {
         'Fill Prescription error:',
         fillPrescriptionResponse.body?.message
       );
-    }
 
-    if (
-      fillPrescriptionResponse.body?.message === 'Cannot reduce stock below 0'
-    ) {
-      setOpenModal(true);
-      setOutOfStockPrescription(prescription);
+      if (
+        fillPrescriptionResponse.body?.message === 'Cannot reduce stock below 0'
+      ) {
+        setOpenModal(true);
+        setOutOfStockPrescription(prescription);
+        return;
+      }
     }
 
     // If the fill prescription call is successful, refresh the prescriptions list
@@ -239,8 +240,6 @@ const PrescriptionsTable = ({ prescriptionsList }) => {
     switch (params.row.status) {
       case 'OUT_OF_STOCK':
         return 'row-out-of-stock';
-      // case 'AWAITING_SHIPMENT':
-      //   return 'row-awaiting-shipment';
     }
   };
 

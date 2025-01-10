@@ -1,9 +1,12 @@
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import PrescriptionAPI from '../../src/API/PrescriptionAPI';
 import * as appContext from '../../src/HOC/AppContext';
+import { usePoll } from '../../src/hooks/usePoll';
 import PrescriptionsPage from '../../src/pages/PrescriptionsPage';
 import mockPrescriptionsList from '../__mocks__/mockPrescriptionsList';
 
+jest.mock('../../src/HOC/AppContext');
+jest.mock('../../src/hooks/usePoll');
 jest.mock('../../src/API/PrescriptionAPI');
 
 const mockContextValues = {
@@ -19,14 +22,8 @@ describe('PrescriptionsPage Tests', () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
-    jest
-      .spyOn(appContext, 'useAppContext')
-      .mockImplementation(() => mockContextValues);
-
-    PrescriptionAPI.getAllActivePrescriptions.mockResolvedValue({
-      status: 200,
-      body: mockPrescriptionsList,
-    });
+    appContext.useAppContext.mockReturnValue(mockContextValues);
+    usePoll.mockReturnValue({ ok: true, body: mockPrescriptionsList });
   });
 
   afterEach(() => {
@@ -35,6 +32,7 @@ describe('PrescriptionsPage Tests', () => {
   });
 
   afterAll(() => {
+    jest.restoreAllMocks();
     appContext.useAppContext.mockRestore();
   });
 
@@ -49,7 +47,10 @@ describe('PrescriptionsPage Tests', () => {
     render(<PrescriptionsPage />);
 
     await waitFor(() => {
-      expect(PrescriptionAPI.getAllActivePrescriptions).toHaveBeenCalledTimes(1);
+      expect(usePoll).toHaveBeenCalledTimes(1);
+      expect(usePoll).toHaveBeenCalledWith(
+        PrescriptionAPI.getAllActivePrescriptions
+      );
       expect(mockContextValues.updatePrescriptions).toHaveBeenCalledWith(
         mockPrescriptionsList
       );
@@ -57,18 +58,18 @@ describe('PrescriptionsPage Tests', () => {
   });
 
   it('should catch any errors if getAllActivePrescriptions fails', async () => {
-    jest.clearAllMocks();
-
-    PrescriptionAPI.getAllActivePrescriptions.mockResolvedValue({
-      status: 400,
+    usePoll.mockReturnValue({
+      ok: false,
       body: { message: 'Error fetching prescriptions' },
     });
+
     render(<PrescriptionsPage />);
 
     await waitFor(() => {
-      expect(PrescriptionAPI.getAllActivePrescriptions).toHaveBeenCalledTimes(1);
+      expect(usePoll).toHaveBeenCalledWith(
+        PrescriptionAPI.getAllActivePrescriptions
+      );
       expect(mockContextValues.updatePrescriptions).toHaveBeenCalledTimes(0);
-      // TODO: Error handling
     });
   });
 });
