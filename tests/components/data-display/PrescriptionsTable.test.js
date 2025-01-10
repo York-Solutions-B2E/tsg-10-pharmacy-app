@@ -324,6 +324,10 @@ describe('PrescriptionsTable Test', () => {
       body: { message: 'Cannot reduce stock below 0' },
     });
 
+    const consoleErrorMock = jest
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
     render(<PrescriptionsTable prescriptionsList={mockPrescriptionsList} />);
 
     // Select the first row with status NEW
@@ -340,8 +344,14 @@ describe('PrescriptionsTable Test', () => {
     await userEvent.click(closeButton);
 
     await waitFor(() => {
-      expect(screen.queryByText('Low Stock!')).toBeNull();
+      expect(consoleErrorMock).toHaveBeenCalledWith(
+        'Fill Prescription error:',
+        'Cannot reduce stock below 0'
+      );
+      expect(screen.queryByText('Low Stock!')).toBeInTheDocument();
     });
+
+    consoleErrorMock.mockRestore();
   });
 
   it('should navigate to the orders page when Order More is clicked on the modal', async () => {
@@ -349,6 +359,10 @@ describe('PrescriptionsTable Test', () => {
       status: 400,
       body: { message: 'Cannot reduce stock below 0' },
     });
+
+    const consoleErrorMock = jest
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
 
     render(<PrescriptionsTable prescriptionsList={mockPrescriptionsList} />);
 
@@ -367,10 +381,15 @@ describe('PrescriptionsTable Test', () => {
     await userEvent.click(modalOrderMoreButton);
 
     await waitFor(() => {
+      expect(consoleErrorMock).toHaveBeenCalledWith(
+        'Fill Prescription error:',
+        'Cannot reduce stock below 0'
+      );
       expect(mockContextValues.navigate).toHaveBeenCalledWith('/orders', {
         state: mockPrescriptionsList[0].medicine,
       });
     });
+    consoleErrorMock.mockRestore();
   });
 
   // Ordering more medicine
@@ -385,8 +404,6 @@ describe('PrescriptionsTable Test', () => {
 
     expect(orderMoreButton.disabled).toBe(false);
     await userEvent.click(orderMoreButton);
-
-    // TODO: replace with navigation function being called
 
     await waitFor(() => {
       expect(mockContextValues.navigate).toHaveBeenCalledWith('/orders', {
