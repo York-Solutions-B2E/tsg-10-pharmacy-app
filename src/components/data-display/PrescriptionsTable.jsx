@@ -1,5 +1,6 @@
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
+import { useSnackbar } from 'notistack';
 import { useState } from 'react';
 import {
   fillPrescription,
@@ -12,6 +13,8 @@ import ConfirmActionModal from '../ConfirmActionModal';
 import StatusChip from './StatusChip';
 
 const PrescriptionsTable = ({ prescriptionsList }) => {
+  const { enqueueSnackbar } = useSnackbar();
+
   const { updatePrescriptions, navigate } = useAppContext();
   const [openModal, setOpenModal] = useState(false);
   const [outOfStockPrescription, setOutOfStockPrescription] =
@@ -36,6 +39,7 @@ const PrescriptionsTable = ({ prescriptionsList }) => {
       setOutOfStockPrescription(prescription);
     }
 
+    enqueueSnackbar('This is a success message!', { variant: 'success' });
     // If the fill prescription call is successful, refresh the prescriptions list
     const refreshStateResponse = await getAllActivePrescriptions();
 

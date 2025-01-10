@@ -38,6 +38,7 @@
     "@mui/x-data-grid-generator": "^7.23.1",
     "@mui/x-date-pickers": "^7.23.3",
     "dayjs": "^1.11.13",
+    "notistack": "^3.0.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^6.28.1"
