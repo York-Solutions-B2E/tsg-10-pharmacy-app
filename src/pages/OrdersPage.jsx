@@ -1,15 +1,31 @@
 import { Box } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { getAllMedications } from '../API/MedicationAPI';
 import { getAllOrders } from '../API/OrdersAPI';
 import OrdersTable from '../components/data-display/OrdersTable';
 import OrderForm from '../components/forms/OrderForm';
 import { useAppContext } from '../HOC/AppContext';
+import { getAllOrders as getAllOrdersAction } from '../store/actions/ordersActions';
 
 const OrdersPage = () => {
   const { ordersList, medicationsList, updateOrders, updateMedications } =
     useAppContext();
+
+  const dispatch = useDispatch();
+
+  const ordersListFromReducer = useSelector((state) => state.orders.ordersList);
+  const orderListErrorMessage = useSelector(
+    (state) => state.orders.orderListErrorMessage
+  );
+  const isOrderListLoading = useSelector(
+    (state) => state.orders.isOrderListLoading
+  );
+
+  console.log('ordersListFromReducer:', ordersListFromReducer);
+  console.log('orderListErrorMessage:', orderListErrorMessage);
+  console.log('isOrderListLoading:', isOrderListLoading);
 
   const loadDataOnMount = async () => {
     const getAllOrdersResponse = await getAllOrders();
@@ -37,12 +53,15 @@ const OrdersPage = () => {
   };
 
   useEffect(() => {
-    loadDataOnMount();
+    dispatch(getAllOrdersAction());
+    // loadDataOnMount();
   }, []);
 
   const orderPageStyling = {
     padding: '30px',
   };
+
+
 
   return (
     <Box sx={orderPageStyling} data-testid="orders-page">
@@ -53,7 +72,7 @@ const OrdersPage = () => {
         Medication Orders
       </Typography>
       <OrderForm inventoryList={medicationsList} />
-      <OrdersTable ordersList={ordersList} />
+      <OrdersTable ordersList={ordersListFromReducer} />
     </Box>
   );
 };
