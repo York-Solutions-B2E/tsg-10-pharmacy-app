@@ -2,8 +2,8 @@ import { createSlice } from '@reduxjs/toolkit';
 import { getAllOrders } from '../actions/ordersActions';
 
 const initialState = {
-  isOrderListLoading: false,
   ordersList: [],
+  isOrderListLoading: false,
   orderListErrorMessage: null,
 };
 
@@ -40,13 +40,9 @@ const getAllOrdersCases = (builder) => {
   });
 
   builder.addCase(getAllOrders.rejected, (state, action) => {
+    console.log('ordersSlice. getAllOrders.rejected. action:', action);
 
-    console.log(
-      'ordersSlice. getAllOrders.rejected. action:',
-      action
-    );
-
-    state.orderListErrorMessage = action.payload?.message;
+    state.orderListErrorMessage = action.payload;
     state.isOrderListLoading = false;
   });
 };

@@ -31,7 +31,7 @@ const getAllActivePrescriptionsCases = (builder) => {
       'prescriptionsSlice. getAllActivePrescriptions.fulfilled. action.payload:',
       action.payload
     );
-    state.ordersList = action.payload;
+    state.prescriptionsList = action.payload;
 
     // Clear any previous errors and set loading to false
     state.prescriptionListErrorMessage = null;
@@ -44,7 +44,7 @@ const getAllActivePrescriptionsCases = (builder) => {
       action
     );
 
-    state.prescriptionListErrorMessage = action.payload?.message;
+    state.prescriptionListErrorMessage = action.payload;
     state.isPrescriptionsListLoading = false;
   });
 };
