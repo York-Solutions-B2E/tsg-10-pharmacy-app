@@ -61,7 +61,7 @@ const MedicationsTable = ({ medicationsList, editMedicine, orderMore }) => {
       sortable: false,
       filterable: false,
       renderCell: (params) => (
-        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', gap: '10px' }}>
           <ButtonWithText
             onClick={() => {
               editMedicine(params.row);
@@ -70,7 +70,6 @@ const MedicationsTable = ({ medicationsList, editMedicine, orderMore }) => {
             color={'primary'}
             buttonText={'Edit Stock'}
           />
-          &nbsp;&nbsp;
           <ButtonWithText
             onClick={() => {
               orderMore(params.row);
