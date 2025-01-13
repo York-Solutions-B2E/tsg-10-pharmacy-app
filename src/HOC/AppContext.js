@@ -1,5 +1,7 @@
 import { createContext, useCallback, useContext, useState } from 'react';
+import { Provider } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { store } from '../store/store';
 
 export const AppContext = createContext();
 
@@ -39,7 +41,9 @@ const AppProvider = ({ children }) => {
   };
 
   return (
-    <AppContext.Provider value={contextValue}>{children}</AppContext.Provider>
+    <Provider store={store}>
+      <AppContext.Provider value={contextValue}>{children}</AppContext.Provider>
+    </Provider>
   );
 };
 
