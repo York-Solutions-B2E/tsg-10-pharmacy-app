@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const getAllActivePrescriptions = createAsyncThunk(
+export const getAllActivePrescriptions = createAsyncThunk(
   'prescriptions/getAllActivePrescriptions',
   async () => {
     const response = await axios.get(
