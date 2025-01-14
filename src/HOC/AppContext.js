@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useState } from 'react';
-import { Provider } from 'react-redux';
+import { Provider, useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { store } from '../store/store';
 
@@ -12,6 +12,7 @@ export const useAppContext = () => {
 const AppProvider = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
 
   const [ordersList, setOrdersList] = useState([]);
   const [medicationsList, setMedicationsList] = useState([]);
@@ -32,6 +33,7 @@ const AppProvider = ({ children }) => {
   const contextValue = {
     navigate,
     location,
+    dispatch,
     ordersList,
     medicationsList,
     prescriptionsList,
