@@ -1,10 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const GET_ALL_ORDERS = gql`
-the query to get all orders
-`;
-
 export const getAllOrders = createAsyncThunk(
   'orders/getAllOrders',
   async (args, { rejectWithValue }) => {
